@@ -156,12 +156,14 @@ class IsbnService {
     try {
       // 使用 ISBN 和可能的書名搜尋
       final searchQuery = 'ISBN $isbn';
-      final response = await http.get(
-        Uri.parse(
-          'https://en.wikipedia.org/w/api.php?'
-          'action=query&list=search&srsearch=${Uri.encodeComponent(searchQuery)}&format=json&srprop=snippet',
-        ),
-      ).timeout(_timeout);
+      final response = await http
+          .get(
+            Uri.parse(
+              'https://en.wikipedia.org/w/api.php?'
+              'action=query&list=search&srsearch=${Uri.encodeComponent(searchQuery)}&format=json&srprop=snippet',
+            ),
+          )
+          .timeout(_timeout);
 
       if (response.statusCode != 200) return null;
 
@@ -281,9 +283,10 @@ class IsbnService {
   /// 從文字中提取所有可能的 ISBN（參考 isbnlib 的 get_isbnlike 做法）
   /// 例如輸入 "ISBN 978-0-446-31078-9 by Author" 會提取 "9780446310789"
   static List<String> extractIsbnFromText(String text) {
-    final isbnPattern = RegExp(r'\b(?:ISBN)?[\s-]?(?=[-0-9X]{10}(?:[-0-9X]{3})?(?:\D|$))(?:97[89][-\s]?)?[0-9]{1,5}[-\s]?(?:[0-9]+[-\s]?){2}[0-9X]');
+    final isbnPattern = RegExp(
+        r'\b(?:ISBN)?[\s-]?(?=[-0-9X]{10}(?:[-0-9X]{3})?(?:\D|$))(?:97[89][-\s]?)?[0-9]{1,5}[-\s]?(?:[0-9]+[-\s]?){2}[0-9X]');
     final matches = isbnPattern.allMatches(text);
-    
+
     final extracted = <String>[];
     for (final match in matches) {
       final cleaned = normalizeIsbn(match.group(0) ?? '');
@@ -291,7 +294,7 @@ class IsbnService {
         extracted.add(cleaned);
       }
     }
-    
+
     return extracted;
   }
 
