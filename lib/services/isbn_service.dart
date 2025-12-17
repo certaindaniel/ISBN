@@ -294,3 +294,9 @@ class IsbnService {
     
     return extracted;
   }
+
+  /// 對外公開的 ISBN 驗證入口（沿用既有呼叫點）
+  static bool isValidIsbn(String isbn) {
+    return _isValidIsbn(isbn);
+  }
+}
