@@ -18,6 +18,8 @@
 ## Git 與 Commit
 - 自動產生的 Git commit messages / comments 一律使用繁體中文台灣用語。
 - 提交前確保程式可成功 build，測試（若有）須通過再宣告完成。
+- 不應該一次 Commit 所有異動！應該獨立 Commit 每個不同意義的異動，這樣 commit 訊息才會跟異動的程式碼有關聯。
+- 每次 Commit 都是針對異動的檔案做說明：Why & What。這樣的 Commit Message 能讓日後的維護人員更快進入狀況
 
 ## 文件與計劃
 - 代理產生的永久或固定的 `implementation_plan.md*`、`task.md*`、`walkthrough.md*` 檔案，一律使用繁體中文台灣用語。
