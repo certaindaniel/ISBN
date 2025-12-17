@@ -1,0 +1,51 @@
+name: isbn_book_manager
+description: ISBN 掃描書籍管理應用 - 支援 iOS/Mac/Android
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 掃描功能
+  mobile_scanner: ^3.5.0
+  
+  # HTTP 客戶端
+  http: ^1.1.0
+  
+  # 本地資料庫
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  
+  shared_preferences: ^2.3.2
+  
+  # URL 啟動器
+  url_launcher: ^6.3.1
+  
+  # 狀態管理
+  provider: ^6.1.0
+  
+  # JSON 序列化
+  json_annotation: ^4.8.1
+  
+  # 日期時間
+  intl: ^0.19.0
+  
+  # UI 組件
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.6
+
+flutter:
+  uses-material-design: true
