@@ -11,7 +11,9 @@ class Book {
   final DateTime purchaseDate;
   final DateTime? saleDate;
   final int quantity;
-  final String status; // 'owned', 'sold', 'available'
+  final String status; // 'unread', 'read'
+  final String? language; // 'en', 'zh', etc.
+  final int? lexileScore; // Lexile Measure for English books
 
   Book({
     this.id,
@@ -26,7 +28,9 @@ class Book {
     required this.purchaseDate,
     this.saleDate,
     this.quantity = 1,
-    this.status = 'owned',
+    this.status = 'unread',
+    this.language,
+    this.lexileScore,
   });
 
   double? get profit => salePrice != null ? salePrice! - purchasePrice : null;
@@ -44,6 +48,8 @@ class Book {
         'saleDate': saleDate?.toIso8601String(),
         'quantity': quantity,
         'status': status,
+        'language': language,
+        'lexileScore': lexileScore,
       };
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
@@ -59,7 +65,9 @@ class Book {
         saleDate:
             json['saleDate'] != null ? DateTime.parse(json['saleDate']) : null,
         quantity: json['quantity'] ?? 1,
-        status: json['status'] ?? 'owned',
+        status: json['status'] ?? 'unread',
+        language: json['language'],
+        lexileScore: json['lexileScore'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -75,6 +83,8 @@ class Book {
         'saleDate': saleDate?.toIso8601String(),
         'quantity': quantity,
         'status': status,
+        'language': language,
+        'lexileScore': lexileScore,
       };
 
   factory Book.fromMap(Map<String, dynamic> map) => Book(
@@ -91,7 +101,9 @@ class Book {
         saleDate:
             map['saleDate'] != null ? DateTime.parse(map['saleDate']) : null,
         quantity: map['quantity'] ?? 1,
-        status: map['status'] ?? 'owned',
+        status: map['status'] ?? 'unread',
+        language: map['language'],
+        lexileScore: map['lexileScore'],
       );
 
   Book copyWith({
@@ -108,6 +120,8 @@ class Book {
     DateTime? saleDate,
     int? quantity,
     String? status,
+    String? language,
+    int? lexileScore,
   }) =>
       Book(
         id: id ?? this.id,
@@ -123,5 +137,7 @@ class Book {
         saleDate: saleDate ?? this.saleDate,
         quantity: quantity ?? this.quantity,
         status: status ?? this.status,
+        language: language ?? this.language,
+        lexileScore: lexileScore ?? this.lexileScore,
       );
 }

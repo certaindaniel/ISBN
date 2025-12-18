@@ -187,7 +187,7 @@ class BookProvider extends ChangeNotifier {
       final updatedBook = book.copyWith(
         salePrice: salePrice,
         saleDate: DateTime.now(),
-        status: 'sold',
+        status: 'read',
       );
 
       return await updateBook(updatedBook);

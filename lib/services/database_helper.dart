@@ -24,8 +24,9 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -44,11 +45,28 @@ class DatabaseHelper {
         purchaseDate TEXT NOT NULL,
         saleDate TEXT,
         quantity INTEGER DEFAULT 1,
-        status TEXT DEFAULT 'owned',
+        status TEXT DEFAULT 'unread',
+        language TEXT,
+        lexileScore INTEGER,
         createdAt TEXT NOT NULL,
         updatedAt TEXT NOT NULL
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // 添加新的列以支持語言和 Lexile 分數
+      await db.execute('ALTER TABLE books ADD COLUMN language TEXT');
+      await db.execute('ALTER TABLE books ADD COLUMN lexileScore INTEGER');
+    }
+
+    if (oldVersion < 3) {
+      // 將舊狀態對齊至新語意：owned→unread、sold→read、NULL/空字串→unread
+      await db.execute(
+          "UPDATE books SET status='unread' WHERE status IS NULL OR status='' OR status='owned'");
+      await db.execute("UPDATE books SET status='read' WHERE status='sold'");
+    }
   }
 
   // 新增書籍
@@ -117,21 +135,33 @@ class DatabaseHelper {
   Future<Map<String, dynamic>> getStatistics() async {
     final db = await database;
 
+    // 總書籍數
     final totalCount = await db.rawQuery('SELECT COUNT(*) as count FROM books');
 
-    final soldCount = await db.rawQuery(
-        'SELECT COUNT(*) as count FROM books WHERE status = ?', ['sold']);
+    // 已讀書籍數
+    final readCount = await db.rawQuery(
+        'SELECT COUNT(*) as count FROM books WHERE status = ?', ['read']);
 
+    // 閱讀中書籍數
+    final readingCount = await db.rawQuery(
+        'SELECT COUNT(*) as count FROM books WHERE status = ?', ['reading']);
+
+    // 未讀書籍數
+    final unreadCount = await db.rawQuery(
+        'SELECT COUNT(*) as count FROM books WHERE status = ?', ['unread']);
+
+    // 金額統計
     final totalSpent = await db
         .rawQuery('SELECT SUM(purchasePrice * quantity) as total FROM books');
 
     final totalEarned = await db.rawQuery(
-        'SELECT SUM(salePrice * quantity) as total FROM books WHERE status = ? OR salePrice IS NOT NULL',
-        ['sold']);
+        'SELECT SUM(salePrice * quantity) as total FROM books WHERE salePrice IS NOT NULL');
 
     return {
       'totalBooks': (totalCount.first['count'] as int?) ?? 0,
-      'soldBooks': (soldCount.first['count'] as int?) ?? 0,
+      'readBooks': (readCount.first['count'] as int?) ?? 0,
+      'readingBooks': (readingCount.first['count'] as int?) ?? 0,
+      'unreadBooks': (unreadCount.first['count'] as int?) ?? 0,
       'totalSpent': (totalSpent.first['total'] as num?)?.toDouble() ?? 0.0,
       'totalEarned': (totalEarned.first['total'] as num?)?.toDouble() ?? 0.0,
     };
