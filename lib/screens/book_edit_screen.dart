@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// 使用內嵌 WebView 顯示 Lexile 查詢
+import 'lexile_webview_screen.dart';
 import '../models/book.dart';
 import '../providers/book_provider.dart';
 
@@ -20,9 +22,12 @@ class _BookEditScreenState extends State<BookEditScreen> {
   late TextEditingController _isbnController;
   late TextEditingController _purchasePriceController;
   late TextEditingController _salePriceController;
+  late TextEditingController _lexileScoreController;
 
   late DateTime _purchaseDate;
   DateTime? _saleDate;
+  String? _language;
+  late String _readStatus; // 'unread' | 'reading' | 'read'
 
   @override
   void initState() {
@@ -41,9 +46,14 @@ class _BookEditScreenState extends State<BookEditScreen> {
     _salePriceController = TextEditingController(
       text: book?.salePrice?.toString() ?? '',
     );
+    _lexileScoreController = TextEditingController(
+      text: book?.lexileScore?.toString() ?? '',
+    );
 
     _purchaseDate = book?.purchaseDate ?? DateTime.now();
     _saleDate = book?.saleDate;
+    _language = book?.language;
+    _readStatus = book?.status ?? 'unread';
   }
 
   @override
@@ -55,6 +65,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
     _isbnController.dispose();
     _purchasePriceController.dispose();
     _salePriceController.dispose();
+    _lexileScoreController.dispose();
     super.dispose();
   }
 
@@ -75,6 +86,48 @@ class _BookEditScreenState extends State<BookEditScreen> {
           _saleDate = selected;
         }
       });
+    }
+  }
+
+  Future<void> _openLexileSearch() async {
+    // 優先使用 ISBN，其次使用 書名+作者
+    final isbn = _isbnController.text.trim();
+    final fallback =
+        '${_titleController.text} ${_authorController.text}'.trim();
+    final query = isbn.isNotEmpty ? isbn : fallback;
+    if (query.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('請先填入書名與作者再查詢 Lexile')),
+      );
+      return;
+    }
+
+    if (!mounted) return;
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => LexileWebViewScreen(searchQuery: query),
+      ),
+    );
+    if (result is int) {
+      setState(() {
+        _lexileScoreController.text = result.toString();
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('已回填 Lexile：${result}L')),
+      );
+    }
+  }
+
+  String _getLanguageName(String languageCode) {
+    switch (languageCode) {
+      case 'en':
+        return 'English (英文)';
+      case 'zh':
+        return 'Chinese (中文)';
+      case 'ja':
+        return 'Japanese (日文)';
+      default:
+        return languageCode;
     }
   }
 
@@ -106,6 +159,11 @@ class _BookEditScreenState extends State<BookEditScreen> {
           : null,
       purchaseDate: _purchaseDate,
       saleDate: _saleDate,
+      language: _language,
+      lexileScore: _lexileScoreController.text.isNotEmpty
+          ? int.tryParse(_lexileScoreController.text)
+          : null,
+      status: _readStatus,
     );
 
     final provider = context.read<BookProvider>();
@@ -240,6 +298,105 @@ class _BookEditScreenState extends State<BookEditScreen> {
                 border: OutlineInputBorder(),
               ),
               maxLines: 3,
+            ),
+            const SizedBox(height: 16),
+
+            // 書籍語言
+            if (_language != null)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.language, size: 20),
+                    const SizedBox(width: 12),
+                    Text('語言: ${_getLanguageName(_language!)}'),
+                  ],
+                ),
+              )
+            else
+              const SizedBox.shrink(),
+            if (_language != null) const SizedBox(height: 16),
+
+            // 閱讀狀態切換（三段）
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                border: Border.all(color: Colors.blue.shade200),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        _readStatus == 'read'
+                            ? Icons.check_circle
+                            : _readStatus == 'reading'
+                                ? Icons.menu_book
+                                : Icons.circle_outlined,
+                        color: _readStatus == 'read'
+                            ? Colors.green
+                            : _readStatus == 'reading'
+                                ? Colors.orange
+                                : Colors.grey,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        _readStatus == 'read'
+                            ? '已讀'
+                            : _readStatus == 'reading'
+                                ? '閱讀中'
+                                : '未讀',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  SegmentedButton<String>(
+                    segments: const [
+                      ButtonSegment(value: 'unread', label: Text('未讀')),
+                      ButtonSegment(value: 'reading', label: Text('閱讀中')),
+                      ButtonSegment(value: 'read', label: Text('已讀')),
+                    ],
+                    selected: {_readStatus},
+                    onSelectionChanged: (selection) {
+                      setState(() {
+                        _readStatus = selection.first;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // 藍思值 (Lexile) - 英文書適用，可手動填寫
+            TextField(
+              controller: _lexileScoreController,
+              decoration: InputDecoration(
+                labelText: '藍思值 (Lexile Measure)',
+                border: const OutlineInputBorder(),
+                hintText: '例: 850',
+                helperText:
+                    _language == 'en' ? '英文書籍的閱讀難度指標' : '主要用於英文書籍，若非英文可留空',
+                prefixIcon: const Icon(Icons.auto_graph),
+                suffixIcon: IconButton(
+                  tooltip: '到 Lexile 查詢',
+                  onPressed: _openLexileSearch,
+                  icon: const Icon(Icons.open_in_new),
+                ),
+              ),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
 
