@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
-import '../models/book.dart';
 import '../providers/book_provider.dart';
 import '../models/api_source.dart';
 import '../providers/settings_provider.dart';
+import '../services/isbn_service.dart';
+import '../models/book.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -120,14 +121,209 @@ class _ScannerScreenState extends State<ScannerScreen> {
     } catch (e) {
       if (!mounted) return;
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('錯誤: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      final message = e.toString();
+      if (message.contains('這個是 EAN')) {
+        // 提示並提供以書名查詢的選項
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('請掃描 ISBN 條碼，這個是 EAN'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        await _startTitleSearchFlow();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('錯誤: $message'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } finally {
       sourceNotifier.dispose();
+    }
+  }
+
+  Future<void> _startTitleSearchFlow() async {
+    if (!mounted) return;
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) {
+        final titleController = TextEditingController();
+        final authorController = TextEditingController();
+        List<Book> results = const [];
+        bool loading = false;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            Future<void> doSearch() async {
+              final title = titleController.text.trim();
+              final author = authorController.text.trim();
+              if (title.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('請輸入書名'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+              setState(() => loading = true);
+              try {
+                final list = await IsbnService.searchByTitleAuthor(
+                  title,
+                  author: author.isEmpty ? null : author,
+                  // 可視需要加入語言限制，例如: langRestrict: 'en'
+                );
+                setState(() => results = list);
+              } catch (err) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('查詢失敗: $err'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } finally {
+                setState(() => loading = false);
+              }
+            }
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '以書名查詢（Google Books）',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: titleController,
+                    decoration: const InputDecoration(
+                      labelText: '書名（必填）',
+                      border: OutlineInputBorder(),
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: authorController,
+                    decoration: const InputDecoration(
+                      labelText: '作者（可選）',
+                      border: OutlineInputBorder(),
+                    ),
+                    onSubmitted: (_) => doSearch(),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: loading ? null : doSearch,
+                      icon: const Icon(Icons.search),
+                      label: const Text('查詢'),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  if (loading) const LinearProgressIndicator(),
+                  if (!loading && results.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        children: [
+                          const Text(
+                            '查無結果（或無可用 ISBN）',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              icon: const Icon(Icons.edit),
+                              label: const Text('手動輸入 ISBN'),
+                              onPressed: () async {
+                                final isbnController = TextEditingController();
+                                final ok = await showDialog<bool>(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('手動輸入 ISBN'),
+                                    content: TextField(
+                                      controller: isbnController,
+                                      decoration: const InputDecoration(
+                                        hintText: '請輸入 10 或 13 位 ISBN',
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(ctx).pop(false),
+                                        child: const Text('取消'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(ctx).pop(true),
+                                        child: const Text('查詢'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (ok == true) {
+                                  Navigator.of(context).pop();
+                                  await _searchBook(isbnController.text.trim());
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (!loading && results.isNotEmpty)
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: results.length,
+                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final b = results[index];
+                          return ListTile(
+                            leading: const Icon(Icons.menu_book_outlined),
+                            title: Text(b.title),
+                            subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
+                            onTap: () async {
+                              // 選定後開啟編輯頁
+                              Navigator.of(context).pop();
+                              final editResult =
+                                  await Navigator.of(this.context).pushNamed(
+                                '/book-edit',
+                                arguments: b,
+                              );
+                              if (!mounted) return;
+                              if (editResult == true) {
+                                Navigator.of(this.context).pop(true);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    if (result == true && mounted) {
+      // 已在內部處理返回刷新
     }
   }
 
