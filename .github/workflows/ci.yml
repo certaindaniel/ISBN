@@ -7,8 +7,8 @@ on:
     branches: [ '**' ]
 
 jobs:
-  analyze-test-build:
-    name: Analyze, Test and Build (Android)
+  quick-check:
+    name: 快速檢查 (analyze + 核心測試)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,13 +33,42 @@ jobs:
       - name: Static analysis
         run: flutter analyze --no-fatal-infos
 
-      - name: Run selected widget tests
-        # 先只執行已知穩定的測試檔，避免舊範例測試破壞 CI
+      - name: Run selected widget tests (核心)
+        # 只執行經驗證穩定的測試檔，確保快速回饋
         run: flutter test test/book_edit_screen_widget_test.dart test/widget_test.dart --coverage
 
+  full-check:
+    name: 完整測試與建構 (all tests + build)
+    needs: quick-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run all tests
+        run: flutter test --coverage
+
       - name: Build Android debug APK
-        run: |
-          flutter build apk --debug --no-shrink
+        run: flutter build apk --debug --no-shrink
 
       - name: Upload coverage as artifact
         if: success()
