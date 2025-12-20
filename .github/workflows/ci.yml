@@ -39,6 +39,7 @@ jobs:
 
   full-check:
     name: 完整測試與建構 (all tests + build)
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     needs: quick-check
     runs-on: ubuntu-latest
     steps:
