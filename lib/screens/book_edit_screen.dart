@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 // 使用內嵌 WebView 顯示 Lexile 查詢
 import 'lexile_webview_screen.dart';
 import '../models/book.dart';
@@ -28,6 +30,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
   DateTime? _saleDate;
   String? _language;
   late String _readStatus; // 'unread' | 'reading' | 'read'
+  
+  File? _pickedImage;
+  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   void initState() {
@@ -118,6 +123,59 @@ class _BookEditScreenState extends State<BookEditScreen> {
     }
   }
 
+  Future<void> _pickImage() async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 85,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          _pickedImage = File(pickedFile.path);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('已拍攝書籍封面')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('拍照失敗: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Widget _buildCoverImage(String coverUrl) {
+    // 判斷是本地檔案還是網路圖片
+    if (coverUrl.startsWith('/') || coverUrl.startsWith('file://')) {
+      final path = coverUrl.replaceFirst('file://', '');
+      return Image.file(
+        File(path),
+        width: 120,
+        height: 180,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 120,
+          height: 180,
+          color: Colors.grey[300],
+          child: const Icon(Icons.book),
+        ),
+      );
+    } else {
+      return Image.network(
+        coverUrl,
+        width: 120,
+        height: 180,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 120,
+          height: 180,
+          color: Colors.grey[300],
+          child: const Icon(Icons.book),
+        ),
+      );
+    }
+  }
+
   String _getLanguageName(String languageCode) {
     switch (languageCode) {
       case 'en':
@@ -143,13 +201,19 @@ class _BookEditScreenState extends State<BookEditScreen> {
       return;
     }
 
+    // 優先使用本地拍攝的圖片，否則使用原有的 coverUrl
+    String? finalCoverUrl = widget.initialBook?.coverUrl;
+    if (_pickedImage != null) {
+      finalCoverUrl = _pickedImage!.path;
+    }
+
     final book = Book(
       id: widget.initialBook?.id,
       isbn: _isbnController.text.trim(),
       title: _titleController.text.trim(),
       author: _authorController.text.trim(),
       publisher: _publisherController.text.trim(),
-      coverUrl: widget.initialBook?.coverUrl,
+      coverUrl: finalCoverUrl,
       description: _descriptionController.text.isNotEmpty
           ? _descriptionController.text.trim()
           : null,
@@ -205,47 +269,97 @@ class _BookEditScreenState extends State<BookEditScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 書籍封面
-            if (widget.initialBook?.coverUrl != null)
-              Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
+            Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // 顯示圖片
+                  if (_pickedImage != null)
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.initialBook!.coverUrl!,
-                      width: 120,
-                      height: 180,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          _pickedImage!,
+                          width: 120,
+                          height: 180,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  else if (widget.initialBook?.coverUrl != null)
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: _buildCoverImage(widget.initialBook!.coverUrl!),
+                      ),
+                    )
+                  else
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
                         width: 120,
                         height: 180,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.book),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              size: 48,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '拍攝封面',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              )
-            else
-              Center(
-                child: Container(
-                  width: 120,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.book, size: 64),
-                ),
+                  // 重拍按鈕（有圖時才顯示）
+                  if (_pickedImage != null || widget.initialBook?.coverUrl != null)
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: FloatingActionButton.small(
+                        onPressed: _pickImage,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: const Icon(Icons.camera_alt, size: 20),
+                      ),
+                    ),
+                ],
               ),
+            ),
             const SizedBox(height: 24),
 
             // ISBN

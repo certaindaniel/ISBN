@@ -26,6 +26,11 @@ dependencies:
   
   # URL 啟動器
   url_launcher: ^6.3.1
+  # 內嵌 WebView（iOS 使用 WKWebView）
+  webview_flutter: ^4.10.0
+  
+  # 圖片選擇與拍照
+  image_picker: ^1.1.2
   
   # 狀態管理
   provider: ^6.1.0

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import '../providers/book_provider.dart';
 import '../models/book.dart';
 import '../services/isbn_service.dart';
@@ -497,30 +498,54 @@ class BookListItem extends StatelessWidget {
 
   // Lexile 查詢入口已從列表頁移除，僅保留顯示數值
 
+  Widget _buildCoverImage() {
+    if (book.coverUrl == null) {
+      return Container(
+        width: 48,
+        height: 72,
+        color: Colors.grey[300],
+        child: const Icon(Icons.book),
+      );
+    }
+
+    final coverUrl = book.coverUrl!;
+    // 判斷是本地檔案還是網路圖片
+    if (coverUrl.startsWith('/') || coverUrl.startsWith('file://')) {
+      final path = coverUrl.replaceFirst('file://', '');
+      return Image.file(
+        File(path),
+        width: 48,
+        height: 72,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 48,
+          height: 72,
+          color: Colors.grey[300],
+          child: const Icon(Icons.book),
+        ),
+      );
+    } else {
+      return Image.network(
+        coverUrl,
+        width: 48,
+        height: 72,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 48,
+          height: 72,
+          color: Colors.grey[300],
+          child: const Icon(Icons.book),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
-        leading: book.coverUrl != null
-            ? Image.network(
-                book.coverUrl!,
-                width: 48,
-                height: 72,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 48,
-                  height: 72,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.book),
-                ),
-              )
-            : Container(
-                width: 48,
-                height: 72,
-                color: Colors.grey[300],
-                child: const Icon(Icons.book),
-              ),
+        leading: _buildCoverImage(),
         title: Text(book.title),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

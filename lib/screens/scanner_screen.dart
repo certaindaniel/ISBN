@@ -347,90 +347,86 @@ class _ScannerScreenState extends State<ScannerScreen> {
             controller: controller,
             onDetect: _handleBarcode,
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.greenAccent,
-                width: 3,
+          // 掃描方框居中
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 3,
+                ),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ),
-            margin: const EdgeInsets.all(40),
-            child: const SizedBox(
-              width: 300,
-              height: 300,
+              width: 280,
+              height: 280,
             ),
           ),
+          // 底部控制區
           Positioned(
-            bottom: 40,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.7),
+                  ],
+                ),
+              ),
+              padding: const EdgeInsets.fromLTRB(16, 40, 16, 32),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      await controller.toggleTorch();
-                      setState(() {});
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black54,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(16),
-                    ),
-                    child: const Icon(Icons.flashlight_on, color: Colors.white),
-                  ),
-                  const SizedBox(height: 20),
+                  // 提示文字
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     decoration: BoxDecoration(
-                      color: Colors.black54,
+                      color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                        width: 1,
+                      ),
                     ),
-                    child: const Text(
+                    child: Text(
                       '將書籍條碼放在掃描區域',
-                      style: TextStyle(color: Colors.white),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                          ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(8),
+                  const SizedBox(height: 16),
+                  // 手動輸入區
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                        width: 1,
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _manualIsbnController,
-                              keyboardType: TextInputType.number,
-                              style: const TextStyle(color: Colors.white),
-                              decoration: const InputDecoration(
-                                hintText: '手動輸入 ISBN',
-                                hintStyle: TextStyle(color: Colors.white70),
-                                border: InputBorder.none,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _manualIsbnController,
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              hintText: '手動輸入 ISBN',
+                              hintStyle: TextStyle(
+                                color: Colors.white.withOpacity(0.6),
                               ),
-                              onSubmitted: (value) async {
-                                final isbn = value.trim();
-                                if (isbn.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('請輸入 ISBN'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-                                await _searchBook(isbn);
-                              },
+                              border: InputBorder.none,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final isbn = _manualIsbnController.text.trim();
+                            onSubmitted: (value) async {
+                              final isbn = value.trim();
                               if (isbn.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -442,14 +438,36 @@ class _ScannerScreenState extends State<ScannerScreen> {
                               }
                               await _searchBook(isbn);
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                            ),
-                            child: const Text('查詢'),
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 8),
+                        FilledButton(
+                          onPressed: () async {
+                            final isbn = _manualIsbnController.text.trim();
+                            if (isbn.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('請輸入 ISBN'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+                            await _searchBook(isbn);
+                          },
+                          child: const Text('查詢'),
+                        ),
+                      ],
                     ),
+                  ),
+                  const SizedBox(height: 12),
+                  // 手電筒按鈕
+                  FilledButton.tonal(
+                    onPressed: () async {
+                      await controller.toggleTorch();
+                      setState(() {});
+                    },
+                    child: const Icon(Icons.flashlight_on),
                   ),
                 ],
               ),
