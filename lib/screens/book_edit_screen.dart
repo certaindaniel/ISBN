@@ -30,7 +30,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
   DateTime? _saleDate;
   String? _language;
   late String _readStatus; // 'unread' | 'reading' | 'read'
-  
+
   File? _pickedImage;
   final ImagePicker _imagePicker = ImagePicker();
 
@@ -318,7 +318,10 @@ class _BookEditScreenState extends State<BookEditScreen> {
                         width: 120,
                         height: 180,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           border: Border.all(
                             color: Theme.of(context).colorScheme.primary,
                             width: 2,
@@ -347,7 +350,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
                       ),
                     ),
                   // 重拍按鈕（有圖時才顯示）
-                  if (_pickedImage != null || widget.initialBook?.coverUrl != null)
+                  if (_pickedImage != null ||
+                      widget.initialBook?.coverUrl != null)
                     Positioned(
                       bottom: 8,
                       right: 8,

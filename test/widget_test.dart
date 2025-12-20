@@ -11,7 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:isbn_book_manager/main.dart';
 
 void main() {
-  testWidgets('App loads and shows main navigation', (WidgetTester tester) async {
+  testWidgets('App loads and shows main navigation',
+      (WidgetTester tester) async {
     // Build the app
     await tester.pumpWidget(const IsbnBookManagerApp());
     await tester.pumpAndSettle();
