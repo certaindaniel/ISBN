@@ -154,7 +154,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       useSafeArea: true,
       isDismissible: false,
       enableDrag: false,
-      builder: (context) {
+        builder: (context) {
         final titleController = TextEditingController();
         final authorController = TextEditingController();
         List<Book> results = const [];
@@ -196,7 +196,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               }
             }
 
-            Future<bool> _confirmClose() async {
+            Future<bool> confirmClose() async {
               // 若有未輸入內容或有查詢結果，提示使用者
               final hasChanges = titleController.text.trim().isNotEmpty ||
                   authorController.text.trim().isNotEmpty ||
@@ -234,8 +234,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
               return false; // cancel or null
             }
 
-            return WillPopScope(
-              onWillPop: _confirmClose,
+            return PopScope(
+              onWillPop: confirmClose,
               child: Padding(
                 padding: EdgeInsets.only(
                   left: 16,
@@ -258,7 +258,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         IconButton(
                           tooltip: '關閉',
                           onPressed: () async {
-                            final shouldClose = await _confirmClose();
+                            final shouldClose = await confirmClose();
                             if (shouldClose && context.mounted) {
                               Navigator.of(context).pop(false);
                             }
