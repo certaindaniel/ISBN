@@ -25,14 +25,6 @@
 - 代理產生的永久或固定的 `implementation_plan.md*`、`task.md*`、`walkthrough.md*` 檔案，一律使用繁體中文台灣用語。
 - 變更需最小且聚焦，避免不必要的重構與風格調整。
 
-## 本地化（Localization）
-- Swift Package 與 Xcode 皆須以 `L("key")` 進行多國語字串擷取（詳見 `QDir/QDir/Utilities/LocalizationHelper.swift`）。
-- 翻譯檔案需置於：
-  - `QDir/QDir/en.lproj/Localizable.strings`
-  - `QDir/QDir/zh-Hant.lproj/Localizable.strings`
-  - `QDir/QDir/zh-Hans.lproj/Localizable.strings`
-- 命令列測試可透過 `LANG=zh_TW.UTF-8 swift run` / `LANG=zh_CN.UTF-8 swift run` 切換語言。
-
 ## 執行準則
 - 先以最小可行步驟驗證，逐步擴充；提供必要的指令與後續建議。
 - 回應保持精練、可操作、避免過度冗長；必要時提供簡短進度更新。

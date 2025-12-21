@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Proposal 1 (背景: 白色) -->
+  <defs>
+    <style> .p { fill: #6A0DAD; } .gold { fill: #D4AF37; } </style>
+  </defs>
+  <rect width="512" height="512" rx="64" fill="#6A0DAD"/>
+  <!-- book body (scaled up 20% and kept centered) -->
+  <g transform="translate(256,256) scale(1.4) translate(-160,-144)">
+    <rect x="0" y="0" width="320" height="288" rx="12" fill="#6A0DAD" />
+    <rect x="8" y="8" width="120" height="272" rx="6" fill="#4A148C" />
+    <!-- ISBN text on cover (gold), then barcode as thin lines on right -->
+    <text x="200" y="48" fill="#D4AF37" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="28">ISBN</text>
+    <!-- barcode as thin lines on right -->
+    <g transform="translate(150,40)" fill="#D4AF37">
+      <rect x="0" y="0" width="6" height="208" />
+      <rect x="12" y="0" width="3" height="208" />
+      <rect x="20" y="0" width="8" height="208" />
+      <rect x="32" y="0" width="4" height="208" />
+      <rect x="40" y="0" width="2" height="208" />
+    </g>
+  </g>
+</svg>

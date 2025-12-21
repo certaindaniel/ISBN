@@ -74,6 +74,86 @@ class _BookEditScreenState extends State<BookEditScreen> {
     super.dispose();
   }
 
+  bool _hasUnsavedChanges() {
+    final book = widget.initialBook;
+    if (book == null) {
+      // 新增模式：若任一欄位非空或有選圖即視為已修改
+      return _titleController.text.isNotEmpty ||
+          _authorController.text.isNotEmpty ||
+          _publisherController.text.isNotEmpty ||
+          _descriptionController.text.isNotEmpty ||
+          _isbnController.text.isNotEmpty ||
+          _purchasePriceController.text.isNotEmpty ||
+          _salePriceController.text.isNotEmpty ||
+          _lexileScoreController.text.isNotEmpty ||
+          _pickedImage != null;
+    }
+
+    // 編輯模式：比對與初始值是否不同
+    if (_titleController.text.trim() != (book.title ?? '')) return true;
+    if (_authorController.text.trim() != (book.author ?? '')) return true;
+    if (_publisherController.text.trim() != (book.publisher ?? '')) return true;
+    if (_descriptionController.text.trim() != (book.description ?? '')) return true;
+    if (_isbnController.text.trim() != (book.isbn ?? '')) return true;
+    if (_purchasePriceController.text.trim() !=
+        (book.purchasePrice?.toString() ?? '')) return true;
+    if (_salePriceController.text.trim() !=
+        (book.salePrice?.toString() ?? '')) return true;
+    if (_lexileScoreController.text.trim() !=
+        (book.lexileScore?.toString() ?? '')) return true;
+    if (_purchaseDate != (book.purchaseDate ?? _purchaseDate)) return true;
+    if ((_saleDate ?? '') != (book.saleDate ?? '') ) {
+      // 比對日期存在性的不同或不同值
+      if (book.saleDate == null && _saleDate != null) return true;
+      if (book.saleDate != null && _saleDate == null) return true;
+      if (book.saleDate != null && _saleDate != null &&
+          book.saleDate != _saleDate) return true;
+    }
+    if ((_pickedImage != null && (book.coverUrl == null || _pickedImage!.path != book.coverUrl)) ) return true;
+    if (_language != book.language) return true;
+    if (_readStatus != (book.status ?? 'unread')) return true;
+
+    return false;
+  }
+
+  Future<bool> _onWillPop() async {
+    if (!_hasUnsavedChanges()) return true;
+
+    final result = await showDialog<String?>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('有未儲存的變更'),
+        content: const Text('您有未儲存的變更，要儲存後離開嗎？'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop('cancel'),
+            child: const Text('取消'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop('discard'),
+            child: const Text('放棄變更'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop('save'),
+            child: const Text('儲存並離開'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == 'save') {
+      await _saveBook();
+      // _saveBook 內在成功時會 pop，為避免雙重 pop，回傳 false
+      return false;
+    }
+
+    if (result == 'discard') {
+      return true;
+    }
+
+    // cancel 或 null
+    return false;
+  }
   Future<void> _selectDate(bool isPurchaseDate) async {
     final selected = await showDatePicker(
       context: context,
@@ -261,7 +341,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
       appBar: AppBar(
         title: Text(widget.initialBook == null ? '新增書籍' : '編輯書籍'),
         centerTitle: true,
@@ -655,6 +737,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
