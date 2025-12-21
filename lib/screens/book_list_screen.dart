@@ -94,9 +94,9 @@ class _BookListScreenState extends State<BookListScreen> {
                   const SizedBox(height: 12),
                   TextField(
                     controller: authorController,
-                    decoration: const InputDecoration(
-                      labelText: '作者（可選）',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.author_optional,
+                      border: const OutlineInputBorder(),
                     ),
                     onSubmitted: (_) => doSearch(),
                   ),

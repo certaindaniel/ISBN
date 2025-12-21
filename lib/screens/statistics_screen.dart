@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/book_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -31,16 +32,18 @@ class _StatisticsScreenState extends State<StatisticsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('統計報告'),
+        title: Text(loc.statistics_title),
         centerTitle: true,
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(icon: Icon(Icons.book), text: '閱讀統計'),
-            Tab(icon: Icon(Icons.attach_money), text: '金額統計'),
+          tabs: [
+            Tab(icon: const Icon(Icons.book), text: loc.statistics_tab_reading),
+            Tab(icon: const Icon(Icons.attach_money), text: loc.statistics_tab_finance),
           ],
         ),
       ),
@@ -77,6 +80,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
     int readingBooks,
     int unreadBooks,
   ) {
+    final loc = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -90,7 +94,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
               child: Column(
                 children: [
                   Text(
-                    '閱讀進度',
+                    loc.stat_overview_title,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 24),
@@ -98,25 +102,25 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _StatCard(
-                        title: '總書籍',
+                        title: loc.stat_total_books,
                         value: totalBooks.toString(),
                         icon: Icons.library_books,
                         color: Colors.blue,
                       ),
                       _StatCard(
-                        title: '已讀',
+                        title: loc.stat_read,
                         value: readBooks.toString(),
                         icon: Icons.check_circle,
                         color: Colors.green,
                       ),
                       _StatCard(
-                        title: '閱讀中',
+                        title: loc.stat_reading,
                         value: readingBooks.toString(),
                         icon: Icons.menu_book,
                         color: Colors.orange,
                       ),
                       _StatCard(
-                        title: '未讀',
+                        title: loc.stat_unread,
                         value: unreadBooks.toString(),
                         icon: Icons.circle_outlined,
                         color: Colors.grey,
@@ -142,7 +146,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '閱讀完成度',
+                          loc.stat_completion_title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
@@ -183,12 +187,12 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '已讀: $readBooks 本',
+                          '${loc.stat_read}: $readBooks',
                           style: const TextStyle(color: Colors.green),
                         ),
-                        Text('閱讀中: $readingBooks 本',
+                        Text('${loc.stats_reading_label(readingBooks)}',
                             style: const TextStyle(color: Colors.orange)),
-                        Text('未讀: $unreadBooks 本',
+                        Text('${loc.stats_unread_label(unreadBooks)}',
                             style: const TextStyle(color: Colors.grey)),
                       ],
                     ),
@@ -207,6 +211,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
     double totalEarned,
     double totalProfit,
   ) {
+    final loc = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -221,18 +226,18 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '金額統計',
+                    loc.finance_title,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 24),
                   _StatRow(
-                    label: '總支出',
+                    label: loc.finance_total_spent,
                     amount: totalSpent,
                     color: Colors.red,
                   ),
                   const SizedBox(height: 12),
                   _StatRow(
-                    label: '總收入',
+                    label: loc.finance_total_earned,
                     amount: totalEarned,
                     color: Colors.green,
                   ),
@@ -249,7 +254,7 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '總利潤',
+                          loc.finance_total_profit,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(

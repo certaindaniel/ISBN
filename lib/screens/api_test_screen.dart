@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/app_logger.dart';
 import '../models/api_source.dart';
 import '../services/isbn_service.dart';
@@ -196,9 +197,10 @@ class _ApiTestScreenState extends State<ApiTestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ISBN API 測試'),
+        title: Text(loc.api_test_title),
         centerTitle: true,
       ),
       body: Column(
@@ -214,7 +216,7 @@ class _ApiTestScreenState extends State<ApiTestScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.play_arrow),
-              label: Text(_isRunning ? '測試進行中...' : '開始測試'),
+              label: Text(_isRunning ? loc.api_test_running : loc.api_test_start),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
@@ -234,7 +236,7 @@ class _ApiTestScreenState extends State<ApiTestScreen> {
               ),
               child: SingleChildScrollView(
                 child: Text(
-                  _output.isEmpty ? '點擊「開始測試」執行 API 測試...' : _output,
+                  _output.isEmpty ? loc.api_test_output_placeholder : _output,
                   style: const TextStyle(
                     color: Colors.greenAccent,
                     fontFamily: 'Courier',
