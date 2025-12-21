@@ -201,11 +201,11 @@ class _BookEditScreenState extends State<BookEditScreen> {
     final fallback =
         '${_titleController.text} ${_authorController.text}'.trim();
     final query = isbn.isNotEmpty ? isbn : fallback;
-        final loc = AppLocalizations.of(context)!;
-        if (query.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.lexile_need_title_author)),
-          );
+    final loc = AppLocalizations.of(context)!;
+    if (query.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.lexile_need_title_author)),
+      );
       return;
     }
 
@@ -216,13 +216,13 @@ class _BookEditScreenState extends State<BookEditScreen> {
       ),
     );
     if (!mounted) return;
-        if (result is int) {
+    if (result is int) {
       setState(() {
         _lexileScoreController.text = result.toString();
       });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.lexile_refilled(result))),
-          );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.lexile_refilled(result))),
+      );
     }
   }
 
@@ -238,14 +238,15 @@ class _BookEditScreenState extends State<BookEditScreen> {
         setState(() {
           _pickedImage = File(pickedFile.path);
         });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(loc.photo_taken)),
-            );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc.photo_taken)),
+        );
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.photo_failed(e)), backgroundColor: Colors.red),
+        SnackBar(
+            content: Text(loc.photo_failed(e)), backgroundColor: Colors.red),
       );
     }
   }
@@ -302,9 +303,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
         _publisherController.text.isEmpty ||
         _isbnController.text.isEmpty ||
         _purchasePriceController.text.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.pleaseFillRequiredFields)),
-          );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.pleaseFillRequiredFields)),
+      );
       return;
     }
 
@@ -348,16 +349,16 @@ class _BookEditScreenState extends State<BookEditScreen> {
     }
 
     if (success && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.book_saved)),
-          );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.book_saved)),
+      );
       Navigator.of(context).pop(true);
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(provider.error ?? loc.save_failed),
-              backgroundColor: Colors.red,
-            ),
+        SnackBar(
+          content: Text(provider.error ?? loc.save_failed),
+          backgroundColor: Colors.red,
+        ),
       );
       provider.clearError();
     }
@@ -377,7 +378,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-              title: Text(widget.initialBook == null ? loc.new_book : loc.edit_book),
+          title:
+              Text(widget.initialBook == null ? loc.new_book : loc.edit_book),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -458,13 +460,13 @@ class _BookEditScreenState extends State<BookEditScreen> {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(height: 8),
-                              Text(
-                                '拍攝封面',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 12,
-                                ),
-                              ),
+                                  Text(
+                                    AppLocalizations.of(context)!.take_photo,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                             ],
                           ),
                         ),
@@ -490,10 +492,10 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // ISBN
               TextField(
                 controller: _isbnController,
-                decoration: const InputDecoration(
-                  labelText: 'ISBN *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.barcode_reader),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.manual_isbn_label,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.barcode_reader),
                 ),
                 readOnly: widget.initialBook != null,
               ),
@@ -502,9 +504,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 書名
               TextField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: '書名 *',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_title_required,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -512,9 +514,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 作者
               TextField(
                 controller: _authorController,
-                decoration: const InputDecoration(
-                  labelText: '作者 *',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_author_required,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -522,9 +524,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 出版社
               TextField(
                 controller: _publisherController,
-                decoration: const InputDecoration(
-                  labelText: '出版社 *',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_publisher_required,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -532,9 +534,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 描述
               TextField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: '描述',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_description,
+                  border: const OutlineInputBorder(),
                 ),
                 maxLines: 3,
               ),
@@ -553,7 +555,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                     children: [
                       const Icon(Icons.language, size: 20),
                       const SizedBox(width: 12),
-                      Text('語言: ${_getLanguageName(_language!)}'),
+                      Text(AppLocalizations.of(context)!.language_label(_getLanguageName(_language!))),
                     ],
                   ),
                 )
@@ -589,10 +591,10 @@ class _BookEditScreenState extends State<BookEditScreen> {
                         const SizedBox(width: 12),
                         Text(
                           _readStatus == 'read'
-                              ? '已讀'
+                              ? AppLocalizations.of(context)!.filter_read
                               : _readStatus == 'reading'
-                                  ? '閱讀中'
-                                  : '未讀',
+                                  ? AppLocalizations.of(context)!.filter_reading
+                                  : AppLocalizations.of(context)!.filter_unread,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -602,10 +604,10 @@ class _BookEditScreenState extends State<BookEditScreen> {
                     ),
                     const SizedBox(height: 12),
                     SegmentedButton<String>(
-                      segments: const [
-                        ButtonSegment(value: 'unread', label: Text('未讀')),
-                        ButtonSegment(value: 'reading', label: Text('閱讀中')),
-                        ButtonSegment(value: 'read', label: Text('已讀')),
+                      segments: [
+                        ButtonSegment(value: 'unread', label: Text(AppLocalizations.of(context)!.filter_unread)),
+                        ButtonSegment(value: 'reading', label: Text(AppLocalizations.of(context)!.filter_reading)),
+                        ButtonSegment(value: 'read', label: Text(AppLocalizations.of(context)!.filter_read)),
                       ],
                       selected: {_readStatus},
                       onSelectionChanged: (selection) {
@@ -623,14 +625,15 @@ class _BookEditScreenState extends State<BookEditScreen> {
               TextField(
                 controller: _lexileScoreController,
                 decoration: InputDecoration(
-                  labelText: '藍思值 (Lexile Measure)',
+                  labelText: AppLocalizations.of(context)!.label_lexile,
                   border: const OutlineInputBorder(),
-                  hintText: '例: 850',
-                  helperText:
-                      _language == 'en' ? '英文書籍的閱讀難度指標' : '主要用於英文書籍，若非英文可留空',
+                  hintText: AppLocalizations.of(context)!.example_lexile_hint,
+                  helperText: _language == 'en'
+                      ? AppLocalizations.of(context)!.lexile_manual_title
+                      : AppLocalizations.of(context)!.lexile_manual_label,
                   prefixIcon: const Icon(Icons.auto_graph),
                   suffixIcon: IconButton(
-                    tooltip: '到 Lexile 查詢',
+                    tooltip: AppLocalizations.of(context)!.searching_title,
                     onPressed: _openLexileSearch,
                     icon: const Icon(Icons.open_in_new),
                   ),
@@ -642,9 +645,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 購買價格
               TextField(
                 controller: _purchasePriceController,
-                decoration: const InputDecoration(
-                  labelText: '購買價格 (元) *',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_purchase_price_required,
+                  border: const OutlineInputBorder(),
                   prefixText: '\$ ',
                 ),
                 keyboardType: TextInputType.number,
@@ -653,7 +656,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
               // 購買日期
               ListTile(
-                title: const Text('購買日期'),
+                title: Text(AppLocalizations.of(context)!.purchase_date_title),
                 subtitle: Text(
                     '${_purchaseDate.year}-${_purchaseDate.month.toString().padLeft(2, '0')}-${_purchaseDate.day.toString().padLeft(2, '0')}'),
                 trailing: const Icon(Icons.calendar_today),
@@ -668,9 +671,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 售出價格
               TextField(
                 controller: _salePriceController,
-                decoration: const InputDecoration(
-                  labelText: '售出價格 (元)',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.label_sale_price,
+                  border: const OutlineInputBorder(),
                   prefixText: '\$ ',
                 ),
                 keyboardType: TextInputType.number,
@@ -680,7 +683,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
               // 售出日期
               if (_saleDate != null) ...[
                 ListTile(
-                  title: const Text('售出日期'),
+                  title: Text(AppLocalizations.of(context)!.sale_date_title),
                   subtitle: Text(
                       '${_saleDate!.year}-${_saleDate!.month.toString().padLeft(2, '0')}-${_saleDate!.day.toString().padLeft(2, '0')}'),
                   trailing: const Icon(Icons.calendar_today),
@@ -694,7 +697,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                 ElevatedButton.icon(
                   onPressed: () => _selectDate(false),
                   icon: const Icon(Icons.add),
-                  label: const Text('設定售出日期'),
+                  label: Text(AppLocalizations.of(context)!.set_sale_date_label),
                 ),
               ],
               const SizedBox(height: 32),
@@ -713,21 +716,21 @@ class _BookEditScreenState extends State<BookEditScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '利潤計算',
+                        AppLocalizations.of(context)!.profit_calculation,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('購買價格:'),
+                          Text('${AppLocalizations.of(context)!.label_purchase_price_required}:'),
                           Text('\$${_purchasePriceController.text}'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('售出價格:'),
+                          Text('${AppLocalizations.of(context)!.label_sale_price}:'),
                           Text('\$${_salePriceController.text}'),
                         ],
                       ),
@@ -735,9 +738,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            '利潤:',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Text(
+                            '${AppLocalizations.of(context)!.profit_label}:',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '\$${((double.tryParse(_salePriceController.text) ?? 0.0) - (double.tryParse(_purchasePriceController.text) ?? 0.0)).toStringAsFixed(2)}',

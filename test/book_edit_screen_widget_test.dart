@@ -13,6 +13,7 @@ void main() {
   testWidgets('沒有封面時顯示拍攝提示', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('zh'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: const Scaffold(
