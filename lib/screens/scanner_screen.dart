@@ -7,6 +7,7 @@ import '../models/api_source.dart';
 import '../providers/settings_provider.dart';
 import '../services/isbn_service.dart';
 import '../models/book.dart';
+import '../widgets/pop_scope.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -234,7 +235,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               return false; // cancel or null
             }
 
-            return WillPopScope(
+            return CompatPopScope(
               onWillPop: confirmClose,
               child: Padding(
                 padding: EdgeInsets.only(

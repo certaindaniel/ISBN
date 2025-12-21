@@ -6,6 +6,7 @@ import 'dart:io';
 import 'lexile_webview_screen.dart';
 import '../models/book.dart';
 import '../providers/book_provider.dart';
+import '../widgets/pop_scope.dart';
 
 class BookEditScreen extends StatefulWidget {
   final Book? initialBook;
@@ -359,7 +360,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return CompatPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
