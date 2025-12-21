@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -50,6 +51,7 @@ class _BookListScreenState extends State<BookListScreen> {
                 );
                 setState(() => results = list);
               } catch (err) {
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('查詢失敗: $err'),
@@ -147,35 +149,34 @@ class _BookListScreenState extends State<BookListScreen> {
                                   ),
                                 );
                                 if (ok == true) {
+                                  if (!context.mounted) return;
                                   Navigator.of(context).pop();
-                                  final provider =
-                                      this.context.read<BookProvider>();
+                                  final provider = context.read<BookProvider>();
                                   final settings =
-                                      this.context.read<SettingsProvider>();
+                                      context.read<SettingsProvider>();
                                   final book = await provider.searchBookByIsbn(
                                     isbnController.text.trim(),
                                     sources: settings.enabledSources,
                                   );
                                   if (book != null) {
-                                    final editResult =
-                                        await Navigator.of(this.context)
-                                            .pushNamed(
+                                    if (!context.mounted) return;
+                                    final nav = Navigator.of(context);
+                                    final editResult = await nav.pushNamed(
                                       '/book-edit',
                                       arguments: book,
                                     );
-                                    if (editResult == true && this.mounted) {
-                                      await this
-                                          .context
+                                    if (editResult == true && context.mounted) {
+                                      await context
                                           .read<BookProvider>()
                                           .loadBooks();
-                                      ScaffoldMessenger.of(this.context)
+                                      ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(content: Text('已新增書籍')),
                                       );
                                     }
                                   } else {
-                                    ScaffoldMessenger.of(this.context)
-                                        .showSnackBar(
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content:
                                               Text(provider.error ?? '查無書籍資訊')),
@@ -203,18 +204,16 @@ class _BookListScreenState extends State<BookListScreen> {
                             subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
                             onTap: () async {
                               Navigator.of(context).pop();
-                              final editResult =
-                                  await Navigator.of(this.context).pushNamed(
+                              if (!context.mounted) return;
+                              final nav = Navigator.of(context);
+                              final editResult = await nav.pushNamed(
                                 '/book-edit',
                                 arguments: b,
                               );
-                              if (!mounted) return;
+                              if (!context.mounted) return;
                               if (editResult == true) {
-                                await this
-                                    .context
-                                    .read<BookProvider>()
-                                    .loadBooks();
-                                ScaffoldMessenger.of(this.context).showSnackBar(
+                                await context.read<BookProvider>().loadBooks();
+                                ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('已新增書籍')),
                                 );
                               }
@@ -239,7 +238,8 @@ class _BookListScreenState extends State<BookListScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       context.read<BookProvider>().loadBooks();
     });
   }
@@ -417,11 +417,13 @@ class _BookListScreenState extends State<BookListScreen> {
                       return BookListItem(
                         book: book,
                         onEdit: () async {
-                          final result = await Navigator.of(context).pushNamed(
+                          if (!context.mounted) return;
+                          final nav = Navigator.of(context);
+                          final result = await nav.pushNamed(
                             '/book-edit',
                             arguments: book,
                           );
-                          if (result == true && mounted) {
+                          if (result == true && context.mounted) {
                             await provider.loadBooks();
                           }
                         },
@@ -461,11 +463,12 @@ class _BookListScreenState extends State<BookListScreen> {
                       subtitle: const Text('使用相機掃描條碼（支援 978/979）'),
                       onTap: () async {
                         Navigator.of(sheetContext).pop();
-                        final result =
-                            await Navigator.of(context).pushNamed('/scanner');
-                        if (result == true && mounted) {
-                          await context.read<BookProvider>().loadBooks();
-                          ScaffoldMessenger.of(context).showSnackBar(
+                        if (!sheetContext.mounted) return;
+                        final nav = Navigator.of(sheetContext);
+                        final result = await nav.pushNamed('/scanner');
+                        if (result == true && sheetContext.mounted) {
+                          await sheetContext.read<BookProvider>().loadBooks();
+                          ScaffoldMessenger.of(sheetContext).showSnackBar(
                             const SnackBar(content: Text('已新增書籍')),
                           );
                         }

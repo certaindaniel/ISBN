@@ -6,7 +6,7 @@ void main() async {
 }
 
 class IsbnBookManagerApp extends StatelessWidget {
-  const IsbnBookManagerApp({Key? key}) : super(key: key);
+  const IsbnBookManagerApp({super.key});
 
   @override
   Widget build(BuildContext context) {

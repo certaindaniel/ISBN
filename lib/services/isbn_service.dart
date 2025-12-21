@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../utils/app_logger.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/book.dart';
@@ -80,8 +81,8 @@ class IsbnService {
         }
       }
       return null;
-    } catch (e) {
-      print('Open Library 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Open Library 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -132,8 +133,8 @@ class IsbnService {
         );
       }
       return null;
-    } catch (e) {
-      print('Google Books 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Google Books 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -181,8 +182,8 @@ class IsbnService {
         }
       }
       return byIsbn.values.toList();
-    } catch (e) {
-      print('書名查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('書名查詢錯誤: $e', e, st);
       return <Book>[];
     }
   }
@@ -356,8 +357,8 @@ class IsbnService {
         );
       }
       return results;
-    } catch (e) {
-      print('Open Library 書名查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Open Library 書名查詢錯誤: $e', e, st);
       return <Book>[];
     }
   }
@@ -398,8 +399,8 @@ class IsbnService {
         purchaseDate: DateTime.now(),
         language: language,
       );
-    } catch (e) {
-      print('Jike 免費 API 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Jike 免費 API 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -441,8 +442,8 @@ class IsbnService {
         );
       }
       return null;
-    } catch (e) {
-      print('Wikipedia 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Wikipedia 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -468,8 +469,8 @@ class IsbnService {
         purchasePrice: 0.0,
         purchaseDate: DateTime.now(),
       );
-    } catch (e) {
-      print('Open Library 解析錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Open Library 解析錯誤: $e', e, st);
       return null;
     }
   }
@@ -609,8 +610,8 @@ class IsbnService {
 
       // 2) 回退到 Open Library 中可能包含的 Lexile 分類
       return await _fetchLexileFromOpenLibrary(isbn);
-    } catch (e) {
-      print('Lexile 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Lexile 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -621,7 +622,7 @@ class IsbnService {
     if (lexileApiBase.isEmpty) return null;
 
     try {
-      final uri = Uri.parse('$lexileApiBase').replace(
+      final uri = Uri.parse(lexileApiBase).replace(
         queryParameters: {
           'isbn': isbn,
           'title': title,
@@ -650,8 +651,8 @@ class IsbnService {
         if (match != null) return int.tryParse(match.group(1) ?? '');
       }
       return null;
-    } catch (e) {
-      print('外部 Lexile API 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('外部 Lexile API 查詢錯誤: $e', e, st);
       return null;
     }
   }
@@ -687,8 +688,8 @@ class IsbnService {
         }
       }
       return null;
-    } catch (e) {
-      print('Open Library Lexile 查詢錯誤: $e');
+    } catch (e, st) {
+      AppLogger.warn('Open Library Lexile 查詢錯誤: $e', e, st);
       return null;
     }
   }

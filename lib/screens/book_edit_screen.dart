@@ -113,6 +113,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         builder: (_) => LexileWebViewScreen(searchQuery: query),
       ),
     );
+    if (!mounted) return;
     if (result is int) {
       setState(() {
         _lexileScoreController.text = result.toString();
@@ -130,6 +131,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         imageQuality: 85,
       );
       if (pickedFile != null) {
+        if (!mounted) return;
         setState(() {
           _pickedImage = File(pickedFile.path);
         });
@@ -138,6 +140,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('拍照失敗: $e'), backgroundColor: Colors.red),
       );
@@ -280,7 +283,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withAlpha((0.2 * 255).round()),
                             blurRadius: 8,
                           ),
                         ],
@@ -301,7 +304,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withAlpha((0.2 * 255).round()),
                             blurRadius: 8,
                           ),
                         ],
@@ -321,7 +324,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                           color: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(0.1),
+                              .withAlpha((0.1 * 255).round()),
                           border: Border.all(
                             color: Theme.of(context).colorScheme.primary,
                             width: 2,

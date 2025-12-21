@@ -129,7 +129,8 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
 
   int? _parseLexile(String text) {
     if (text.isEmpty) return null;
-    final match = RegExp(r'(?i)lexile\s*:?\s*(\d+)\s*L').firstMatch(text);
+    final match = RegExp(r'lexile\s*:?\s*(\d+)\s*L', caseSensitive: false)
+        .firstMatch(text);
     if (match != null) {
       return int.tryParse(match.group(1)!);
     }

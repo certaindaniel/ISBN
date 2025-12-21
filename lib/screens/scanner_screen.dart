@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
@@ -110,6 +111,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
           Navigator.of(context).pop(true);
         }
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(provider.error ?? '無法查詢到書籍資訊'),
@@ -162,6 +164,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               final title = titleController.text.trim();
               final author = authorController.text.trim();
               if (title.isEmpty) {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('請輸入書名'),
@@ -179,6 +182,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 );
                 setState(() => results = list);
               } catch (err) {
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('查詢失敗: $err'),
@@ -276,6 +280,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                                   ),
                                 );
                                 if (ok == true) {
+                                  if (!context.mounted) return;
                                   Navigator.of(context).pop();
                                   await _searchBook(isbnController.text.trim());
                                 }
@@ -300,6 +305,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             onTap: () async {
                               // 選定後開啟編輯頁
                               Navigator.of(context).pop();
+                              if (!mounted) return;
                               final editResult =
                                   await Navigator.of(this.context).pushNamed(
                                 '/book-edit',
@@ -373,7 +379,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withAlpha((0.7 * 255).round()),
                   ],
                 ),
               ),
@@ -386,13 +392,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withAlpha((0.5 * 255).round()),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.5),
+                            .withAlpha((0.5 * 255).round()),
                         width: 1,
                       ),
                     ),
@@ -408,13 +414,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withAlpha((0.5 * 255).round()),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.3),
+                            .withAlpha((0.3 * 255).round()),
                         width: 1,
                       ),
                     ),
@@ -428,7 +434,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             decoration: InputDecoration(
                               hintText: '手動輸入 ISBN',
                               hintStyle: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
+                                color:
+                                    Colors.white.withAlpha((0.6 * 255).round()),
                               ),
                               border: InputBorder.none,
                             ),

@@ -28,7 +28,7 @@ class Book {
     required this.purchaseDate,
     this.saleDate,
     this.quantity = 1,
-    this.status = 'unread',
+    this.status = 'owned',
     this.language,
     this.lexileScore,
   });
@@ -65,7 +65,7 @@ class Book {
         saleDate:
             json['saleDate'] != null ? DateTime.parse(json['saleDate']) : null,
         quantity: json['quantity'] ?? 1,
-        status: json['status'] ?? 'unread',
+        status: json['status'] ?? 'owned',
         language: json['language'],
         lexileScore: json['lexileScore'],
       );
@@ -101,7 +101,7 @@ class Book {
         saleDate:
             map['saleDate'] != null ? DateTime.parse(map['saleDate']) : null,
         quantity: map['quantity'] ?? 1,
-        status: map['status'] ?? 'unread',
+        status: map['status'] ?? 'owned',
         language: map['language'],
         lexileScore: map['lexileScore'],
       );

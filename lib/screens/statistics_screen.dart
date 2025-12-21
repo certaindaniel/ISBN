@@ -17,7 +17,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       context.read<BookProvider>().loadStatistics();
     });
   }
@@ -240,8 +241,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: totalProfit >= 0
-                          ? Colors.green.withOpacity(0.1)
-                          : Colors.red.withOpacity(0.1),
+                          ? Colors.green.withAlpha((0.1 * 255).round())
+                          : Colors.red.withAlpha((0.1 * 255).round()),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(

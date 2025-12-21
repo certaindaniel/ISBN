@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 enum ApiSource {
   googleBooks,
   openLibrary,
@@ -75,11 +73,11 @@ class ApiSourceRegistry {
 
   static ApiSource? fromId(String raw) {
     try {
-      return ApiSource.values.firstWhere((s) => describeEnum(s) == raw);
+      return ApiSource.values.firstWhere((s) => s.name == raw);
     } catch (_) {
       return null;
     }
   }
 
-  static String toId(ApiSource source) => describeEnum(source);
+  static String toId(ApiSource source) => source.name;
 }

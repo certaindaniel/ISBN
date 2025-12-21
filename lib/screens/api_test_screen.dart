@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../utils/app_logger.dart';
 import '../models/api_source.dart';
 import '../services/isbn_service.dart';
 
@@ -19,7 +19,7 @@ class _ApiTestScreenState extends State<ApiTestScreen> {
     setState(() {
       _output += '$message\n';
     });
-    debugPrint(message);
+    AppLogger.debug(message);
   }
 
   Future<void> _runTests() async {

@@ -3,6 +3,7 @@ import '../models/book.dart';
 import '../models/api_source.dart';
 import '../services/database_helper.dart';
 import '../services/isbn_service.dart';
+import '../utils/app_logger.dart';
 
 class BookProvider extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
@@ -43,8 +44,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _statistics = await _dbHelper.getStatistics();
       notifyListeners();
-    } catch (e) {
-      print('載入統計失敗: $e');
+    } catch (e, st) {
+      AppLogger.warn('載入統計失敗: $e', e, st);
     }
   }
 
