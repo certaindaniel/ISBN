@@ -17,6 +17,7 @@ class IsbnService {
     String rawIsbn, {
     List<ApiSource>? sources,
     ValueChanged<ApiSource>? onSourceStart,
+    http.Client? client,
   }) async {
     final isbn = normalizeIsbn(rawIsbn);
 
@@ -28,38 +29,47 @@ class IsbnService {
     }
 
     final activeSources = (sources == null || sources.isEmpty)
-        ? ApiSourceRegistry.defaultEnabled()
-        : sources;
+      ? ApiSourceRegistry.defaultEnabled()
+      : sources;
 
-    for (final source in activeSources) {
-      onSourceStart?.call(source);
-      Book? result;
-      switch (source) {
-        case ApiSource.googleBooks:
-          result = await _searchGoogleBooks(isbn);
-          break;
-        case ApiSource.openLibrary:
-          result = await _searchOpenLibrary(isbn);
-          break;
-        case ApiSource.wikipedia:
-          result = await _searchWikipedia(isbn);
-          break;
-        case ApiSource.jikeFree:
-          result = await _searchJikeFree(isbn);
-          break;
+    // 使用可注入的 http client（若未提供則自行建立並在結束時關閉），以利測試時注入 MockClient
+    final bool _shouldCloseClient = client == null;
+    final http.Client _client = client ?? http.Client();
+
+    try {
+      for (final source in activeSources) {
+        onSourceStart?.call(source);
+        Book? result;
+        switch (source) {
+          case ApiSource.googleBooks:
+            result = await _searchGoogleBooks(isbn, _client);
+            break;
+          case ApiSource.openLibrary:
+            result = await _searchOpenLibrary(isbn, _client);
+            break;
+          case ApiSource.wikipedia:
+            result = await _searchWikipedia(isbn, _client);
+            break;
+          case ApiSource.jikeFree:
+            result = await _searchJikeFree(isbn, _client);
+            break;
+        }
+        if (result != null) return result;
       }
-      if (result != null) return result;
+      return null;
+    } finally {
+      if (_shouldCloseClient) {
+        try {
+          _client.close();
+        } catch (_) {}
+      }
     }
-
-    return null;
   }
 
-  static Future<Book?> _searchOpenLibrary(String isbn) async {
+  static Future<Book?> _searchOpenLibrary(String isbn, http.Client client) async {
     try {
-      final response = await http
-          .get(
-            Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'),
-          )
+      final response = await client
+          .get(Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'))
           .timeout(_timeout);
 
       if (response.statusCode == 200) {
@@ -87,12 +97,10 @@ class IsbnService {
     }
   }
 
-  static Future<Book?> _searchGoogleBooks(String isbn) async {
+  static Future<Book?> _searchGoogleBooks(String isbn, http.Client client) async {
     try {
-      final url = Uri.parse(
-        'https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn',
-      );
-      final response = await http.get(url).timeout(_timeout);
+      final url = Uri.parse('https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn');
+      final response = await client.get(url).timeout(_timeout);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -363,9 +371,9 @@ class IsbnService {
     }
   }
 
-  static Future<Book?> _searchJikeFree(String isbn) async {
+  static Future<Book?> _searchJikeFree(String isbn, http.Client client) async {
     try {
-      final response = await http
+      final response = await client
           .get(Uri.parse('https://api.jike.xyz/situ/book/isbn/$isbn'))
           .timeout(const Duration(seconds: 8)); // 縮短超時，此來源較不穩定
 
@@ -407,17 +415,14 @@ class IsbnService {
 
  
 
-  static Future<Book?> _searchWikipedia(String isbn) async {
+  static Future<Book?> _searchWikipedia(String isbn, http.Client client) async {
     try {
       // 使用 ISBN 和可能的書名搜尋
       final searchQuery = 'ISBN $isbn';
-      final response = await http
-          .get(
-            Uri.parse(
+      final response = await client
+          .get(Uri.parse(
               'https://en.wikipedia.org/w/api.php?'
-              'action=query&list=search&srsearch=${Uri.encodeComponent(searchQuery)}&format=json&srprop=snippet',
-            ),
-          )
+              'action=query&list=search&srsearch=${Uri.encodeComponent(searchQuery)}&format=json&srprop=snippet'))
           .timeout(_timeout);
 
       if (response.statusCode != 200) return null;
@@ -619,7 +624,7 @@ class IsbnService {
   }
 
   /// 從外部可配置 API 獲取 Lexile 分數，成功則回傳分數，未配置或失敗回傳 null
-  static Future<int?> _fetchLexileFromExternal(
+    static Future<int?> _fetchLexileFromExternal(
       String isbn, String title) async {
     if (lexileApiBase.isEmpty) return null;
 
@@ -663,9 +668,7 @@ class IsbnService {
   static Future<int?> _fetchLexileFromOpenLibrary(String isbn) async {
     try {
       final response = await http
-          .get(
-            Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'),
-          )
+          .get(Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'))
           .timeout(const Duration(seconds: 8));
 
       if (response.statusCode == 200) {
