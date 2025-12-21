@@ -80,7 +80,15 @@
   "purchase_date_title": "購買日期",
   "sale_date_title": "售出日期",
   "set_sale_date_label": "設定售出日期",
-  "profit_label": "利潤"
+    "profit_label": "利潤",
+    "no_enabled_sources": "尚未啟用任何查詢來源，請到設定頁開啟來源",
+    "searching_title": "查詢中...",
+    "source_label": "來源：{value}",
+    "cannot_find_book": "無法查詢到書籍資訊",
+    "scan_not_isbn_ean": "請掃描 ISBN 條碼，這個是 EAN",
+    "please_enter_title": "請輸入書名",
+    "query_failed_error": "查詢失敗: {error}",
+    "error_prefix": "錯誤: {message}"
   ,
   "no_results_text": "查無結果（或無可用 ISBN）",
   "manual_isbn_hint": "請輸入 10 或 13 位 ISBN",

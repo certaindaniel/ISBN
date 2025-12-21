@@ -56,22 +56,24 @@ class _ScannerScreenState extends State<ScannerScreen> {
     final enabledSources = settings.enabledSources;
 
     if (enabledSources.isEmpty) {
+      final loc = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('尚未啟用任何查詢來源，請到設定頁開啟來源'),
+        SnackBar(
+          content: Text(loc.no_enabled_sources),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    final sourceNotifier = ValueNotifier<String>('準備查詢...');
+    final loc = AppLocalizations.of(context)!;
+    final sourceNotifier = ValueNotifier<String>(loc.searching_title);
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('查詢中...'),
+        title: Text(loc.searching_title),
         content: SizedBox(
           height: 80,
           child: Column(
@@ -81,7 +83,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               const SizedBox(height: 12),
               ValueListenableBuilder<String>(
                 valueListenable: sourceNotifier,
-                builder: (context, value, _) => Text('來源：$value'),
+                builder: (context, value, _) => Text(loc.source_label(value)),
               ),
             ],
           ),
@@ -116,7 +118,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(provider.error ?? '無法查詢到書籍資訊'),
+            content: Text(provider.error ?? loc.cannot_find_book),
             backgroundColor: Colors.red,
           ),
         );
@@ -129,8 +131,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
       if (message.contains('這個是 EAN')) {
         // 提示並提供以書名查詢的選項
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('請掃描 ISBN 條碼，這個是 EAN'),
+          SnackBar(
+            content: Text(loc.scan_not_isbn_ean),
             backgroundColor: Colors.orange,
           ),
         );
@@ -138,7 +140,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('錯誤: $message'),
+            content: Text(loc.error_prefix(message)),
             backgroundColor: Colors.red,
           ),
         );
@@ -169,9 +171,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
               final author = authorController.text.trim();
               if (title.isEmpty) {
                 if (!mounted) return;
+                final loc = AppLocalizations.of(context)!;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('請輸入書名'),
+                  SnackBar(
+                    content: Text(loc.please_enter_title),
                     backgroundColor: Colors.red,
                   ),
                 );
@@ -185,11 +188,12 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   // 可視需要加入語言限制，例如: langRestrict: 'en'
                 );
                 setState(() => results = list);
-              } catch (err) {
+                } catch (err) {
                 if (!context.mounted) return;
+                final loc = AppLocalizations.of(context)!;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('查詢失敗: $err'),
+                    content: Text(loc.query_failed_error(err)),
                     backgroundColor: Colors.red,
                   ),
                 );

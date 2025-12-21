@@ -86,4 +86,13 @@
   "sale_date_title": "Sale Date",
   "set_sale_date_label": "Set sale date",
   "profit_label": "Profit"
+  ,
+  "no_enabled_sources": "No ISBN sources enabled, please enable sources in Settings",
+  "searching_title": "Searching...",
+  "source_label": "Source: {value}",
+  "cannot_find_book": "Unable to find book information",
+  "scan_not_isbn_ean": "Please scan an ISBN barcode; this is an EAN",
+  "please_enter_title": "Please enter title",
+  "query_failed_error": "Query failed: {error}",
+  "error_prefix": "Error: {message}"
 }
