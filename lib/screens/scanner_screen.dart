@@ -152,6 +152,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
       builder: (context) {
         final titleController = TextEditingController();
         final authorController = TextEditingController();
@@ -194,133 +196,193 @@ class _ScannerScreenState extends State<ScannerScreen> {
               }
             }
 
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 16,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    '以書名查詢（Google Books）',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: '書名（必填）',
-                      border: OutlineInputBorder(),
+            Future<bool> _confirmClose() async {
+              // 若有未輸入內容或有查詢結果，提示使用者
+              final hasChanges = titleController.text.trim().isNotEmpty ||
+                  authorController.text.trim().isNotEmpty ||
+                  results.isNotEmpty ||
+                  loading;
+              if (!hasChanges) return true;
+
+              final choice = await showDialog<String?>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('有未完成的查詢或變更'),
+                  content: const Text('您有尚未完成的查詢或輸入，要執行查詢、放棄變更還是繼續編輯？'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop('cancel'),
+                      child: const Text('取消'),
                     ),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: authorController,
-                    decoration: const InputDecoration(
-                      labelText: '作者（可選）',
-                      border: OutlineInputBorder(),
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop('discard'),
+                      child: const Text('放棄變更'),
                     ),
-                    onSubmitted: (_) => doSearch(),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: loading ? null : doSearch,
-                      icon: const Icon(Icons.search),
-                      label: const Text('查詢'),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(ctx).pop('search'),
+                      child: const Text('執行查詢'),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  if (loading) const LinearProgressIndicator(),
-                  if (!loading && results.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        children: [
-                          const Text(
-                            '查無結果（或無可用 ISBN）',
-                            style: TextStyle(color: Colors.grey),
+                  ],
+                ),
+              );
+
+              if (choice == 'discard') return true;
+              if (choice == 'search') {
+                await doSearch();
+                return false;
+              }
+              return false; // cancel or null
+            }
+
+            return WillPopScope(
+              onWillPop: _confirmClose,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '以書名查詢（Google Books）',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                              icon: const Icon(Icons.edit),
-                              label: const Text('手動輸入 ISBN'),
-                              onPressed: () async {
-                                final isbnController = TextEditingController();
-                                final ok = await showDialog<bool>(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    title: const Text('手動輸入 ISBN'),
-                                    content: TextField(
-                                      controller: isbnController,
-                                      decoration: const InputDecoration(
-                                        hintText: '請輸入 10 或 13 位 ISBN',
+                        ),
+                        IconButton(
+                          tooltip: '關閉',
+                          onPressed: () async {
+                            final shouldClose = await _confirmClose();
+                            if (shouldClose && context.mounted) {
+                              Navigator.of(context).pop(false);
+                            }
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        labelText: '書名（必填）',
+                        border: OutlineInputBorder(),
+                      ),
+                      textInputAction: TextInputAction.next,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: authorController,
+                      decoration: const InputDecoration(
+                        labelText: '作者（可選）',
+                        border: OutlineInputBorder(),
+                      ),
+                      onSubmitted: (_) => doSearch(),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: loading ? null : doSearch,
+                        icon: const Icon(Icons.search),
+                        label: const Text('查詢'),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    if (loading) const LinearProgressIndicator(),
+                    if (!loading && results.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Column(
+                          children: [
+                            const Text(
+                              '查無結果（或無可用 ISBN）',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton.icon(
+                                icon: const Icon(Icons.edit),
+                                label: const Text('手動輸入 ISBN'),
+                                onPressed: () async {
+                                  final isbnController =
+                                      TextEditingController();
+                                  final ok = await showDialog<bool>(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text('手動輸入 ISBN'),
+                                      content: TextField(
+                                        controller: isbnController,
+                                        decoration: const InputDecoration(
+                                          hintText: '請輸入 10 或 13 位 ISBN',
+                                        ),
+                                        keyboardType: TextInputType.number,
                                       ),
-                                      keyboardType: TextInputType.number,
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(false),
+                                          child: const Text('取消'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(true),
+                                          child: const Text('查詢'),
+                                        ),
+                                      ],
                                     ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(ctx).pop(false),
-                                        child: const Text('取消'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(ctx).pop(true),
-                                        child: const Text('查詢'),
-                                      ),
-                                    ],
-                                  ),
+                                  );
+                                  if (ok == true) {
+                                    if (!context.mounted) return;
+                                    Navigator.of(context).pop();
+                                    await _searchBook(
+                                        isbnController.text.trim());
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (!loading && results.isNotEmpty)
+                      Flexible(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: results.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (context, index) {
+                            final b = results[index];
+                            return ListTile(
+                              leading: const Icon(Icons.menu_book_outlined),
+                              title: Text(b.title),
+                              subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
+                              onTap: () async {
+                                // 選定後開啟編輯頁
+                                Navigator.of(context).pop();
+                                if (!mounted) return;
+                                final editResult =
+                                    await Navigator.of(this.context).pushNamed(
+                                  '/book-edit',
+                                  arguments: b,
                                 );
-                                if (ok == true) {
-                                  if (!context.mounted) return;
-                                  Navigator.of(context).pop();
-                                  await _searchBook(isbnController.text.trim());
+                                if (!mounted) return;
+                                if (editResult == true) {
+                                  Navigator.of(this.context).pop(true);
                                 }
                               },
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  if (!loading && results.isNotEmpty)
-                    Flexible(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: results.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          final b = results[index];
-                          return ListTile(
-                            leading: const Icon(Icons.menu_book_outlined),
-                            title: Text(b.title),
-                            subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
-                            onTap: () async {
-                              // 選定後開啟編輯頁
-                              Navigator.of(context).pop();
-                              if (!mounted) return;
-                              final editResult =
-                                  await Navigator.of(this.context).pushNamed(
-                                '/book-edit',
-                                arguments: b,
-                              );
-                              if (!mounted) return;
-                              if (editResult == true) {
-                                Navigator.of(this.context).pop(true);
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             );
           },
