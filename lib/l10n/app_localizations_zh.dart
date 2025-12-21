@@ -43,6 +43,172 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pleaseFillRequiredFields => '請填入所有必填欄位';
+
+  @override
+  String get bookList_search_hint => '請輸入書名';
+
+  @override
+  String search_failed(Object error) {
+    return '查詢失敗: $error';
+  }
+
+  @override
+  String get search_button => '查詢';
+
+  @override
+  String get manual_isbn_label => '手動輸入 ISBN';
+
+  @override
+  String get manual_isbn_title => '手動輸入 ISBN';
+
+  @override
+  String get book_added => '已新增書籍';
+
+  @override
+  String get book_deleted => '書籍已刪除';
+
+  @override
+  String get delete_confirm_title => '刪除確認';
+
+  @override
+  String get delete_confirm_content => '確定要刪除此書籍嗎？';
+
+  @override
+  String get delete_action => '刪除';
+
+  @override
+  String get my_books_title => '我的書籍';
+
+  @override
+  String get filter_all => '全部';
+
+  @override
+  String get filter_unread => '未讀';
+
+  @override
+  String get filter_reading => '閱讀中';
+
+  @override
+  String get filter_read => '已讀';
+
+  @override
+  String get empty_hint => '換個篩選或新增一本試試看';
+
+  @override
+  String get search_by_title_title => '以書名查詢';
+
+  @override
+  String get search_by_title_subtitle => '輸入書名/作者，用 Google Books 搜尋';
+
+  @override
+  String get scan_title => '掃描 ISBN';
+
+  @override
+  String get scan_subtitle => '使用相機掃描條碼（支援 978/979）';
+
+  @override
+  String lexile_label(Object score) {
+    return 'Lexile: ${score}L';
+  }
+
+  @override
+  String get edit => '編輯';
+
+  @override
+  String get delete => '刪除';
+
+  @override
+  String lexile_load_failed(Object error) {
+    return '載入失敗: $error';
+  }
+
+  @override
+  String get lexile_clipboard_none => '剪貼簿未偵測到 Lexile 值';
+
+  @override
+  String get lexile_manual_title => '手動輸入 Lexile 值';
+
+  @override
+  String get lexile_cancel => '取消';
+
+  @override
+  String get lexile_fill => '回填';
+
+  @override
+  String get lexile_manual_label => '手動輸入';
+
+  @override
+  String get statistics_title => '統計報告';
+
+  @override
+  String stats_reading_label(Object count) {
+    return '閱讀中: $count 本';
+  }
+
+  @override
+  String stats_unread_label(Object count) {
+    return '未讀: $count 本';
+  }
+
+  @override
+  String get settings_title => '設定';
+
+  @override
+  String get settings_sources_subtitle => '可切換使用的 ISBN 查詢來源，依序嘗試';
+
+  @override
+  String get settings_manual_query_subtitle => '手動查詢書籍資訊';
+
+  @override
+  String get settings_tnla_title => '台灣國家圖書館 ISBN';
+
+  @override
+  String get settings_tnla_subtitle => '查詢台灣出版書籍資訊';
+
+  @override
+  String get settings_bok_title => '博客來';
+
+  @override
+  String get settings_bok_subtitle => '台灣最大網路書店';
+
+  @override
+  String get settings_eslite_title => '誠品書店';
+
+  @override
+  String get settings_eslite_subtitle => '誠品線上書店';
+
+  @override
+  String get settings_google_title => 'Google Books';
+
+  @override
+  String get settings_google_subtitle => '全球書籍資料庫';
+
+  @override
+  String get lexile_title => 'Lexile 查詢';
+
+  @override
+  String get no_results_text => '查無結果（或無可用 ISBN）';
+
+  @override
+  String get manual_isbn_hint => '請輸入 10 或 13 位 ISBN';
+
+  @override
+  String get book_not_found => '查無書籍資訊';
+
+  @override
+  String get filter_no_books => '這個篩選沒有書籍';
+
+  @override
+  String get refresh_tooltip => '重新整理';
+
+  @override
+  String get example_lexile_hint => '例如：850';
+
+  @override
+  String get clipboard_paste_tooltip => '貼上回填';
+
+  @override
+  String get author_optional => '作者（可選）';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -84,6 +250,172 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get pleaseFillRequiredFields => '请填写所有必填栏位';
+
+  @override
+  String get bookList_search_hint => '请输入书名';
+
+  @override
+  String search_failed(Object error) {
+    return '查询失败: $error';
+  }
+
+  @override
+  String get search_button => '查询';
+
+  @override
+  String get manual_isbn_label => '手动输入 ISBN';
+
+  @override
+  String get manual_isbn_title => '手动输入 ISBN';
+
+  @override
+  String get book_added => '已新增书籍';
+
+  @override
+  String get book_deleted => '书籍已删除';
+
+  @override
+  String get delete_confirm_title => '删除确认';
+
+  @override
+  String get delete_confirm_content => '确定要删除此书籍吗？';
+
+  @override
+  String get delete_action => '删除';
+
+  @override
+  String get my_books_title => '我的书籍';
+
+  @override
+  String get filter_all => '全部';
+
+  @override
+  String get filter_unread => '未读';
+
+  @override
+  String get filter_reading => '阅读中';
+
+  @override
+  String get filter_read => '已读';
+
+  @override
+  String get empty_hint => '换个筛选或新增一本试试看';
+
+  @override
+  String get search_by_title_title => '以书名查询';
+
+  @override
+  String get search_by_title_subtitle => '输入书名/作者，用 Google Books 搜寻';
+
+  @override
+  String get scan_title => '扫描 ISBN';
+
+  @override
+  String get scan_subtitle => '使用相机扫描条码（支持 978/979）';
+
+  @override
+  String lexile_label(Object score) {
+    return 'Lexile: ${score}L';
+  }
+
+  @override
+  String get edit => '编辑';
+
+  @override
+  String get delete => '删除';
+
+  @override
+  String lexile_load_failed(Object error) {
+    return '加载失败: $error';
+  }
+
+  @override
+  String get lexile_clipboard_none => '剪贴板未检测到 Lexile 值';
+
+  @override
+  String get lexile_manual_title => '手动输入 Lexile 值';
+
+  @override
+  String get lexile_cancel => '取消';
+
+  @override
+  String get lexile_fill => '回填';
+
+  @override
+  String get lexile_manual_label => '手动输入';
+
+  @override
+  String get statistics_title => '统计报告';
+
+  @override
+  String stats_reading_label(Object count) {
+    return '阅读中: $count 本';
+  }
+
+  @override
+  String stats_unread_label(Object count) {
+    return '未读: $count 本';
+  }
+
+  @override
+  String get settings_title => '设置';
+
+  @override
+  String get settings_sources_subtitle => '可切换使用的 ISBN 查询来源，依序尝试';
+
+  @override
+  String get settings_manual_query_subtitle => '手动查询书籍信息';
+
+  @override
+  String get settings_tnla_title => '台湾国家图书馆 ISBN';
+
+  @override
+  String get settings_tnla_subtitle => '查询台湾出版书籍信息';
+
+  @override
+  String get settings_bok_title => '博客来';
+
+  @override
+  String get settings_bok_subtitle => '台湾最大网络书店';
+
+  @override
+  String get settings_eslite_title => '诚品书店';
+
+  @override
+  String get settings_eslite_subtitle => '诚品线上书店';
+
+  @override
+  String get settings_google_title => 'Google Books';
+
+  @override
+  String get settings_google_subtitle => '全球书籍数据库';
+
+  @override
+  String get lexile_title => 'Lexile 查询';
+
+  @override
+  String get no_results_text => '查无结果（或无可用 ISBN）';
+
+  @override
+  String get manual_isbn_hint => '请输入 10 或 13 位 ISBN';
+
+  @override
+  String get book_not_found => '查无书籍信息';
+
+  @override
+  String get filter_no_books => '此筛选没有书籍';
+
+  @override
+  String get refresh_tooltip => '重新整理';
+
+  @override
+  String get example_lexile_hint => '例如：850';
+
+  @override
+  String get clipboard_paste_tooltip => '贴上回填';
+
+  @override
+  String get author_optional => '作者（可選）';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -125,4 +457,170 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get pleaseFillRequiredFields => '請填入所有必填欄位';
+
+  @override
+  String get bookList_search_hint => '請輸入書名';
+
+  @override
+  String search_failed(Object error) {
+    return '查詢失敗: $error';
+  }
+
+  @override
+  String get search_button => '查詢';
+
+  @override
+  String get manual_isbn_label => '手動輸入 ISBN';
+
+  @override
+  String get manual_isbn_title => '手動輸入 ISBN';
+
+  @override
+  String get book_added => '已新增書籍';
+
+  @override
+  String get book_deleted => '書籍已刪除';
+
+  @override
+  String get delete_confirm_title => '刪除確認';
+
+  @override
+  String get delete_confirm_content => '確定要刪除此書籍嗎？';
+
+  @override
+  String get delete_action => '刪除';
+
+  @override
+  String get my_books_title => '我的書籍';
+
+  @override
+  String get filter_all => '全部';
+
+  @override
+  String get filter_unread => '未讀';
+
+  @override
+  String get filter_reading => '閱讀中';
+
+  @override
+  String get filter_read => '已讀';
+
+  @override
+  String get empty_hint => '換個篩選或新增一本試試看';
+
+  @override
+  String get search_by_title_title => '以書名查詢';
+
+  @override
+  String get search_by_title_subtitle => '輸入書名/作者，用 Google Books 搜尋';
+
+  @override
+  String get scan_title => '掃描 ISBN';
+
+  @override
+  String get scan_subtitle => '使用相機掃描條碼（支援 978/979）';
+
+  @override
+  String lexile_label(Object score) {
+    return 'Lexile: ${score}L';
+  }
+
+  @override
+  String get edit => '編輯';
+
+  @override
+  String get delete => '刪除';
+
+  @override
+  String lexile_load_failed(Object error) {
+    return '載入失敗: $error';
+  }
+
+  @override
+  String get lexile_clipboard_none => '剪貼簿未偵測到 Lexile 值';
+
+  @override
+  String get lexile_manual_title => '手動輸入 Lexile 值';
+
+  @override
+  String get lexile_cancel => '取消';
+
+  @override
+  String get lexile_fill => '回填';
+
+  @override
+  String get lexile_manual_label => '手動輸入';
+
+  @override
+  String get statistics_title => '統計報告';
+
+  @override
+  String stats_reading_label(Object count) {
+    return '閱讀中: $count 本';
+  }
+
+  @override
+  String stats_unread_label(Object count) {
+    return '未讀: $count 本';
+  }
+
+  @override
+  String get settings_title => '設定';
+
+  @override
+  String get settings_sources_subtitle => '可切換使用的 ISBN 查詢來源，依序嘗試';
+
+  @override
+  String get settings_manual_query_subtitle => '手動查詢書籍資訊';
+
+  @override
+  String get settings_tnla_title => '台灣國家圖書館 ISBN';
+
+  @override
+  String get settings_tnla_subtitle => '查詢台灣出版書籍資訊';
+
+  @override
+  String get settings_bok_title => '博客來';
+
+  @override
+  String get settings_bok_subtitle => '台灣最大網路書店';
+
+  @override
+  String get settings_eslite_title => '誠品書店';
+
+  @override
+  String get settings_eslite_subtitle => '誠品線上書店';
+
+  @override
+  String get settings_google_title => 'Google Books';
+
+  @override
+  String get settings_google_subtitle => '全球書籍資料庫';
+
+  @override
+  String get lexile_title => 'Lexile 查詢';
+
+  @override
+  String get no_results_text => '查無結果（或無可用 ISBN）';
+
+  @override
+  String get manual_isbn_hint => '請輸入 10 或 13 位 ISBN';
+
+  @override
+  String get book_not_found => '查無書籍資訊';
+
+  @override
+  String get filter_no_books => '這個篩選沒有書籍';
+
+  @override
+  String get refresh_tooltip => '重新整理';
+
+  @override
+  String get example_lexile_hint => '例如：850';
+
+  @override
+  String get clipboard_paste_tooltip => '貼上回填';
+
+  @override
+  String get author_optional => '作者（可選）';
 }

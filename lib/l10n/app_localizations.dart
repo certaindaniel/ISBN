@@ -168,6 +168,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill all required fields'**
   String get pleaseFillRequiredFields;
+
+  /// No description provided for @bookList_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter title'**
+  String get bookList_search_hint;
+
+  /// No description provided for @search_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed: {error}'**
+  String search_failed(Object error);
+
+  /// No description provided for @search_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search_button;
+
+  /// No description provided for @manual_isbn_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual ISBN'**
+  String get manual_isbn_label;
+
+  /// No description provided for @manual_isbn_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual ISBN'**
+  String get manual_isbn_title;
+
+  /// No description provided for @book_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Book added'**
+  String get book_added;
+
+  /// No description provided for @book_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Book deleted'**
+  String get book_deleted;
+
+  /// No description provided for @delete_confirm_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete confirmation'**
+  String get delete_confirm_title;
+
+  /// No description provided for @delete_confirm_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this book?'**
+  String get delete_confirm_content;
+
+  /// No description provided for @delete_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete_action;
+
+  /// No description provided for @my_books_title.
+  ///
+  /// In en, this message translates to:
+  /// **'My books'**
+  String get my_books_title;
+
+  /// No description provided for @filter_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filter_all;
+
+  /// No description provided for @filter_unread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get filter_unread;
+
+  /// No description provided for @filter_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get filter_reading;
+
+  /// No description provided for @filter_read.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get filter_read;
+
+  /// No description provided for @empty_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different filter or add a book'**
+  String get empty_hint;
+
+  /// No description provided for @search_by_title_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title'**
+  String get search_by_title_title;
+
+  /// No description provided for @search_by_title_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter title/author, search Google Books'**
+  String get search_by_title_subtitle;
+
+  /// No description provided for @scan_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan ISBN'**
+  String get scan_title;
+
+  /// No description provided for @scan_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use camera to scan (supports 978/979)'**
+  String get scan_subtitle;
+
+  /// No description provided for @lexile_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Lexile: {score}L'**
+  String lexile_label(Object score);
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @lexile_load_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Load failed: {error}'**
+  String lexile_load_failed(Object error);
+
+  /// No description provided for @lexile_clipboard_none.
+  ///
+  /// In en, this message translates to:
+  /// **'No Lexile value detected in clipboard'**
+  String get lexile_clipboard_none;
+
+  /// No description provided for @lexile_manual_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Lexile input'**
+  String get lexile_manual_title;
+
+  /// No description provided for @lexile_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get lexile_cancel;
+
+  /// No description provided for @lexile_fill.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill'**
+  String get lexile_fill;
+
+  /// No description provided for @lexile_manual_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual input'**
+  String get lexile_manual_label;
+
+  /// No description provided for @statistics_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statistics_title;
+
+  /// No description provided for @stats_reading_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading: {count} books'**
+  String stats_reading_label(Object count);
+
+  /// No description provided for @stats_unread_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread: {count} books'**
+  String stats_unread_label(Object count);
+
+  /// No description provided for @settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings_title;
+
+  /// No description provided for @settings_sources_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle ISBN sources to try in order'**
+  String get settings_sources_subtitle;
+
+  /// No description provided for @settings_manual_query_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual book lookup'**
+  String get settings_manual_query_subtitle;
+
+  /// No description provided for @settings_tnla_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Taiwan National Library ISBN'**
+  String get settings_tnla_title;
+
+  /// No description provided for @settings_tnla_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lookup Taiwan-published books'**
+  String get settings_tnla_subtitle;
+
+  /// No description provided for @settings_bok_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Books.com.tw'**
+  String get settings_bok_title;
+
+  /// No description provided for @settings_bok_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Taiwan\'s largest online bookstore'**
+  String get settings_bok_subtitle;
+
+  /// No description provided for @settings_eslite_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Eslite'**
+  String get settings_eslite_title;
+
+  /// No description provided for @settings_eslite_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Eslite online bookstore'**
+  String get settings_eslite_subtitle;
+
+  /// No description provided for @settings_google_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Books'**
+  String get settings_google_title;
+
+  /// No description provided for @settings_google_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Global books database'**
+  String get settings_google_subtitle;
+
+  /// No description provided for @lexile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Lexile Lookup'**
+  String get lexile_title;
+
+  /// No description provided for @no_results_text.
+  ///
+  /// In en, this message translates to:
+  /// **'No results (or no usable ISBN)'**
+  String get no_results_text;
+
+  /// No description provided for @manual_isbn_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 10 or 13 digit ISBN'**
+  String get manual_isbn_hint;
+
+  /// No description provided for @book_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No book information found'**
+  String get book_not_found;
+
+  /// No description provided for @filter_no_books.
+  ///
+  /// In en, this message translates to:
+  /// **'No books for this filter'**
+  String get filter_no_books;
+
+  /// No description provided for @refresh_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh_tooltip;
+
+  /// No description provided for @example_lexile_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g.: 850'**
+  String get example_lexile_hint;
+
+  /// No description provided for @clipboard_paste_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from clipboard'**
+  String get clipboard_paste_tooltip;
+
+  /// No description provided for @author_optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Author (optional)'**
+  String get author_optional;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
