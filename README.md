@@ -187,6 +187,12 @@ CREATE TABLE books(
   - 若要上架 iOS，可考慮在 `pubspec.yaml` 加入 `remove_alpha_ios: true` 以移除圖示 alpha 通道，避免 App Store 警告。
   - 推送上述變更到遠端（`git push`）並視需要建立 Release / Tag。
   - 將「離開前提示儲存」邏輯套用到其他編輯型 UI（例如掃描頁面的內嵌編輯對話框）。
+  - 測試執行建議：若 CI 或本地遇到 `flutter test` 在關閉階段出現 listener/stream race，建議改以序列化執行測試：
+    ```bash
+    ./scripts/run_tests_serial.sh
+    # 或在 CI 裡直接
+    flutter test --concurrency=1
+    ```
 
 
 ## 主要依賴套件
