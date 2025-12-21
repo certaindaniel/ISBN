@@ -64,7 +64,6 @@ class IsbnBookManagerApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BookProvider()..initialize()),
       ],
       child: MaterialApp(
-        title: 'ISBN 書籍管理',
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -72,6 +71,7 @@ class IsbnBookManagerApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           useMaterial3: true,

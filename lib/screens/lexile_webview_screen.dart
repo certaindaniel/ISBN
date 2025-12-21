@@ -66,8 +66,8 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.lexile_clipboard_none)),
+                        content: Text(AppLocalizations.of(context)!
+                            .lexile_clipboard_none)),
                   );
                 }
               }

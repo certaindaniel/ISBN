@@ -201,10 +201,11 @@ class _BookEditScreenState extends State<BookEditScreen> {
     final fallback =
         '${_titleController.text} ${_authorController.text}'.trim();
     final query = isbn.isNotEmpty ? isbn : fallback;
-    if (query.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('請先填入書名與作者再查詢 Lexile')),
-      );
+        final loc = AppLocalizations.of(context)!;
+        if (query.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(loc.lexile_need_title_author)),
+          );
       return;
     }
 
@@ -215,17 +216,18 @@ class _BookEditScreenState extends State<BookEditScreen> {
       ),
     );
     if (!mounted) return;
-    if (result is int) {
+        if (result is int) {
       setState(() {
         _lexileScoreController.text = result.toString();
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('已回填 Lexile：${result}L')),
-      );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(loc.lexile_refilled(result))),
+          );
     }
   }
 
   Future<void> _pickImage() async {
+    final loc = AppLocalizations.of(context)!;
     try {
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.camera,
@@ -236,14 +238,14 @@ class _BookEditScreenState extends State<BookEditScreen> {
         setState(() {
           _pickedImage = File(pickedFile.path);
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已拍攝書籍封面')),
-        );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(loc.photo_taken)),
+            );
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('拍照失敗: $e'), backgroundColor: Colors.red),
+            SnackBar(content: Text(loc.photo_failed(e)), backgroundColor: Colors.red),
       );
     }
   }
@@ -300,9 +302,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
         _publisherController.text.isEmpty ||
         _isbnController.text.isEmpty ||
         _purchasePriceController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.pleaseFillRequiredFields)),
-      );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(loc.pleaseFillRequiredFields)),
+          );
       return;
     }
 
@@ -346,16 +348,16 @@ class _BookEditScreenState extends State<BookEditScreen> {
     }
 
     if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('書籍已儲存')),
-      );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(loc.book_saved)),
+          );
       Navigator.of(context).pop(true);
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(provider.error ?? '儲存失敗'),
-          backgroundColor: Colors.red,
-        ),
+            SnackBar(
+              content: Text(provider.error ?? loc.save_failed),
+              backgroundColor: Colors.red,
+            ),
       );
       provider.clearError();
     }
@@ -363,6 +365,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return PopScope<Object?>(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -374,7 +377,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.initialBook == null ? '新增書籍' : '編輯書籍'),
+              title: Text(widget.initialBook == null ? loc.new_book : loc.edit_book),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
