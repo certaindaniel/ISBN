@@ -46,7 +46,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         TextEditingController(text: book?.description ?? '');
     _isbnController = TextEditingController(text: book?.isbn ?? '');
     _purchasePriceController = TextEditingController(
-      text: book?.purchasePrice.toString() ?? '',
+      text: book?.purchasePrice?.toString() ?? '',
     );
     _salePriceController = TextEditingController(
       text: book?.salePrice?.toString() ?? '',
