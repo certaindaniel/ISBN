@@ -1,0 +1,15 @@
+{
+  "@@@locale": "zh_TW",
+  "appTitle": "ISBN 書籍管理",
+  "books": "書籍",
+  "statistics": "統計",
+  "unsavedChangesTitle": "有未儲存的變更",
+  "unsavedChangesContent": "您有未儲存的變更，要儲存後離開嗎？",
+  "discard": "放棄變更",
+  "saveAndLeave": "儲存並離開",
+  "cancel": "取消",
+  "unfinishedSearchTitle": "有未完成的查詢或變更",
+  "unfinishedSearchContent": "您有尚未完成的查詢或輸入，要執行查詢、放棄變更還是繼續編輯？",
+  "performSearch": "執行查詢",
+  "pleaseFillRequiredFields": "請填入所有必填欄位"
+}

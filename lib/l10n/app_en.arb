@@ -1,0 +1,15 @@
+{
+  "@@@locale": "en",
+  "appTitle": "ISBN Book Manager",
+  "books": "Books",
+  "statistics": "Statistics",
+  "unsavedChangesTitle": "Unsaved changes",
+  "unsavedChangesContent": "You have unsaved changes. Save before leaving?",
+  "discard": "Discard",
+  "saveAndLeave": "Save and leave",
+  "cancel": "Cancel",
+  "unfinishedSearchTitle": "Unfinished search or changes",
+  "unfinishedSearchContent": "You have an unfinished search or input. Perform search, discard changes, or continue editing?",
+  "performSearch": "Search",
+  "pleaseFillRequiredFields": "Please fill all required fields"
+}

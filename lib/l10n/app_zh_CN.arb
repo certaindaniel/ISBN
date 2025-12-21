@@ -1,0 +1,15 @@
+{
+  "@@@locale": "zh_CN",
+  "appTitle": "ISBN 书籍管理",
+  "books": "书籍",
+  "statistics": "统计",
+  "unsavedChangesTitle": "有未保存的更改",
+  "unsavedChangesContent": "您有未保存的更改，要保存后离开吗？",
+  "discard": "放弃更改",
+  "saveAndLeave": "保存并离开",
+  "cancel": "取消",
+  "unfinishedSearchTitle": "有未完成的查询或更改",
+  "unfinishedSearchContent": "您有尚未完成的查询或输入，要执行查询、放弃更改还是继续编辑？",
+  "performSearch": "执行查询",
+  "pleaseFillRequiredFields": "请填写所有必填栏位"
+}
