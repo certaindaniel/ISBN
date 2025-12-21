@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'screens/scanner_screen.dart';
+import 'screens/scanner_screen.dart' deferred as scanner_screen;
 import 'screens/book_list_screen.dart';
 import 'screens/book_edit_screen.dart';
 import 'screens/statistics_screen.dart';
@@ -17,8 +17,44 @@ void main() async {
   runApp(const IsbnBookManagerApp());
 }
 
+class _DeferredScannerLoader extends StatefulWidget {
+  const _DeferredScannerLoader();
+
+  @override
+  State<_DeferredScannerLoader> createState() => _DeferredScannerLoaderState();
+}
+
+class _DeferredScannerLoaderState extends State<_DeferredScannerLoader> {
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      await scanner_screen.loadLibrary();
+      if (mounted) setState(() => _loaded = true);
+    } catch (_) {
+      if (mounted) setState(() => _loaded = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loaded) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    return scanner_screen.ScannerScreen();
+  }
+}
+
 class IsbnBookManagerApp extends StatelessWidget {
-  const IsbnBookManagerApp({super.key});
+  const IsbnBookManagerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +78,7 @@ class IsbnBookManagerApp extends StatelessWidget {
         ),
         home: const HomeScreen(),
         routes: {
-          '/scanner': (context) => const ScannerScreen(),
+          '/scanner': (context) => _DeferredScannerLoader(),
           '/book-edit': (context) {
             final args = ModalRoute.of(context)?.settings.arguments;
             return BookEditScreen(
@@ -60,7 +96,7 @@ class IsbnBookManagerApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
