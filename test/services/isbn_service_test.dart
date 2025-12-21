@@ -3,6 +3,9 @@ import '../test_helper.dart';
 import 'package:isbn_book_manager/services/isbn_service.dart';
 import 'package:isbn_book_manager/models/api_source.dart';
 import 'package:isbn_book_manager/utils/app_logger.dart';
+import 'package:http/testing.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   setUpAll(() {
@@ -65,6 +68,57 @@ void main() {
   group('ISBN API 查詢測試', () {
     const testIsbn = '9789868914766';
 
+      // 使用 MockClient 以避免實際網路呼叫，並確保測試在並行執行時穩定
+      final mockClient = MockClient((http.Request request) async {
+        final host = request.url.host;
+        // Google Books
+        if (host.contains('googleapis')) {
+          final body = {
+            'items': [
+              {
+                'volumeInfo': {
+                  'title': '測試，你的腦力到底剩多少',
+                  'authors': ['李元瑞'],
+                  'publisher': '永續圖書有限公司',
+                  'imageLinks': {'thumbnail': 'http://example.com/cover.jpg'},
+                  'language': 'zh'
+                }
+              }
+            ]
+          };
+          return http.Response.bytes(
+            utf8.encode(jsonEncode(body)),
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+
+        // Open Library
+        if (host.contains('openlibrary')) {
+          // 回傳空結果以模擬無資料情形
+          return http.Response.bytes(
+            utf8.encode('{}'),
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+
+        // Jike - 模擬未返回結果
+        if (host.contains('api.jike.xyz')) {
+          return http.Response.bytes(
+            utf8.encode('{}'),
+            404,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+
+        return http.Response.bytes(
+          utf8.encode('{}'),
+          200,
+          headers: {'content-type': 'application/json; charset=utf-8'},
+        );
+      });
+
     test('Google Books 查詢 - $testIsbn', () async {
       AppLogger.debug('\n=== 測試 Google Books API ===');
       AppLogger.debug('ISBN: $testIsbn');
@@ -77,6 +131,7 @@ void main() {
         onSourceStart: (source) {
           AppLogger.debug('→ 嘗試：${ApiSourceRegistry.info(source).displayName}');
         },
+        client: mockClient,
       );
 
       if (book != null) {
@@ -104,6 +159,7 @@ void main() {
         onSourceStart: (source) {
           AppLogger.debug('→ 嘗試：${ApiSourceRegistry.info(source).displayName}');
         },
+        client: mockClient,
       );
 
       if (book != null) {
@@ -130,6 +186,7 @@ void main() {
         onSourceStart: (source) {
           AppLogger.debug('→ 嘗試：${ApiSourceRegistry.info(source).displayName}');
         },
+        client: mockClient,
       );
 
       if (book != null) {
@@ -160,6 +217,7 @@ void main() {
           attemptedSources.add(source);
           AppLogger.debug('→ 嘗試：${ApiSourceRegistry.info(source).displayName}');
         },
+        client: mockClient,
       );
 
       expect(book, isNotNull);
@@ -189,6 +247,7 @@ void main() {
           attemptedSources.add(source);
           AppLogger.debug('→ 嘗試：${ApiSourceRegistry.info(source).displayName}');
         },
+        client: mockClient,
       );
 
       expect(book, isNotNull);
