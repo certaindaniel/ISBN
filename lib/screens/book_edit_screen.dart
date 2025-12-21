@@ -124,8 +124,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
       return true;
     }
     if ((_pickedImage != null &&
-        (book.coverUrl == null || _pickedImage!.path != book.coverUrl)))
+        (book.coverUrl == null || _pickedImage!.path != book.coverUrl))) {
       return true;
+    }
     if (_language != book.language) return true;
     if (_readStatus != book.status) return true;
 

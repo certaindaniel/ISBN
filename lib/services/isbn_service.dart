@@ -33,34 +33,34 @@ class IsbnService {
         : sources;
 
     // 使用可注入的 http client（若未提供則自行建立並在結束時關閉），以利測試時注入 MockClient
-    final bool _shouldCloseClient = client == null;
-    final http.Client _client = client ?? http.Client();
+    final bool shouldCloseClient = client == null;
+    final http.Client clientLocal = client ?? http.Client();
 
     try {
       for (final source in activeSources) {
         onSourceStart?.call(source);
         Book? result;
         switch (source) {
-          case ApiSource.googleBooks:
-            result = await _searchGoogleBooks(isbn, _client);
+            case ApiSource.googleBooks:
+            result = await _searchGoogleBooks(isbn, clientLocal);
             break;
           case ApiSource.openLibrary:
-            result = await _searchOpenLibrary(isbn, _client);
+            result = await _searchOpenLibrary(isbn, clientLocal);
             break;
           case ApiSource.wikipedia:
-            result = await _searchWikipedia(isbn, _client);
+            result = await _searchWikipedia(isbn, clientLocal);
             break;
           case ApiSource.jikeFree:
-            result = await _searchJikeFree(isbn, _client);
+            result = await _searchJikeFree(isbn, clientLocal);
             break;
         }
         if (result != null) return result;
       }
       return null;
     } finally {
-      if (_shouldCloseClient) {
+      if (shouldCloseClient) {
         try {
-          _client.close();
+          clientLocal.close();
         } catch (_) {}
       }
     }

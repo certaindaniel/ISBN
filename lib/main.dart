@@ -54,7 +54,7 @@ class _DeferredScannerLoaderState extends State<_DeferredScannerLoader> {
 }
 
 class IsbnBookManagerApp extends StatelessWidget {
-  const IsbnBookManagerApp({Key? key}) : super(key: key);
+  const IsbnBookManagerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class IsbnBookManagerApp extends StatelessWidget {
         ),
         home: const HomeScreen(),
         routes: {
-          '/scanner': (context) => _DeferredScannerLoader(),
+          '/scanner': (context) => const _DeferredScannerLoader(),
           '/book-edit': (context) {
             final args = ModalRoute.of(context)?.settings.arguments;
             return BookEditScreen(
@@ -96,7 +96,7 @@ class IsbnBookManagerApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -119,11 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
+            icon: const Icon(Icons.library_books),
             label: AppLocalizations.of(context)?.books ?? '書籍',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
+            icon: const Icon(Icons.bar_chart),
             label: AppLocalizations.of(context)?.statistics ?? '統計',
           ),
         ],
