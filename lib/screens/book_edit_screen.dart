@@ -6,6 +6,7 @@ import 'dart:io';
 import 'lexile_webview_screen.dart';
 import '../models/book.dart';
 import '../providers/book_provider.dart';
+import '../l10n/app_localizations.dart';
 // 使用 framework 的 PopScope 以配合 Android 預測返回手勢
 
 class BookEditScreen extends StatefulWidget {
@@ -137,23 +138,24 @@ class _BookEditScreenState extends State<BookEditScreen> {
   Future<bool> _onWillPop() async {
     if (!_hasUnsavedChanges()) return true;
 
+    final loc = AppLocalizations.of(context)!;
     final result = await showDialog<String?>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('有未儲存的變更'),
-        content: const Text('您有未儲存的變更，要儲存後離開嗎？'),
+        title: Text(loc.unsavedChangesTitle),
+        content: Text(loc.unsavedChangesContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop('cancel'),
-            child: const Text('取消'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop('discard'),
-            child: const Text('放棄變更'),
+            child: Text(loc.discard),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(ctx).pop('save'),
-            child: const Text('儲存並離開'),
+            child: Text(loc.saveAndLeave),
           ),
         ],
       ),
@@ -292,13 +294,14 @@ class _BookEditScreenState extends State<BookEditScreen> {
   }
 
   Future<void> _saveBook() async {
+    final loc = AppLocalizations.of(context)!;
     if (_titleController.text.isEmpty ||
         _authorController.text.isEmpty ||
         _publisherController.text.isEmpty ||
         _isbnController.text.isEmpty ||
         _purchasePriceController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('請填入所有必填欄位')),
+        SnackBar(content: Text(loc.pleaseFillRequiredFields)),
       );
       return;
     }

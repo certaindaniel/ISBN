@@ -7,6 +7,7 @@ import '../models/api_source.dart';
 import '../providers/settings_provider.dart';
 import '../services/isbn_service.dart';
 import '../models/book.dart';
+import '../l10n/app_localizations.dart';
 // 使用 framework PopScope 以支援系統預測返回手勢
 
 class ScannerScreen extends StatefulWidget {
@@ -207,24 +208,27 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
               final choice = await showDialog<String?>(
                 context: context,
-                builder: (ctx) => AlertDialog(
-                  title: const Text('有未完成的查詢或變更'),
-                  content: const Text('您有尚未完成的查詢或輸入，要執行查詢、放棄變更還是繼續編輯？'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop('cancel'),
-                      child: const Text('取消'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop('discard'),
-                      child: const Text('放棄變更'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => Navigator.of(ctx).pop('search'),
-                      child: const Text('執行查詢'),
-                    ),
-                  ],
-                ),
+                builder: (ctx) {
+                  final loc = AppLocalizations.of(ctx)!;
+                  return AlertDialog(
+                    title: Text(loc.unfinishedSearchTitle),
+                    content: Text(loc.unfinishedSearchContent),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop('cancel'),
+                        child: Text(loc.cancel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop('discard'),
+                        child: Text(loc.discard),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(ctx).pop('search'),
+                        child: Text(loc.performSearch),
+                      ),
+                    ],
+                  );
+                },
               );
 
               if (choice == 'discard') return true;
