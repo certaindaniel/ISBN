@@ -46,7 +46,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         TextEditingController(text: book?.description ?? '');
     _isbnController = TextEditingController(text: book?.isbn ?? '');
     _purchasePriceController = TextEditingController(
-      text: book?.purchasePrice?.toString() ?? '',
+      text: book == null ? '' : book.purchasePrice.toString(),
     );
     _salePriceController = TextEditingController(
       text: book?.salePrice?.toString() ?? '',
@@ -127,7 +127,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         (book.coverUrl == null || _pickedImage!.path != book.coverUrl)))
       return true;
     if (_language != book.language) return true;
-    if (_readStatus != (book.status ?? 'unread')) return true;
+    if (_readStatus != book.status) return true;
 
     return false;
   }
