@@ -108,10 +108,12 @@ class _BookEditScreenState extends State<BookEditScreen> {
     if (_purchasePriceController.text.trim() != book.purchasePrice.toString()) {
       return true;
     }
-    if (_salePriceController.text.trim() != (book.salePrice?.toString() ?? '')) {
+    if (_salePriceController.text.trim() !=
+        (book.salePrice?.toString() ?? '')) {
       return true;
     }
-    if (_lexileScoreController.text.trim() != (book.lexileScore?.toString() ?? '')) {
+    if (_lexileScoreController.text.trim() !=
+        (book.lexileScore?.toString() ?? '')) {
       return true;
     }
     if (_purchaseDate != book.purchaseDate) {

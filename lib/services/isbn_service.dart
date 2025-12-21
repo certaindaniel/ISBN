@@ -29,8 +29,8 @@ class IsbnService {
     }
 
     final activeSources = (sources == null || sources.isEmpty)
-      ? ApiSourceRegistry.defaultEnabled()
-      : sources;
+        ? ApiSourceRegistry.defaultEnabled()
+        : sources;
 
     // 使用可注入的 http client（若未提供則自行建立並在結束時關閉），以利測試時注入 MockClient
     final bool _shouldCloseClient = client == null;
@@ -66,7 +66,8 @@ class IsbnService {
     }
   }
 
-  static Future<Book?> _searchOpenLibrary(String isbn, http.Client client) async {
+  static Future<Book?> _searchOpenLibrary(
+      String isbn, http.Client client) async {
     try {
       final response = await client
           .get(Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'))
@@ -97,9 +98,11 @@ class IsbnService {
     }
   }
 
-  static Future<Book?> _searchGoogleBooks(String isbn, http.Client client) async {
+  static Future<Book?> _searchGoogleBooks(
+      String isbn, http.Client client) async {
     try {
-      final url = Uri.parse('https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn');
+      final url =
+          Uri.parse('https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn');
       final response = await client.get(url).timeout(_timeout);
 
       if (response.statusCode == 200) {
@@ -413,15 +416,12 @@ class IsbnService {
     }
   }
 
- 
-
   static Future<Book?> _searchWikipedia(String isbn, http.Client client) async {
     try {
       // 使用 ISBN 和可能的書名搜尋
       final searchQuery = 'ISBN $isbn';
       final response = await client
-          .get(Uri.parse(
-              'https://en.wikipedia.org/w/api.php?'
+          .get(Uri.parse('https://en.wikipedia.org/w/api.php?'
               'action=query&list=search&srsearch=${Uri.encodeComponent(searchQuery)}&format=json&srprop=snippet'))
           .timeout(_timeout);
 
@@ -624,7 +624,7 @@ class IsbnService {
   }
 
   /// 從外部可配置 API 獲取 Lexile 分數，成功則回傳分數，未配置或失敗回傳 null
-    static Future<int?> _fetchLexileFromExternal(
+  static Future<int?> _fetchLexileFromExternal(
       String isbn, String title) async {
     if (lexileApiBase.isEmpty) return null;
 

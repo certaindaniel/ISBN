@@ -154,7 +154,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       useSafeArea: true,
       isDismissible: false,
       enableDrag: false,
-        builder: (context) {
+      builder: (context) {
         final titleController = TextEditingController();
         final authorController = TextEditingController();
         List<Book> results = const [];
