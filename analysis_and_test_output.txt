@@ -1,0 +1,95 @@
+Analyzing ISBN...
+No issues found!
+00:00 +0: loading /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart                                                                                                       00:01 +0: loading /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart                                                                                                       00:01 +0: loading /Users/daniel.lu/GitProject/Daniel/ISBN/test/models/book_test.dart                                                                                                                   00:01 +0: /Users/daniel.lu/GitProject/Daniel/ISBN/test/models/book_test.dart: Book 模型測試 書籍創建                                                                                                           00:01 +1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                                  00:01 +2: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                                  00:01 +3: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                                  00:01 +4: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                                  00:01 +5: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                                  00:01 +5 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN 格式驗證測試 ISBN-10 驗證 [E]                                                                                  
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/isbn_service_test.dart 10:7           main.<fn>.<fn>
+  
+
+To run this test again: /Users/daniel.lu/flutter/bin/cache/dart-sdk/bin/dart test /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart -p vm --plain-name 'ISBN 格式驗證測試 ISBN-10 驗證'
+00:01 +6 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                               00:01 +7 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                               00:01 +8 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                               00:01 +9 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                               00:01 +10 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                              00:01 +11 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                              00:01 +12 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/book_edit_screen_widget_test.dart: 沒有封面時顯示拍攝提示                                                                                              00:01 +12 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google Books 查詢 - 9789868914766                                                              
+
+=== 測試 Google Books API ===
+ISBN: 9789868914766
+→ 嘗試：Google Books
+00:02 +13 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/widget_test.dart: App loads and shows main navigation                                                                                       00:02 +13 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/widget_test.dart: App loads and shows main navigation                                                                                       
+WARN: 載入統計失敗: Bad state: databaseFactory not initialized
+databaseFactory is only initialized when using sqflite. When using `sqflite_common_ffi`
+You must call `databaseFactory = databaseFactoryFfi;` before using global openDatabase API
+
+  error: Bad state: databaseFactory not initialized
+databaseFactory is only initialized when using sqflite. When using `sqflite_common_ffi`
+You must call `databaseFactory = databaseFactoryFfi;` before using global openDatabase API
+
+  stack: #0      databaseFactory.<anonymous closure> (package:sqflite_common/src/sqflite_database_factory.dart:32:7)
+#1      databaseFactory (package:sqflite_common/src/sqflite_database_factory.dart:36:6)
+#2      getDatabasesPath (package:sqflite_common/sqflite.dart:109:38)
+#3      DatabaseHelper._initDatabase (package:isbn_book_manager/services/database_helper.dart:22:26)
+#4      DatabaseHelper.database (package:isbn_book_manager/services/database_helper.dart:17:23)
+#5      DatabaseHelper.getStatistics (package:isbn_book_manager/services/database_helper.dart:136:22)
+#6      BookProvider.loadStatistics (package:isbn_book_manager/providers/book_provider.dart:45:37)
+#7      BookProvider.initialize (package:isbn_book_manager/providers/book_provider.dart:23:11)
+<asynchronous suspension>
+
+00:02 +14 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/widget_test.dart: App loads and shows main navigation                                                                                       00:02 +15 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google Books 查詢 - 9789868914766                                                              00:02 +15 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google Books 查詢 - 9789868914766                                                              
+✓ 查詢成功！
+  書名：測試，你的腦力到底剩多少
+  作者：李元瑞
+  出版社：永續圖書有限公司
+  封面：有
+00:02 +16 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google Books 查詢 - 9789868914766                                                              00:02 +16 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Open Library 查詢 - 9789868914766                                                              00:02 +16 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Open Library 查詢 - 9789868914766                                                              
+
+=== 測試 Open Library API ===
+ISBN: 9789868914766
+→ 嘗試：Open Library
+WARN: ⚠ Open Library 未返回結果
+00:02 +17 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Open Library 查詢 - 9789868914766                                                              00:02 +17 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Jike 免費 API 查詢 - 9789868914766                                                               00:02 +17 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Jike 免費 API 查詢 - 9789868914766                                                               
+
+=== 測試 Jike 免費 API ===
+ISBN: 9789868914766
+→ 嘗試：中文第三方免費 API
+✓ 查詢成功！
+  書名：未知標題
+  作者：未知作者
+  出版社：未知出版社
+  封面：無
+00:03 +18 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Jike 免費 API 查詢 - 9789868914766                                                               00:03 +18 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google + Open Library 依序嘗試                                                                   00:03 +18 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google + Open Library 依序嘗試                                                                   
+
+=== 多來源查詢 (Google → Open Library) ===
+ISBN: 9789868914766
+→ 嘗試：Google Books
+✓ 成功查詢！
+  嘗試順序：Google Books
+  使用第 1 個來源
+  書籍：測試，你的腦力到底剩多少
+00:03 +19 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 Google + Open Library 依序嘗試                                                                   00:03 +19 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 所有預設來源                                                                                       00:03 +19 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 所有預設來源                                                                                       
+
+=== 多來源查詢 (所有預設來源) ===
+ISBN: 9789868914766
+已啟用來源：Google Books, Open Library
+→ 嘗試：Google Books
+✓ 成功查詢！
+  最終使用：Google Books
+  書籍資訊：
+    - 書名：測試，你的腦力到底剩多少
+    - 作者：李元瑞
+    - 出版社：永續圖書有限公司
+    - ISBN：9789868914766
+00:04 +20 -1: /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart: ISBN API 查詢測試 所有預設來源                                                                                       00:04 +20 -1: Some tests failed.                                                                                                                                                                       
+00:00 +0: loading /Users/daniel.lu/GitProject/Daniel/ISBN/test/services/isbn_service_test.dart
+00:00 +0: ISBN 格式驗證測試 ISBN-10 驗證
+normalize(0140328726) -> 0140328726
+isValidIsbn10 -> true
+isValidIsbn -> true
+00:00 +0 -1: ISBN 格式驗證測試 ISBN-10 驗證 [E]
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/services/isbn_service_test.dart 13:7           main.<fn>.<fn>
+  
+00:00 +0 -1: Some tests failed.

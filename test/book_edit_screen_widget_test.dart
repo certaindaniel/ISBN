@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'test_helper.dart';
 import 'package:isbn_book_manager/models/book.dart';
 import 'package:isbn_book_manager/screens/book_edit_screen.dart';
 
 void main() {
+  setUpAll(() {
+    initTestDatabase();
+  });
+
   testWidgets('沒有封面時顯示拍攝提示', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(

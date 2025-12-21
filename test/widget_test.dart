@@ -5,19 +5,34 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+// ignore: unused_import
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'test_helper.dart';
 
 import 'package:isbn_book_manager/main.dart';
+import 'package:isbn_book_manager/providers/book_provider.dart';
+import 'package:isbn_book_manager/providers/settings_provider.dart';
 
 void main() {
-  testWidgets('App loads and shows main navigation',
+  setUpAll(() {
+    initTestDatabase();
+  });
+
+  testWidgets('HomeScreen shows main navigation label',
       (WidgetTester tester) async {
-    // Build the app
-    await tester.pumpWidget(const IsbnBookManagerApp());
+    await tester.pumpWidget(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SettingsProvider>(
+            create: (_) => SettingsProvider()),
+        ChangeNotifierProvider<BookProvider>(create: (_) => BookProvider()),
+      ],
+      child: const MaterialApp(home: HomeScreen()),
+    ));
+
     await tester.pumpAndSettle();
 
-    // Expect the bottom navigation label '書籍' to be present
     expect(find.text('書籍'), findsOneWidget);
   });
 }
