@@ -209,6 +209,67 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get author_optional => '作者（可選）';
+
+  @override
+  String get new_book => '新增書籍';
+
+  @override
+  String get edit_book => '編輯書籍';
+
+  @override
+  String get lexile_need_title_author => '請先填入書名與作者再查詢 Lexile';
+
+  @override
+  String lexile_refilled(Object value) {
+    return '已回填 Lexile：${value}L';
+  }
+
+  @override
+  String get photo_taken => '已拍攝書籍封面';
+
+  @override
+  String photo_failed(Object error) {
+    return '拍照失敗: $error';
+  }
+
+  @override
+  String get book_saved => '書籍已儲存';
+
+  @override
+  String get save_failed => '儲存失敗';
+
+  @override
+  String get save_book_button => '保存書籍';
+
+  @override
+  String get label_title_required => '書名 *';
+
+  @override
+  String get label_author_required => '作者 *';
+
+  @override
+  String get label_publisher_required => '出版社 *';
+
+  @override
+  String get label_description => '描述';
+
+  @override
+  String get label_purchase_price_required => '購買價格 (元) *';
+
+  @override
+  String get label_sale_price => '售出價格 (元)';
+
+  @override
+  String get purchase_date_title => '購買日期';
+
+  @override
+  String get sale_date_title => '售出日期';
+
+  @override
+  String get set_sale_date_label => '設定售出日期';
+
+  @override
+  String get profit_label => '利潤';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -416,6 +477,67 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get author_optional => '作者（可選）';
+
+  @override
+  String get new_book => '新增书籍';
+
+  @override
+  String get edit_book => '编辑书籍';
+
+  @override
+  String get lexile_need_title_author => '请先填入书名与作者再查询 Lexile';
+
+  @override
+  String lexile_refilled(Object value) {
+    return '已回填 Lexile：${value}L';
+  }
+
+  @override
+  String get photo_taken => '已拍摄书籍封面';
+
+  @override
+  String photo_failed(Object error) {
+    return '拍照失败: $error';
+  }
+
+  @override
+  String get book_saved => '书籍已保存';
+
+  @override
+  String get save_failed => '保存失败';
+
+  @override
+  String get save_book_button => '保存书籍';
+
+  @override
+  String get label_title_required => '书名 *';
+
+  @override
+  String get label_author_required => '作者 *';
+
+  @override
+  String get label_publisher_required => '出版社 *';
+
+  @override
+  String get label_description => '描述';
+
+  @override
+  String get label_purchase_price_required => '购买价格 (元) *';
+
+  @override
+  String get label_sale_price => '售价 (元)';
+
+  @override
+  String get purchase_date_title => '购买日期';
+
+  @override
+  String get sale_date_title => '售出日期';
+
+  @override
+  String get set_sale_date_label => '設定售出日期';
+
+  @override
+  String get profit_label => '利润';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -623,4 +745,65 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get author_optional => '作者（可選）';
+
+  @override
+  String get new_book => '新增書籍';
+
+  @override
+  String get edit_book => '編輯書籍';
+
+  @override
+  String get lexile_need_title_author => '請先填入書名與作者再查詢 Lexile';
+
+  @override
+  String lexile_refilled(Object value) {
+    return '已回填 Lexile：${value}L';
+  }
+
+  @override
+  String get photo_taken => '已拍攝書籍封面';
+
+  @override
+  String photo_failed(Object error) {
+    return '拍照失敗: $error';
+  }
+
+  @override
+  String get book_saved => '書籍已儲存';
+
+  @override
+  String get save_failed => '儲存失敗';
+
+  @override
+  String get save_book_button => '保存書籍';
+
+  @override
+  String get label_title_required => '書名 *';
+
+  @override
+  String get label_author_required => '作者 *';
+
+  @override
+  String get label_publisher_required => '出版社 *';
+
+  @override
+  String get label_description => '描述';
+
+  @override
+  String get label_purchase_price_required => '購買價格 (元) *';
+
+  @override
+  String get label_sale_price => '售出價格 (元)';
+
+  @override
+  String get purchase_date_title => '購買日期';
+
+  @override
+  String get sale_date_title => '售出日期';
+
+  @override
+  String get set_sale_date_label => '設定售出日期';
+
+  @override
+  String get profit_label => '利潤';
 }

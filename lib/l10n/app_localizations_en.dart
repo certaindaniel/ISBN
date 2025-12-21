@@ -209,4 +209,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get author_optional => 'Author (optional)';
+
+  @override
+  String get new_book => 'New Book';
+
+  @override
+  String get edit_book => 'Edit Book';
+
+  @override
+  String get lexile_need_title_author => 'Please enter title and author before searching Lexile';
+
+  @override
+  String lexile_refilled(Object value) {
+    return 'Lexile filled: ${value}L';
+  }
+
+  @override
+  String get photo_taken => 'Photo captured';
+
+  @override
+  String photo_failed(Object error) {
+    return 'Photo failed: $error';
+  }
+
+  @override
+  String get book_saved => 'Book saved';
+
+  @override
+  String get save_failed => 'Save failed';
+
+  @override
+  String get save_book_button => 'Save Book';
+
+  @override
+  String get label_title_required => 'Title *';
+
+  @override
+  String get label_author_required => 'Author *';
+
+  @override
+  String get label_publisher_required => 'Publisher *';
+
+  @override
+  String get label_description => 'Description';
+
+  @override
+  String get label_purchase_price_required => 'Purchase price (NT\$) *';
+
+  @override
+  String get label_sale_price => 'Sale price (NT\$)';
+
+  @override
+  String get purchase_date_title => 'Purchase Date';
+
+  @override
+  String get sale_date_title => 'Sale Date';
+
+  @override
+  String get set_sale_date_label => 'Set sale date';
+
+  @override
+  String get profit_label => 'Profit';
 }

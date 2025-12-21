@@ -480,6 +480,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Author (optional)'**
   String get author_optional;
+
+  /// No description provided for @new_book.
+  ///
+  /// In en, this message translates to:
+  /// **'New Book'**
+  String get new_book;
+
+  /// No description provided for @edit_book.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Book'**
+  String get edit_book;
+
+  /// No description provided for @lexile_need_title_author.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter title and author before searching Lexile'**
+  String get lexile_need_title_author;
+
+  /// No description provided for @lexile_refilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Lexile filled: {value}L'**
+  String lexile_refilled(Object value);
+
+  /// No description provided for @photo_taken.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo captured'**
+  String get photo_taken;
+
+  /// No description provided for @photo_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo failed: {error}'**
+  String photo_failed(Object error);
+
+  /// No description provided for @book_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Book saved'**
+  String get book_saved;
+
+  /// No description provided for @save_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Save failed'**
+  String get save_failed;
+
+  /// No description provided for @save_book_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Book'**
+  String get save_book_button;
+
+  /// No description provided for @label_title_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Title *'**
+  String get label_title_required;
+
+  /// No description provided for @label_author_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Author *'**
+  String get label_author_required;
+
+  /// No description provided for @label_publisher_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher *'**
+  String get label_publisher_required;
+
+  /// No description provided for @label_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get label_description;
+
+  /// No description provided for @label_purchase_price_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase price (NT\$) *'**
+  String get label_purchase_price_required;
+
+  /// No description provided for @label_sale_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale price (NT\$)'**
+  String get label_sale_price;
+
+  /// No description provided for @purchase_date_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Date'**
+  String get purchase_date_title;
+
+  /// No description provided for @sale_date_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Date'**
+  String get sale_date_title;
+
+  /// No description provided for @set_sale_date_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Set sale date'**
+  String get set_sale_date_label;
+
+  /// No description provided for @profit_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get profit_label;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
