@@ -234,7 +234,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               return false; // cancel or null
             }
 
-            return PopScope(
+            return WillPopScope(
               onWillPop: confirmClose,
               child: Padding(
                 padding: EdgeInsets.only(

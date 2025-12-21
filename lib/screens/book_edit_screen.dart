@@ -356,7 +356,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
