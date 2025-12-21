@@ -6,6 +6,7 @@ import '../providers/book_provider.dart';
 import '../models/book.dart';
 import '../services/isbn_service.dart';
 import '../providers/settings_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});
@@ -36,8 +37,9 @@ class _BookListScreenState extends State<BookListScreen> {
               final author = authorController.text.trim();
               if (title.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('請輸入書名'),
+                  SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.bookList_search_hint),
                     backgroundColor: Colors.red,
                   ),
                 );
@@ -54,7 +56,8 @@ class _BookListScreenState extends State<BookListScreen> {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('查詢失敗: $err'),
+                    content:
+                        Text(AppLocalizations.of(context)!.search_failed(err)),
                     backgroundColor: Colors.red,
                   ),
                 );
@@ -73,16 +76,18 @@ class _BookListScreenState extends State<BookListScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    '以書名查詢（Google Books）',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    AppLocalizations.of(context)!.search_by_title_title,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: '書名（必填）',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText:
+                          AppLocalizations.of(context)!.bookList_search_hint,
+                      border: const OutlineInputBorder(),
                     ),
                     textInputAction: TextInputAction.next,
                   ),
@@ -101,7 +106,7 @@ class _BookListScreenState extends State<BookListScreen> {
                     child: ElevatedButton.icon(
                       onPressed: loading ? null : doSearch,
                       icon: const Icon(Icons.search),
-                      label: const Text('查詢'),
+                      label: Text(AppLocalizations.of(context)!.search_button),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -111,26 +116,29 @@ class _BookListScreenState extends State<BookListScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Column(
                         children: [
-                          const Text(
-                            '查無結果（或無可用 ISBN）',
-                            style: TextStyle(color: Colors.grey),
+                          Text(
+                            AppLocalizations.of(context)!.no_results_text,
+                            style: const TextStyle(color: Colors.grey),
                           ),
                           const SizedBox(height: 8),
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton.icon(
                               icon: const Icon(Icons.edit),
-                              label: const Text('手動輸入 ISBN'),
+                              label: Text(AppLocalizations.of(context)!
+                                  .manual_isbn_label),
                               onPressed: () async {
                                 final isbnController = TextEditingController();
                                 final ok = await showDialog<bool>(
                                   context: context,
                                   builder: (ctx) => AlertDialog(
-                                    title: const Text('手動輸入 ISBN'),
+                                    title: Text(AppLocalizations.of(ctx)!
+                                        .manual_isbn_title),
                                     content: TextField(
                                       controller: isbnController,
-                                      decoration: const InputDecoration(
-                                        hintText: '請輸入 10 或 13 位 ISBN',
+                                      decoration: InputDecoration(
+                                        hintText: AppLocalizations.of(ctx)!
+                                            .manual_isbn_hint,
                                       ),
                                       keyboardType: TextInputType.number,
                                     ),
@@ -138,12 +146,14 @@ class _BookListScreenState extends State<BookListScreen> {
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(ctx).pop(false),
-                                        child: const Text('取消'),
+                                        child: Text(
+                                            AppLocalizations.of(ctx)!.cancel),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(ctx).pop(true),
-                                        child: const Text('查詢'),
+                                        child: Text(AppLocalizations.of(ctx)!
+                                            .search_button),
                                       ),
                                     ],
                                   ),
@@ -171,15 +181,19 @@ class _BookListScreenState extends State<BookListScreen> {
                                           .loadBooks();
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(content: Text('已新增書籍')),
+                                        SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .book_added)),
                                       );
                                     }
                                   } else {
                                     if (!context.mounted) return;
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                          content:
-                                              Text(provider.error ?? '查無書籍資訊')),
+                                          content: Text(provider.error ??
+                                              AppLocalizations.of(context)!
+                                                  .book_not_found)),
                                     );
                                     provider.clearError();
                                   }
@@ -214,7 +228,10 @@ class _BookListScreenState extends State<BookListScreen> {
                               if (editResult == true) {
                                 await context.read<BookProvider>().loadBooks();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('已新增書籍')),
+                                  SnackBar(
+                                      content: Text(
+                                          AppLocalizations.of(context)!
+                                              .book_added)),
                                 );
                               }
                             },
@@ -261,22 +278,24 @@ class _BookListScreenState extends State<BookListScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('刪除確認'),
-        content: const Text('確定要刪除此書籍嗎？'),
+        title: Text(AppLocalizations.of(context)!.delete_confirm_title),
+        content: Text(AppLocalizations.of(context)!.delete_confirm_content),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('取消'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
               context.read<BookProvider>().deleteBook(id);
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('書籍已刪除')),
+                SnackBar(
+                    content: Text(AppLocalizations.of(context)!.book_deleted)),
               );
             },
-            child: const Text('刪除', style: TextStyle(color: Colors.red)),
+            child: Text(AppLocalizations.of(context)!.delete_action,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -287,12 +306,12 @@ class _BookListScreenState extends State<BookListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的書籍'),
+        title: Text(AppLocalizations.of(context)!.my_books_title),
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
-            tooltip: '以書名查詢',
+            tooltip: AppLocalizations.of(context)!.search_by_title_title,
             icon: const Icon(Icons.search),
             onPressed: _startTitleSearchFlow,
           ),
@@ -334,7 +353,7 @@ class _BookListScreenState extends State<BookListScreen> {
                           icon: const Icon(Icons.close, color: Colors.red),
                           onPressed: () =>
                               context.read<BookProvider>().clearError(),
-                          tooltip: '關閉',
+                          tooltip: AppLocalizations.of(context)!.cancel,
                         ),
                       ],
                     ),
@@ -347,7 +366,7 @@ class _BookListScreenState extends State<BookListScreen> {
                 child: Row(
                   children: [
                     FilterChip(
-                      label: const Text('全部'),
+                      label: Text(AppLocalizations.of(context)!.filter_all),
                       selected: _filterStatus == 'all',
                       onSelected: (selected) {
                         setState(() => _filterStatus = 'all');
@@ -355,7 +374,7 @@ class _BookListScreenState extends State<BookListScreen> {
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('未讀'),
+                      label: Text(AppLocalizations.of(context)!.filter_unread),
                       selected: _filterStatus == 'unread',
                       onSelected: (selected) {
                         setState(() => _filterStatus = 'unread');
@@ -363,7 +382,7 @@ class _BookListScreenState extends State<BookListScreen> {
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('閱讀中'),
+                      label: Text(AppLocalizations.of(context)!.filter_reading),
                       selected: _filterStatus == 'reading',
                       onSelected: (selected) {
                         setState(() => _filterStatus = 'reading');
@@ -371,7 +390,7 @@ class _BookListScreenState extends State<BookListScreen> {
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('已讀'),
+                      label: Text(AppLocalizations.of(context)!.filter_read),
                       selected: _filterStatus == 'read',
                       onSelected: (selected) {
                         setState(() => _filterStatus = 'read');
@@ -398,11 +417,11 @@ class _BookListScreenState extends State<BookListScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          '這個篩選沒有書籍',
+                          AppLocalizations.of(context)!.filter_no_books,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),
-                        const Text('換個篩選或新增一本試試看'),
+                        Text(AppLocalizations.of(context)!.empty_hint),
                       ],
                     ),
                   ),
@@ -449,8 +468,10 @@ class _BookListScreenState extends State<BookListScreen> {
                   children: [
                     ListTile(
                       leading: const Icon(Icons.search),
-                      title: const Text('以書名查詢'),
-                      subtitle: const Text('輸入書名/作者，用 Google Books 搜尋'),
+                      title: Text(AppLocalizations.of(sheetContext)!
+                          .search_by_title_title),
+                      subtitle: Text(AppLocalizations.of(sheetContext)!
+                          .search_by_title_subtitle),
                       onTap: () async {
                         Navigator.of(sheetContext).pop();
                         await _startTitleSearchFlow();
@@ -459,8 +480,10 @@ class _BookListScreenState extends State<BookListScreen> {
                     const Divider(height: 1),
                     ListTile(
                       leading: const Icon(Icons.qr_code_scanner),
-                      title: const Text('掃描 ISBN'),
-                      subtitle: const Text('使用相機掃描條碼（支援 978/979）'),
+                      title:
+                          Text(AppLocalizations.of(sheetContext)!.scan_title),
+                      subtitle: Text(
+                          AppLocalizations.of(sheetContext)!.scan_subtitle),
                       onTap: () async {
                         Navigator.of(sheetContext).pop();
                         if (!sheetContext.mounted) return;
@@ -469,7 +492,9 @@ class _BookListScreenState extends State<BookListScreen> {
                         if (result == true && sheetContext.mounted) {
                           await sheetContext.read<BookProvider>().loadBooks();
                           ScaffoldMessenger.of(sheetContext).showSnackBar(
-                            const SnackBar(content: Text('已新增書籍')),
+                            SnackBar(
+                                content: Text(AppLocalizations.of(sheetContext)!
+                                    .book_added)),
                           );
                         }
                       },
@@ -572,10 +597,10 @@ class BookListItem extends StatelessWidget {
                   ),
                   child: Text(
                     book.status == 'read'
-                        ? '已讀'
+                        ? AppLocalizations.of(context)!.filter_read
                         : book.status == 'reading'
-                            ? '閱讀中'
-                            : '未讀',
+                            ? AppLocalizations.of(context)!.filter_reading
+                            : AppLocalizations.of(context)!.filter_unread,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -589,7 +614,11 @@ class BookListItem extends StatelessWidget {
                       const Icon(Icons.auto_graph,
                           size: 16, color: Colors.blue),
                       const SizedBox(width: 6),
-                      Text('Lexile: ${book.lexileScore}L'),
+                      Builder(builder: (ctx) {
+                        final score = book.lexileScore!;
+                        return Text(
+                            AppLocalizations.of(ctx)!.lexile_label(score));
+                      }),
                     ],
                   ),
                 ],
@@ -611,20 +640,20 @@ class BookListItem extends StatelessWidget {
                     break;
                 }
               },
-              itemBuilder: (context) => const [
+              itemBuilder: (context) => [
                 PopupMenuItem(
                   value: 'edit',
                   child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('編輯'),
+                    leading: const Icon(Icons.edit),
+                    title: Text(AppLocalizations.of(context)!.edit),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
                 PopupMenuItem(
                   value: 'delete',
                   child: ListTile(
-                    leading: Icon(Icons.delete, color: Colors.red),
-                    title: Text('刪除'),
+                    leading: const Icon(Icons.delete, color: Colors.red),
+                    title: Text(AppLocalizations.of(context)!.delete),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),

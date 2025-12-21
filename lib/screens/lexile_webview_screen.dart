@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
+import '../l10n/app_localizations.dart';
 
 class LexileWebViewScreen extends StatefulWidget {
   final String searchQuery; // ISBN 優先，否則書名+作者
@@ -29,8 +30,10 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
+            final loc = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('載入失敗: ${error.description}')),
+              SnackBar(
+                  content: Text(loc.lexile_load_failed(error.description))),
             );
           },
         ),
@@ -48,10 +51,10 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lexile 查詢'),
+        title: Text(AppLocalizations.of(context)!.lexile_title),
         actions: [
           IconButton(
-            tooltip: '貼上回填',
+            tooltip: AppLocalizations.of(context)!.clipboard_paste_tooltip,
             icon: const Icon(Icons.content_paste_go),
             onPressed: () async {
               final data = await Clipboard.getData('text/plain');
@@ -62,14 +65,16 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
               } else {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('剪貼簿未偵測到 Lexile 值')),
+                    SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.lexile_clipboard_none)),
                   );
                 }
               }
             },
           ),
           IconButton(
-            tooltip: '重新整理',
+            tooltip: AppLocalizations.of(context)!.refresh_tooltip,
             icon: const Icon(Icons.refresh),
             onPressed: () => _controller.reload(),
           ),
@@ -91,23 +96,27 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
                     final result = await showDialog<int>(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        title: const Text('手動輸入 Lexile 值'),
+                        title: Text(
+                            AppLocalizations.of(context)!.lexile_manual_title),
                         content: TextField(
                           controller: controller,
                           keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(hintText: '例如：850'),
+                          decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!
+                                  .example_lexile_hint),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('取消'),
+                            child: Text(AppLocalizations.of(context)!.cancel),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               final v = int.tryParse(controller.text.trim());
                               Navigator.of(ctx).pop(v);
                             },
-                            child: const Text('回填'),
+                            child:
+                                Text(AppLocalizations.of(context)!.lexile_fill),
                           ),
                         ],
                       ),
@@ -117,7 +126,8 @@ class _LexileWebViewScreenState extends State<LexileWebViewScreen> {
                     }
                   },
                   icon: const Icon(Icons.edit),
-                  label: const Text('手動輸入'),
+                  label:
+                      Text(AppLocalizations.of(context)!.lexile_manual_label),
                 ),
               ],
             ),
