@@ -39,7 +39,8 @@ void main() {
 
     await tester.pump();
 
-    final bar = tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
+    final bar =
+        tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
     expect(bar.items[0].label, '書籍');
   });
 }
