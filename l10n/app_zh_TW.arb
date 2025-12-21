@@ -1,0 +1,9 @@
+{
+  "@@locale": "zh_TW",
+  "appTitle": "ISBN 書籍管理",
+  "books": "書籍",
+  "statistics": "統計",
+  "scanIsbn": "掃描 ISBN",
+  "searchByTitle": "以書名查詢",
+  "manualIsbn": "手動輸入 ISBN"
+}

@@ -39,10 +39,12 @@ dependencies:
   json_annotation: ^4.8.1
   
   # 日期時間
-  intl: ^0.19.0
+  intl: ^0.20.2
   
   # UI 組件
   cupertino_icons: ^1.0.6
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +58,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   
   assets:
     - assets/design/logo/
