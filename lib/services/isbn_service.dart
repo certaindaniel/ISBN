@@ -41,7 +41,7 @@ class IsbnService {
         onSourceStart?.call(source);
         Book? result;
         switch (source) {
-            case ApiSource.googleBooks:
+          case ApiSource.googleBooks:
             result = await _searchGoogleBooks(isbn, clientLocal);
             break;
           case ApiSource.openLibrary:
