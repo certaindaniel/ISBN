@@ -277,7 +277,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get settings_sources_explain => '系統會依照上列順序逐一查詢，失敗時自動換下一個來源。所有 API 均為免費第三方服務，穩定度可能會有所差異。';
+  String get settings_sources_explain =>
+      '系統會依照上列順序逐一查詢，失敗時自動換下一個來源。所有 API 均為免費第三方服務，穩定度可能會有所差異。';
 
   @override
   String get statistics_tab_reading => '閱讀統計';
@@ -317,6 +318,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settings_common_websites_title => '常用查詢網頁';
+
+  @override
+  String get take_photo => '拍攝封面';
+
+  @override
+  String language_label(Object value) {
+    return '語言：$value';
+  }
+
+  @override
+  String get label_lexile => '藍思值 (Lexile Measure)';
+
+  @override
+  String get profit_calculation => '利潤計算';
 
   @override
   String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
@@ -359,11 +374,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String error_prefix(Object message) {
     return '錯誤: $message';
   }
+
+  @override
+  String get isbn_error_invalid_format => '無效的 ISBN 格式';
+
+  @override
+  String provider_book_record_sale_failed(Object error) {
+    return '記錄售出失敗：$error';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
 class AppLocalizationsZhCn extends AppLocalizationsZh {
-  AppLocalizationsZhCn(): super('zh_CN');
+  AppLocalizationsZhCn() : super('zh_CN');
 
   @override
   String get appTitle => 'ISBN 书籍管理';
@@ -661,7 +684,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
 class AppLocalizationsZhTw extends AppLocalizationsZh {
-  AppLocalizationsZhTw(): super('zh_TW');
+  AppLocalizationsZhTw() : super('zh_TW');
 
   @override
   String get appTitle => 'ISBN 書籍管理';

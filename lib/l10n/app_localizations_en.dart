@@ -21,7 +21,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unsavedChangesTitle => 'Unsaved changes';
 
   @override
-  String get unsavedChangesContent => 'You have unsaved changes. Save before leaving?';
+  String get unsavedChangesContent =>
+      'You have unsaved changes. Save before leaving?';
 
   @override
   String get discard => 'Discard';
@@ -36,7 +37,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unfinishedSearchTitle => 'Unfinished search or changes';
 
   @override
-  String get unfinishedSearchContent => 'You have an unfinished search or input. Perform search, discard changes, or continue editing?';
+  String get unfinishedSearchContent =>
+      'You have an unfinished search or input. Perform search, discard changes, or continue editing?';
 
   @override
   String get performSearch => 'Search';
@@ -71,7 +73,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_confirm_title => 'Delete confirmation';
 
   @override
-  String get delete_confirm_content => 'Are you sure you want to delete this book?';
+  String get delete_confirm_content =>
+      'Are you sure you want to delete this book?';
 
   @override
   String get delete_action => 'Delete';
@@ -98,7 +101,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get search_by_title_title => 'Search by title';
 
   @override
-  String get search_by_title_subtitle => 'Enter title/author, search Google Books';
+  String get search_by_title_subtitle =>
+      'Enter title/author, search Google Books';
 
   @override
   String get scan_title => 'Scan ISBN';
@@ -217,7 +221,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit_book => 'Edit Book';
 
   @override
-  String get lexile_need_title_author => 'Please enter title and author before searching Lexile';
+  String get lexile_need_title_author =>
+      'Please enter title and author before searching Lexile';
 
   @override
   String lexile_refilled(Object value) {
@@ -277,7 +282,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get settings_sources_explain => 'The system will try enabled sources in order and fall back to the next if a source fails. All APIs are free third-party services and may vary in reliability.';
+  String get settings_sources_explain =>
+      'The system will try enabled sources in order and fall back to the next if a source fails. All APIs are free third-party services and may vary in reliability.';
 
   @override
   String get statistics_tab_reading => 'Reading Stats';
@@ -319,7 +325,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_common_websites_title => 'Common lookup websites';
 
   @override
-  String get no_enabled_sources => 'No ISBN sources enabled, please enable sources in Settings';
+  String get take_photo => 'Take photo';
+
+  @override
+  String language_label(Object value) {
+    return 'Language: $value';
+  }
+
+  @override
+  String get label_lexile => 'Lexile (Measure)';
+
+  @override
+  String get profit_calculation => 'Profit calculation';
+
+  @override
+  String get no_enabled_sources =>
+      'No ISBN sources enabled, please enable sources in Settings';
 
   @override
   String get searching_title => 'Searching...';
@@ -342,7 +363,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get api_test_running => 'Testing...';
 
   @override
-  String get api_test_output_placeholder => 'Tap "Start tests" to run API tests...';
+  String get api_test_output_placeholder =>
+      'Tap "Start tests" to run API tests...';
 
   @override
   String get scan_not_isbn_ean => 'Please scan an ISBN barcode; this is an EAN';
@@ -358,5 +380,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String error_prefix(Object message) {
     return 'Error: $message';
+  }
+
+  @override
+  String get isbn_error_invalid_format => 'Invalid ISBN format';
+
+  @override
+  String provider_book_record_sale_failed(Object error) {
+    return 'Failed to record sale: $error';
   }
 }

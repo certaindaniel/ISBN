@@ -4,6 +4,7 @@ import '../models/api_source.dart';
 import '../services/database_helper.dart';
 import '../services/isbn_service.dart';
 import '../utils/app_logger.dart';
+import '../l10n/app_localizations.dart';
 
 class BookProvider extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
@@ -11,11 +12,15 @@ class BookProvider extends ChangeNotifier {
   Map<String, dynamic> _statistics = {};
   bool _isLoading = false;
   String? _error;
+  String? _errorCode;
+  Map<String, dynamic>? _errorArgs;
 
   List<Book> get books => _books;
   Map<String, dynamic> get statistics => _statistics;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  String? get errorCode => _errorCode;
+  Map<String, dynamic>? get errorArgs => _errorArgs;
 
   // 初始化
   Future<void> initialize() async {
@@ -28,6 +33,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+      _errorCode = null;
+      _errorArgs = null;
       _books = await _dbHelper.getAllBooks();
       notifyListeners();
     } catch (e) {
@@ -58,6 +65,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+      _errorCode = null;
+      _errorArgs = null;
       notifyListeners();
 
       final normalizedIsbn = IsbnService.normalizeIsbn(isbn);
@@ -100,6 +109,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+      _errorCode = null;
+      _errorArgs = null;
       notifyListeners();
 
       final normalizedIsbn = IsbnService.normalizeIsbn(book.isbn);
@@ -137,6 +148,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+      _errorCode = null;
+      _errorArgs = null;
       notifyListeners();
 
       final normalizedIsbn = IsbnService.normalizeIsbn(book.isbn);
@@ -166,6 +179,8 @@ class BookProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
+      _errorCode = null;
+      _errorArgs = null;
       notifyListeners();
 
       await _dbHelper.deleteBook(id);
@@ -194,6 +209,8 @@ class BookProvider extends ChangeNotifier {
       return await updateBook(updatedBook);
     } catch (e) {
       _error = '記錄售出失敗: $e';
+      _errorCode = 'provider_book_record_sale_failed';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
       return false;
     }
@@ -202,6 +219,20 @@ class BookProvider extends ChangeNotifier {
   // 清除錯誤訊息
   void clearError() {
     _error = null;
+    _errorCode = null;
+    _errorArgs = null;
     notifyListeners();
+  }
+
+  /// Helper: return localized error message when UI has a BuildContext.
+  String localizedError(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    if (_errorCode == 'provider_book_record_sale_failed') {
+      return loc.provider_book_record_sale_failed(_errorArgs?['error'] ?? '');
+    }
+    if (_error != null && _error!.contains('無效的 ISBN 格式')) {
+      return loc.isbn_error_invalid_format;
+    }
+    return _error ?? '';
   }
 }

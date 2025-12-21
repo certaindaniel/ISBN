@@ -96,6 +96,10 @@
   "finance_total_earned": "總收入",
   "finance_total_profit": "總利潤",
   "settings_common_websites_title": "常用查詢網頁",
+  "take_photo": "拍攝封面",
+  "language_label": "語言：{value}",
+  "label_lexile": "藍思值 (Lexile Measure)",
+  "profit_calculation": "利潤計算",
   "no_results_text": "查無結果（或無可用 ISBN）",
   "manual_isbn_hint": "請輸入 10 或 13 位 ISBN",
   "book_not_found": "查無書籍資訊",
@@ -113,4 +117,7 @@
   "please_enter_title": "請輸入書名",
   "query_failed_error": "查詢失敗: {error}",
   "error_prefix": "錯誤: {message}"
+  ,
+  "isbn_error_invalid_format": "無效的 ISBN 格式",
+  "provider_book_record_sale_failed": "記錄售出失敗：{error}"
 }

@@ -103,6 +103,10 @@
   "finance_total_earned": "Total earned",
   "finance_total_profit": "Total profit",
   "settings_common_websites_title": "Common lookup websites",
+  "take_photo": "Take photo",
+  "language_label": "Language: {value}",
+  "label_lexile": "Lexile (Measure)",
+  "profit_calculation": "Profit calculation",
   "no_enabled_sources": "No ISBN sources enabled, please enable sources in Settings",
   "searching_title": "Searching...",
   "source_label": "Source: {value}",
@@ -115,4 +119,7 @@
   "please_enter_title": "Please enter title",
   "query_failed_error": "Query failed: {error}",
   "error_prefix": "Error: {message}"
+  ,
+  "isbn_error_invalid_format": "Invalid ISBN format",
+  "provider_book_record_sale_failed": "Failed to record sale: {error}"
 }
