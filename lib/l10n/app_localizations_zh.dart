@@ -270,6 +270,95 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get profit_label => '利潤';
+
+  @override
+  String settings_enabled_sources(Object enabled, Object total) {
+    return '已啟用來源：$enabled / $total';
+  }
+
+  @override
+  String get settings_sources_explain => '系統會依照上列順序逐一查詢，失敗時自動換下一個來源。所有 API 均為免費第三方服務，穩定度可能會有所差異。';
+
+  @override
+  String get statistics_tab_reading => '閱讀統計';
+
+  @override
+  String get statistics_tab_finance => '金額統計';
+
+  @override
+  String get stat_overview_title => '閱讀進度';
+
+  @override
+  String get stat_total_books => '總書籍';
+
+  @override
+  String get stat_read => '已讀';
+
+  @override
+  String get stat_reading => '閱讀中';
+
+  @override
+  String get stat_unread => '未讀';
+
+  @override
+  String get stat_completion_title => '閱讀完成度';
+
+  @override
+  String get finance_title => '金額統計';
+
+  @override
+  String get finance_total_spent => '總支出';
+
+  @override
+  String get finance_total_earned => '總收入';
+
+  @override
+  String get finance_total_profit => '總利潤';
+
+  @override
+  String get settings_common_websites_title => '常用查詢網頁';
+
+  @override
+  String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
+
+  @override
+  String get searching_title => '查詢中...';
+
+  @override
+  String source_label(Object value) {
+    return '來源：$value';
+  }
+
+  @override
+  String get cannot_find_book => '無法查詢到書籍資訊';
+
+  @override
+  String get api_test_title => 'ISBN API 測試';
+
+  @override
+  String get api_test_start => '開始測試';
+
+  @override
+  String get api_test_running => '測試進行中...';
+
+  @override
+  String get api_test_output_placeholder => '點擊「開始測試」執行 API 測試...';
+
+  @override
+  String get scan_not_isbn_ean => '請掃描 ISBN 條碼，這個是 EAN';
+
+  @override
+  String get please_enter_title => '請輸入書名';
+
+  @override
+  String query_failed_error(Object error) {
+    return '查詢失敗: $error';
+  }
+
+  @override
+  String error_prefix(Object message) {
+    return '錯誤: $message';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -538,6 +627,36 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get profit_label => '利润';
+
+  @override
+  String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
+
+  @override
+  String get searching_title => '查詢中...';
+
+  @override
+  String source_label(Object value) {
+    return '來源：$value';
+  }
+
+  @override
+  String get cannot_find_book => '無法查詢到書籍資訊';
+
+  @override
+  String get scan_not_isbn_ean => '請掃描 ISBN 條碼，這個是 EAN';
+
+  @override
+  String get please_enter_title => '請輸入書名';
+
+  @override
+  String query_failed_error(Object error) {
+    return '查詢失敗: $error';
+  }
+
+  @override
+  String error_prefix(Object message) {
+    return '錯誤: $message';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -806,4 +925,34 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get profit_label => '利潤';
+
+  @override
+  String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
+
+  @override
+  String get searching_title => '查詢中...';
+
+  @override
+  String source_label(Object value) {
+    return '來源：$value';
+  }
+
+  @override
+  String get cannot_find_book => '無法查詢到書籍資訊';
+
+  @override
+  String get scan_not_isbn_ean => '請掃描 ISBN 條碼，這個是 EAN';
+
+  @override
+  String get please_enter_title => '請輸入書名';
+
+  @override
+  String query_failed_error(Object error) {
+    return '查詢失敗: $error';
+  }
+
+  @override
+  String error_prefix(Object message) {
+    return '錯誤: $message';
+  }
 }

@@ -594,6 +594,129 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profit'**
   String get profit_label;
+
+  /// No description provided for @settings_enabled_sources.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled sources: {enabled} / {total}'**
+  String settings_enabled_sources(Object enabled, Object total);
+
+  /// No description provided for @settings_sources_explain.
+  ///
+  /// In en, this message translates to:
+  /// **'The system will try enabled sources in order and fall back to the next if a source fails. All APIs are free third-party services and may vary in reliability.'**
+  String get settings_sources_explain;
+
+  /// No description provided for @statistics_tab_reading.
+  String get statistics_tab_reading;
+
+  /// No description provided for @statistics_tab_finance.
+  String get statistics_tab_finance;
+
+  /// No description provided for @stat_overview_title.
+  String get stat_overview_title;
+
+  /// No description provided for @stat_total_books.
+  String get stat_total_books;
+
+  /// No description provided for @stat_read.
+  String get stat_read;
+
+  /// No description provided for @stat_reading.
+  String get stat_reading;
+
+  /// No description provided for @stat_unread.
+  String get stat_unread;
+
+  /// No description provided for @stat_completion_title.
+  String get stat_completion_title;
+
+  /// No description provided for @finance_title.
+  String get finance_title;
+
+  /// No description provided for @finance_total_spent.
+  String get finance_total_spent;
+
+  /// No description provided for @finance_total_earned.
+  String get finance_total_earned;
+
+  /// No description provided for @finance_total_profit.
+  String get finance_total_profit;
+
+  /// No description provided for @settings_common_websites_title.
+  String get settings_common_websites_title;
+
+  /// No description provided for @no_enabled_sources.
+  ///
+  /// In en, this message translates to:
+  /// **'No ISBN sources enabled, please enable sources in Settings'**
+  String get no_enabled_sources;
+
+  /// No description provided for @searching_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching...'**
+  String get searching_title;
+
+  /// No description provided for @source_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {value}'**
+  String source_label(Object value);
+
+  /// No description provided for @cannot_find_book.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to find book information'**
+  String get cannot_find_book;
+
+  /// No description provided for @api_test_title.
+  ///
+  /// In en, this message translates to:
+  /// **'ISBN API Test'**
+  String get api_test_title;
+
+  /// No description provided for @api_test_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tests'**
+  String get api_test_start;
+
+  /// No description provided for @api_test_running.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing...'**
+  String get api_test_running;
+
+  /// No description provided for @api_test_output_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap "Start tests" to run API tests...'**
+  String get api_test_output_placeholder;
+
+  /// No description provided for @scan_not_isbn_ean.
+  ///
+  /// In en, this message translates to:
+  /// **'Please scan an ISBN barcode; this is an EAN'**
+  String get scan_not_isbn_ean;
+
+  /// No description provided for @please_enter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter title'**
+  String get please_enter_title;
+
+  /// No description provided for @query_failed_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Query failed: {error}'**
+  String query_failed_error(Object error);
+
+  /// No description provided for @error_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String error_prefix(Object message);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

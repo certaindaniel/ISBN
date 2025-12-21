@@ -270,4 +270,93 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profit_label => 'Profit';
+
+  @override
+  String settings_enabled_sources(Object enabled, Object total) {
+    return 'Enabled sources: $enabled / $total';
+  }
+
+  @override
+  String get settings_sources_explain => 'The system will try enabled sources in order and fall back to the next if a source fails. All APIs are free third-party services and may vary in reliability.';
+
+  @override
+  String get statistics_tab_reading => 'Reading Stats';
+
+  @override
+  String get statistics_tab_finance => 'Finance Stats';
+
+  @override
+  String get stat_overview_title => 'Reading Overview';
+
+  @override
+  String get stat_total_books => 'Total books';
+
+  @override
+  String get stat_read => 'Read';
+
+  @override
+  String get stat_reading => 'Reading';
+
+  @override
+  String get stat_unread => 'Unread';
+
+  @override
+  String get stat_completion_title => 'Completion';
+
+  @override
+  String get finance_title => 'Finance Overview';
+
+  @override
+  String get finance_total_spent => 'Total spent';
+
+  @override
+  String get finance_total_earned => 'Total earned';
+
+  @override
+  String get finance_total_profit => 'Total profit';
+
+  @override
+  String get settings_common_websites_title => 'Common lookup websites';
+
+  @override
+  String get no_enabled_sources => 'No ISBN sources enabled, please enable sources in Settings';
+
+  @override
+  String get searching_title => 'Searching...';
+
+  @override
+  String source_label(Object value) {
+    return 'Source: $value';
+  }
+
+  @override
+  String get cannot_find_book => 'Unable to find book information';
+
+  @override
+  String get api_test_title => 'ISBN API Test';
+
+  @override
+  String get api_test_start => 'Start tests';
+
+  @override
+  String get api_test_running => 'Testing...';
+
+  @override
+  String get api_test_output_placeholder => 'Tap "Start tests" to run API tests...';
+
+  @override
+  String get scan_not_isbn_ean => 'Please scan an ISBN barcode; this is an EAN';
+
+  @override
+  String get please_enter_title => 'Please enter title';
+
+  @override
+  String query_failed_error(Object error) {
+    return 'Query failed: $error';
+  }
+
+  @override
+  String error_prefix(Object message) {
+    return 'Error: $message';
+  }
 }
