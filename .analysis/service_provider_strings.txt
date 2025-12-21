@@ -1,0 +1,9 @@
+--- throw/print/errors ---
+lib/services/isbn_service.dart:26:        throw Exception('請掃描 ISBN 條碼，這個是 EAN');
+lib/services/isbn_service.dart:28:      throw Exception('無效的 ISBN 格式');
+lib/providers/book_provider.dart:203:  void clearError() {
+--- quoted-strings ---
+lib/services/database_helper.dart:67:          "UPDATE books SET status='unread' WHERE status IS NULL OR status='' OR status='owned'");
+lib/services/database_helper.dart:68:      await db.execute("UPDATE books SET status='read' WHERE status='sold'");
+lib/services/isbn_service.dart:566:  /// 例如輸入 "ISBN 978-0-446-31078-9 by Author" 會提取 "9780446310789"
+lib/services/isbn_service.dart:686:              // Lexile 通常是格式 "LEXILE: 850L" 或 "850"

@@ -460,13 +460,13 @@ class _BookEditScreenState extends State<BookEditScreen> {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(height: 8),
-                                  Text(
-                                    AppLocalizations.of(context)!.take_photo,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: 12,
-                                    ),
-                                  ),
+                              Text(
+                                AppLocalizations.of(context)!.take_photo,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -515,7 +515,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
               TextField(
                 controller: _authorController,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.label_author_required,
+                  labelText:
+                      AppLocalizations.of(context)!.label_author_required,
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -525,7 +526,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
               TextField(
                 controller: _publisherController,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.label_publisher_required,
+                  labelText:
+                      AppLocalizations.of(context)!.label_publisher_required,
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -555,7 +557,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
                     children: [
                       const Icon(Icons.language, size: 20),
                       const SizedBox(width: 12),
-                      Text(AppLocalizations.of(context)!.language_label(_getLanguageName(_language!))),
+                      Text(AppLocalizations.of(context)!
+                          .language_label(_getLanguageName(_language!))),
                     ],
                   ),
                 )
@@ -605,9 +608,18 @@ class _BookEditScreenState extends State<BookEditScreen> {
                     const SizedBox(height: 12),
                     SegmentedButton<String>(
                       segments: [
-                        ButtonSegment(value: 'unread', label: Text(AppLocalizations.of(context)!.filter_unread)),
-                        ButtonSegment(value: 'reading', label: Text(AppLocalizations.of(context)!.filter_reading)),
-                        ButtonSegment(value: 'read', label: Text(AppLocalizations.of(context)!.filter_read)),
+                        ButtonSegment(
+                            value: 'unread',
+                            label: Text(
+                                AppLocalizations.of(context)!.filter_unread)),
+                        ButtonSegment(
+                            value: 'reading',
+                            label: Text(
+                                AppLocalizations.of(context)!.filter_reading)),
+                        ButtonSegment(
+                            value: 'read',
+                            label: Text(
+                                AppLocalizations.of(context)!.filter_read)),
                       ],
                       selected: {_readStatus},
                       onSelectionChanged: (selection) {
@@ -646,7 +658,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
               TextField(
                 controller: _purchasePriceController,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.label_purchase_price_required,
+                  labelText: AppLocalizations.of(context)!
+                      .label_purchase_price_required,
                   border: const OutlineInputBorder(),
                   prefixText: '\$ ',
                 ),
@@ -697,7 +710,8 @@ class _BookEditScreenState extends State<BookEditScreen> {
                 ElevatedButton.icon(
                   onPressed: () => _selectDate(false),
                   icon: const Icon(Icons.add),
-                  label: Text(AppLocalizations.of(context)!.set_sale_date_label),
+                  label:
+                      Text(AppLocalizations.of(context)!.set_sale_date_label),
                 ),
               ],
               const SizedBox(height: 32),
@@ -723,14 +737,16 @@ class _BookEditScreenState extends State<BookEditScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${AppLocalizations.of(context)!.label_purchase_price_required}:'),
+                          Text(
+                              '${AppLocalizations.of(context)!.label_purchase_price_required}:'),
                           Text('\$${_purchasePriceController.text}'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${AppLocalizations.of(context)!.label_sale_price}:'),
+                          Text(
+                              '${AppLocalizations.of(context)!.label_sale_price}:'),
                           Text('\$${_salePriceController.text}'),
                         ],
                       ),

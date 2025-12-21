@@ -39,6 +39,8 @@ class BookProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _error = '載入書籍失敗: $e';
+      _errorCode = 'load_books_failed';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -75,6 +77,8 @@ class BookProvider extends ChangeNotifier {
       final localBook = await _dbHelper.getBookByISBN(normalizedIsbn);
       if (localBook != null) {
         _error = '此 ISBN 已存在於資料庫';
+        _errorCode = 'isbn_already_exists';
+        _errorArgs = null;
         notifyListeners();
         return localBook;
       }
@@ -90,12 +94,16 @@ class BookProvider extends ChangeNotifier {
         final nclUrl =
             'https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple&isbn=$normalizedIsbn';
         _error = '無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：$nclUrl';
+        _errorCode = 'cannot_find_isbn_ncl';
+        _errorArgs = {'url': nclUrl};
       }
 
       notifyListeners();
       return book;
     } catch (e) {
       _error = '查詢失敗: $e';
+      _errorCode = 'query_failed_error';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
       return null;
     } finally {
@@ -116,6 +124,8 @@ class BookProvider extends ChangeNotifier {
       final normalizedIsbn = IsbnService.normalizeIsbn(book.isbn);
       if (!IsbnService.isValidIsbn(normalizedIsbn)) {
         _error = '無效的 ISBN 格式';
+        _errorCode = 'isbn_error_invalid_format';
+        _errorArgs = null;
         notifyListeners();
         return false;
       }
@@ -125,6 +135,8 @@ class BookProvider extends ChangeNotifier {
       final existing = await _dbHelper.getBookByISBN(normalizedIsbn);
       if (existing != null) {
         _error = 'ISBN 已存在於資料庫';
+        _errorCode = 'isbn_already_exists';
+        _errorArgs = null;
         notifyListeners();
         return false;
       }
@@ -135,6 +147,8 @@ class BookProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       _error = '新增書籍失敗: $e';
+      _errorCode = 'add_book_failed';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
       return false;
     } finally {
@@ -155,6 +169,8 @@ class BookProvider extends ChangeNotifier {
       final normalizedIsbn = IsbnService.normalizeIsbn(book.isbn);
       if (!IsbnService.isValidIsbn(normalizedIsbn)) {
         _error = '無效的 ISBN 格式';
+        _errorCode = 'isbn_error_invalid_format';
+        _errorArgs = null;
         notifyListeners();
         return false;
       }
@@ -166,6 +182,8 @@ class BookProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       _error = '更新書籍失敗: $e';
+      _errorCode = 'update_book_failed';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
       return false;
     } finally {
@@ -189,6 +207,8 @@ class BookProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       _error = '刪除書籍失敗: $e';
+      _errorCode = 'delete_book_failed';
+      _errorArgs = {'error': e.toString()};
       notifyListeners();
       return false;
     } finally {
@@ -227,12 +247,27 @@ class BookProvider extends ChangeNotifier {
   /// Helper: return localized error message when UI has a BuildContext.
   String localizedError(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    if (_errorCode == 'provider_book_record_sale_failed') {
-      return loc.provider_book_record_sale_failed(_errorArgs?['error'] ?? '');
+    switch (_errorCode) {
+      case 'provider_book_record_sale_failed':
+        return loc.provider_book_record_sale_failed(_errorArgs?['error'] ?? '');
+      case 'isbn_error_invalid_format':
+        return loc.isbn_error_invalid_format;
+      case 'isbn_already_exists':
+        return loc.isbn_already_exists;
+      case 'cannot_find_isbn_ncl':
+        return loc.cannot_find_isbn_ncl(_errorArgs?['url'] ?? '');
+      case 'load_books_failed':
+        return loc.load_books_failed(_errorArgs?['error'] ?? '');
+      case 'add_book_failed':
+        return loc.add_book_failed(_errorArgs?['error'] ?? '');
+      case 'update_book_failed':
+        return loc.update_book_failed(_errorArgs?['error'] ?? '');
+      case 'delete_book_failed':
+        return loc.delete_book_failed(_errorArgs?['error'] ?? '');
+      case 'query_failed_error':
+        return loc.query_failed_error(_errorArgs?['error'] ?? '');
+      default:
+        return _error ?? '';
     }
-    if (_error != null && _error!.contains('無效的 ISBN 格式')) {
-      return loc.isbn_error_invalid_format;
-    }
-    return _error ?? '';
   }
 }

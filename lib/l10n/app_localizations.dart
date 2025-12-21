@@ -739,6 +739,42 @@ abstract class AppLocalizations {
   /// **'Failed to record sale: {error}'**
   String provider_book_record_sale_failed(Object error);
 
+  /// No description provided for @isbn_already_exists.
+  ///
+  /// In en, this message translates to:
+  /// **'ISBN already exists in database'**
+  String get isbn_already_exists;
+
+  /// No description provided for @cannot_find_isbn_ncl.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to find book information. See: {url}'**
+  String cannot_find_isbn_ncl(Object url);
+
+  /// No description provided for @load_books_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load books: {error}'**
+  String load_books_failed(Object error);
+
+  /// No description provided for @add_book_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add book: {error}'**
+  String add_book_failed(Object error);
+
+  /// No description provided for @update_book_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update book: {error}'**
+  String update_book_failed(Object error);
+
+  /// No description provided for @delete_book_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete book: {error}'**
+  String delete_book_failed(Object error);
+
   /// No description provided for @error_prefix.
   ///
   /// In en, this message translates to:

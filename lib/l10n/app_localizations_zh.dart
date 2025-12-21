@@ -382,6 +382,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String provider_book_record_sale_failed(Object error) {
     return '記錄售出失敗：$error';
   }
+
+  @override
+  String get isbn_already_exists => 'ISBN 已存在於資料庫';
+
+  @override
+  String cannot_find_isbn_ncl(Object url) {
+    return '無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：$url';
+  }
+
+  @override
+  String load_books_failed(Object error) {
+    return '載入書籍失敗: $error';
+  }
+
+  @override
+  String add_book_failed(Object error) {
+    return '新增書籍失敗: $error';
+  }
+
+  @override
+  String update_book_failed(Object error) {
+    return '更新書籍失敗: $error';
+  }
+
+  @override
+  String delete_book_failed(Object error) {
+    return '刪除書籍失敗: $error';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

@@ -36,7 +36,8 @@ class SettingsScreen extends StatelessWidget {
           return ListView(
             children: [
               ListTile(
-                title: Text(loc.settings_enabled_sources(enabledCount, ApiSourceRegistry.all.length)),
+                title: Text(loc.settings_enabled_sources(
+                    enabledCount, ApiSourceRegistry.all.length)),
                 subtitle: Text(loc.settings_sources_subtitle),
               ),
               const Divider(height: 1),

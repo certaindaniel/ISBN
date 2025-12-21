@@ -389,4 +389,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String provider_book_record_sale_failed(Object error) {
     return 'Failed to record sale: $error';
   }
+
+  @override
+  String get isbn_already_exists => 'ISBN already exists in database';
+
+  @override
+  String cannot_find_isbn_ncl(Object url) {
+    return 'Unable to find book information. See: $url';
+  }
+
+  @override
+  String load_books_failed(Object error) {
+    return 'Failed to load books: $error';
+  }
+
+  @override
+  String add_book_failed(Object error) {
+    return 'Failed to add book: $error';
+  }
+
+  @override
+  String update_book_failed(Object error) {
+    return 'Failed to update book: $error';
+  }
+
+  @override
+  String delete_book_failed(Object error) {
+    return 'Failed to delete book: $error';
+  }
 }

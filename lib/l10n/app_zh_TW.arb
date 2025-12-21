@@ -116,6 +116,13 @@
     ,
     "isbn_error_invalid_format": "無效的 ISBN 格式",
     "provider_book_record_sale_failed": "記錄售出失敗：{error}"
+    ,
+    "isbn_already_exists": "ISBN 已存在於資料庫",
+    "cannot_find_isbn_ncl": "無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：{url}",
+    "load_books_failed": "載入書籍失敗: {error}",
+    "add_book_failed": "新增書籍失敗: {error}",
+    "update_book_failed": "更新書籍失敗: {error}",
+    "delete_book_failed": "刪除書籍失敗: {error}"
   ,
   "no_results_text": "查無結果（或無可用 ISBN）",
   "manual_isbn_hint": "請輸入 10 或 13 位 ISBN",

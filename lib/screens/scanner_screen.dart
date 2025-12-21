@@ -188,7 +188,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   // 可視需要加入語言限制，例如: langRestrict: 'en'
                 );
                 setState(() => results = list);
-                } catch (err) {
+              } catch (err) {
                 if (!context.mounted) return;
                 final loc = AppLocalizations.of(context)!;
                 ScaffoldMessenger.of(context).showSnackBar(

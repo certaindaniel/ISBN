@@ -122,4 +122,11 @@
   ,
   "isbn_error_invalid_format": "Invalid ISBN format",
   "provider_book_record_sale_failed": "Failed to record sale: {error}"
+  ,
+  "isbn_already_exists": "ISBN already exists in database",
+  "cannot_find_isbn_ncl": "Unable to find book information. See: {url}",
+  "load_books_failed": "Failed to load books: {error}",
+  "add_book_failed": "Failed to add book: {error}",
+  "update_book_failed": "Failed to update book: {error}",
+  "delete_book_failed": "Failed to delete book: {error}"
 }

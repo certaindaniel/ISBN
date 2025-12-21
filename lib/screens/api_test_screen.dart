@@ -216,7 +216,8 @@ class _ApiTestScreenState extends State<ApiTestScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.play_arrow),
-              label: Text(_isRunning ? loc.api_test_running : loc.api_test_start),
+              label:
+                  Text(_isRunning ? loc.api_test_running : loc.api_test_start),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
