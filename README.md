@@ -175,6 +175,20 @@ CREATE TABLE books(
 - [API_source.md](API_source.md) - ISBN API 資源列表
 - [pubspec.yaml](pubspec.yaml) - 依賴套件
 
+## 實作進度（2025-12-21）
+
+- **已完成**
+  - 產生 iOS / Android 應用程式圖示（來源：`assets/design/logo/proposal-1_bg_white.svg`），已將多尺寸 PNG 放入 `ios/Runner/Assets.xcassets/AppIcon.appiconset` 與 `android/app/src/main/res/mipmap-*`。
+  - 在 `BookEditScreen` 新增離開前提示儲存（未儲存變更檢查、儲存／放棄／取消對話框）。
+  - 在 `pubspec.yaml` 加入 `flutter_launcher_icons` 並執行 icon 生成流程；為了兼容，先將 SVG 轉出為 `assets/design/logo/app_icon.png`（使用 ImageMagick）。
+  - 本地 `dart analyze` 與現有單元/Widget 測試已通過（測試輸出顯示 All tests passed）。
+
+- **下一步建議**
+  - 若要上架 iOS，可考慮在 `pubspec.yaml` 加入 `remove_alpha_ios: true` 以移除圖示 alpha 通道，避免 App Store 警告。
+  - 推送上述變更到遠端（`git push`）並視需要建立 Release / Tag。
+  - 將「離開前提示儲存」邏輯套用到其他編輯型 UI（例如掃描頁面的內嵌編輯對話框）。
+
+
 ## 主要依賴套件
 
 | 套件 | 用途 | 版本 |
