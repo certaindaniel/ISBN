@@ -7,7 +7,7 @@ import '../models/api_source.dart';
 import '../providers/settings_provider.dart';
 import '../services/isbn_service.dart';
 import '../models/book.dart';
-import '../widgets/pop_scope.dart';
+// 使用 framework PopScope 以支援系統預測返回手勢
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -235,8 +235,15 @@ class _ScannerScreenState extends State<ScannerScreen> {
               return false; // cancel or null
             }
 
-            return CompatPopScope(
-              onWillPop: confirmClose,
+            return PopScope<Object?>(
+              canPop: false,
+              onPopInvokedWithResult: (bool didPop, Object? result) async {
+                if (didPop) return;
+                final shouldClose = await confirmClose();
+                if (shouldClose && context.mounted) {
+                  Navigator.of(context).pop(false);
+                }
+              },
               child: Padding(
                 padding: EdgeInsets.only(
                   left: 16,

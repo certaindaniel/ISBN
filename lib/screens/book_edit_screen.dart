@@ -6,7 +6,7 @@ import 'dart:io';
 import 'lexile_webview_screen.dart';
 import '../models/book.dart';
 import '../providers/book_provider.dart';
-import '../widgets/pop_scope.dart';
+// 使用 framework 的 PopScope 以配合 Android 預測返回手勢
 
 class BookEditScreen extends StatefulWidget {
   final Book? initialBook;
@@ -360,8 +360,15 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CompatPopScope(
-      onWillPop: _onWillPop,
+    return PopScope<Object?>(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+        final shouldPop = await _onWillPop();
+        if (shouldPop && context.mounted) {
+          Navigator.of(context).pop();
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.initialBook == null ? '新增書籍' : '編輯書籍'),
