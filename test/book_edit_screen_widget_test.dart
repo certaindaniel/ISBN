@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_helper.dart';
 import 'package:isbn_book_manager/models/book.dart';
 import 'package:isbn_book_manager/screens/book_edit_screen.dart';
+import 'package:isbn_book_manager/l10n/app_localizations.dart';
 
 void main() {
   setUpAll(() {
@@ -11,8 +12,10 @@ void main() {
 
   testWidgets('沒有封面時顯示拍攝提示', (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const Scaffold(
           body: BookEditScreen(),
         ),
       ),
@@ -44,6 +47,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BookEditScreen(initialBook: book),
         ),

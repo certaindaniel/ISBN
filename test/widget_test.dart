@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'test_helper.dart';
 
 import 'package:isbn_book_manager/main.dart';
+import 'package:isbn_book_manager/l10n/app_localizations.dart';
 import 'package:isbn_book_manager/providers/book_provider.dart';
 import 'package:isbn_book_manager/providers/settings_provider.dart';
 
@@ -28,11 +29,17 @@ void main() {
             create: (_) => SettingsProvider()),
         ChangeNotifierProvider<BookProvider>(create: (_) => BookProvider()),
       ],
-      child: const MaterialApp(home: HomeScreen()),
+      child: MaterialApp(
+        locale: const Locale('zh'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomeScreen(),
+      ),
     ));
 
-    await tester.pumpAndSettle();
+    await tester.pump();
 
-    expect(find.text('書籍'), findsOneWidget);
+    final bar = tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
+    expect(bar.items[0].label, '書籍');
   });
 }
