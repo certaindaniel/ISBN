@@ -58,6 +58,7 @@ class ApiSourceRegistry {
       requiresKey: false,
       baseUrl: 'https://api.jike.xyz/situ/book/isbn/',
     ),
+
   ];
 
   static ApiSourceInfo info(ApiSource source) {
