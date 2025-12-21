@@ -90,26 +90,36 @@ class _BookEditScreenState extends State<BookEditScreen> {
     }
 
     // 編輯模式：比對與初始值是否不同
-    if (_titleController.text.trim() != (book.title ?? '')) return true;
-    if (_authorController.text.trim() != (book.author ?? '')) return true;
-    if (_publisherController.text.trim() != (book.publisher ?? '')) return true;
-    if (_descriptionController.text.trim() != (book.description ?? ''))
+    if (_titleController.text.trim() != book.title) {
       return true;
-    if (_isbnController.text.trim() != (book.isbn ?? '')) return true;
-    if (_purchasePriceController.text.trim() !=
-        (book.purchasePrice?.toString() ?? '')) return true;
-    if (_salePriceController.text.trim() != (book.salePrice?.toString() ?? ''))
+    }
+    if (_authorController.text.trim() != book.author) {
       return true;
-    if (_lexileScoreController.text.trim() !=
-        (book.lexileScore?.toString() ?? '')) return true;
-    if (_purchaseDate != (book.purchaseDate ?? _purchaseDate)) return true;
-    if ((_saleDate ?? '') != (book.saleDate ?? '')) {
-      // 比對日期存在性的不同或不同值
-      if (book.saleDate == null && _saleDate != null) return true;
-      if (book.saleDate != null && _saleDate == null) return true;
-      if (book.saleDate != null &&
-          _saleDate != null &&
-          book.saleDate != _saleDate) return true;
+    }
+    if (_publisherController.text.trim() != book.publisher) {
+      return true;
+    }
+    if (_descriptionController.text.trim() != (book.description ?? '')) {
+      return true;
+    }
+    if (_isbnController.text.trim() != book.isbn) {
+      return true;
+    }
+    if (_purchasePriceController.text.trim() != book.purchasePrice.toString()) {
+      return true;
+    }
+    if (_salePriceController.text.trim() != (book.salePrice?.toString() ?? '')) {
+      return true;
+    }
+    if (_lexileScoreController.text.trim() != (book.lexileScore?.toString() ?? '')) {
+      return true;
+    }
+    if (_purchaseDate != book.purchaseDate) {
+      return true;
+    }
+    // 比對售出日期（含 null 與不同值）
+    if (_saleDate != book.saleDate) {
+      return true;
     }
     if ((_pickedImage != null &&
         (book.coverUrl == null || _pickedImage!.path != book.coverUrl)))
@@ -346,7 +356,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
