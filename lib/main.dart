@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'screens/scanner_screen.dart';
 import 'screens/book_list_screen.dart';
@@ -27,6 +29,13 @@ class IsbnBookManagerApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'ISBN 書籍管理',
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           useMaterial3: true,
@@ -72,14 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) {
           setState(() => _selectedIndex = index);
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books),
-            label: '書籍',
+            label: AppLocalizations.of(context)?.books ?? '書籍',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
-            label: '統計',
+            label: AppLocalizations.of(context)?.statistics ?? '統計',
           ),
         ],
       ),
