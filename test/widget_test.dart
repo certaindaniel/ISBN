@@ -30,7 +30,7 @@ void main() {
         ChangeNotifierProvider<BookProvider>(create: (_) => BookProvider()),
       ],
       child: MaterialApp(
-        locale: const Locale('zh'),
+        locale: Locale('zh'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: const HomeScreen(),
