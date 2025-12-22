@@ -24,8 +24,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>需要使用相機掃描書籍條碼</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>掃描功能可能需要訪問麥克風</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>允許從相冊選擇書籍封面圖片</string>
 	<key>LSRequiresIPhoneOS</key>

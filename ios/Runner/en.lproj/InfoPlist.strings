@@ -7,4 +7,3 @@
 "CFBundleDisplayName" = "ISBN Book Manager";
 "NSCameraUsageDescription" = "The app needs camera access to scan book ISBN barcodes";
 "NSPhotoLibraryUsageDescription" = "The app needs photo library access to select book cover images";
-"NSMicrophoneUsageDescription" = "The scanning feature may require microphone access";
