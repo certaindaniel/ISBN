@@ -1,1 +1,10 @@
+/* 
+  InfoPlist.strings
+  ISBN Book Manager
+
+  Localized privacy usage descriptions for Simplified Chinese
+*/
 "CFBundleDisplayName" = "ISBN 书籍管理";
+"NSCameraUsageDescription" = "需要使用相机扫描书籍条码";
+"NSPhotoLibraryUsageDescription" = "允许从相册选择书籍封面图片";
+"NSMicrophoneUsageDescription" = "扫描功能可能需要访问麦克风";
