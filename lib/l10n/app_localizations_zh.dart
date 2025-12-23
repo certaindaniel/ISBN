@@ -172,6 +172,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_bok_subtitle => '台灣最大網路書店';
 
   @override
+  String get settings_openlibrary_title => 'Open Library';
+
+  @override
+  String get settings_openlibrary_subtitle => '完全免費開放資料，補足封面與基本元資料。';
+
+  @override
   String get settings_eslite_title => '誠品書店';
 
   @override
@@ -184,6 +190,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_google_subtitle => '全球書籍資料庫';
 
   @override
+  String get settings_wikipedia_title => 'Wikipedia';
+
+  @override
+  String get settings_wikipedia_subtitle => '維基百科參考書籍資訊，補充文獻數據。';
+
+  @override
+  String get settings_jike_title => '中文第三方免費 API';
+
+  @override
+  String get settings_jike_subtitle => '社群維護的中文書資訊，穩定度較低，預設關閉。';
+
+  @override
   String get lexile_title => 'Lexile 查詢';
 
   @override
@@ -191,6 +209,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get manual_isbn_hint => '請輸入 10 或 13 位 ISBN';
+
+  @override
+  String get please_enter_isbn => '請輸入 ISBN';
+
+  @override
+  String get scan_area_hint => '將書籍條碼放在掃描區域';
 
   @override
   String get book_not_found => '查無書籍資訊';
@@ -580,6 +604,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get settings_bok_subtitle => '台湾最大网络书店';
 
   @override
+  String get settings_openlibrary_title => 'Open Library';
+
+  @override
+  String get settings_openlibrary_subtitle => '完全免费开放资料，补充封面与基本元资料。';
+
+  @override
   String get settings_eslite_title => '诚品书店';
 
   @override
@@ -592,6 +622,18 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get settings_google_subtitle => '全球书籍数据库';
 
   @override
+  String get settings_wikipedia_title => 'Wikipedia';
+
+  @override
+  String get settings_wikipedia_subtitle => '维基百科参考书籍资讯，补充文献数据。';
+
+  @override
+  String get settings_jike_title => '中文第三方免費 API';
+
+  @override
+  String get settings_jike_subtitle => '社群维护的中文书资讯，稳定度较低，预设关闭。';
+
+  @override
   String get lexile_title => 'Lexile 查询';
 
   @override
@@ -599,6 +641,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get manual_isbn_hint => '请输入 10 或 13 位 ISBN';
+
+  @override
+  String get please_enter_isbn => '请输入 ISBN';
+
+  @override
+  String get scan_area_hint => '将书籍条码放在扫描区域';
 
   @override
   String get book_not_found => '查无书籍信息';
@@ -878,6 +926,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settings_bok_subtitle => '台灣最大網路書店';
 
   @override
+  String get settings_openlibrary_title => 'Open Library';
+
+  @override
+  String get settings_openlibrary_subtitle => '完全免費開放資料，補足封面與基本元資料。';
+
+  @override
   String get settings_eslite_title => '誠品書店';
 
   @override
@@ -890,6 +944,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settings_google_subtitle => '全球書籍資料庫';
 
   @override
+  String get settings_wikipedia_title => 'Wikipedia';
+
+  @override
+  String get settings_wikipedia_subtitle => '維基百科參考書籍資訊，補充文獻數據。';
+
+  @override
+  String get settings_jike_title => '中文第三方免費 API';
+
+  @override
+  String get settings_jike_subtitle => '社群維護的中文書資訊，穩定度較低，預設關閉。';
+
+  @override
   String get lexile_title => 'Lexile 查詢';
 
   @override
@@ -897,6 +963,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get manual_isbn_hint => '請輸入 10 或 13 位 ISBN';
+
+  @override
+  String get please_enter_isbn => '請輸入 ISBN';
+
+  @override
+  String get scan_area_hint => '將書籍條碼放在掃描區域';
 
   @override
   String get book_not_found => '查無書籍資訊';
@@ -978,6 +1050,68 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get profit_label => '利潤';
 
   @override
+  String settings_enabled_sources(Object enabled, Object total) {
+    return '已啟用來源：$enabled / $total';
+  }
+
+  @override
+  String get settings_sources_explain =>
+      '系統會依照上列順序逐一查詢，失敗時自動換下一個來源。所有 API 均為免費第三方服務，穩定度可能會有所差異。';
+
+  @override
+  String get statistics_tab_reading => '閱讀統計';
+
+  @override
+  String get statistics_tab_finance => '金額統計';
+
+  @override
+  String get stat_overview_title => '閱讀進度';
+
+  @override
+  String get stat_total_books => '總書籍';
+
+  @override
+  String get stat_read => '已讀';
+
+  @override
+  String get stat_reading => '閱讀中';
+
+  @override
+  String get stat_unread => '未讀';
+
+  @override
+  String get stat_completion_title => '閱讀完成度';
+
+  @override
+  String get finance_title => '金額統計';
+
+  @override
+  String get finance_total_spent => '總支出';
+
+  @override
+  String get finance_total_earned => '總收入';
+
+  @override
+  String get finance_total_profit => '總利潤';
+
+  @override
+  String get settings_common_websites_title => '常用查詢網頁';
+
+  @override
+  String get take_photo => '拍攝封面';
+
+  @override
+  String language_label(Object value) {
+    return '語言：$value';
+  }
+
+  @override
+  String get label_lexile => '藍思值 (Lexile Measure)';
+
+  @override
+  String get profit_calculation => '利潤計算';
+
+  @override
   String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
 
   @override
@@ -990,6 +1124,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cannot_find_book => '無法查詢到書籍資訊';
+
+  @override
+  String get api_test_title => 'ISBN API 測試';
+
+  @override
+  String get api_test_start => '開始測試';
+
+  @override
+  String get api_test_running => '測試進行中...';
+
+  @override
+  String get api_test_output_placeholder => '點擊「開始測試」執行 API 測試...';
 
   @override
   String get scan_not_isbn_ean => '請掃描 ISBN 條碼，這個是 EAN';
@@ -1005,5 +1151,41 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String error_prefix(Object message) {
     return '錯誤: $message';
+  }
+
+  @override
+  String get isbn_error_invalid_format => '無效的 ISBN 格式';
+
+  @override
+  String provider_book_record_sale_failed(Object error) {
+    return '記錄售出失敗：$error';
+  }
+
+  @override
+  String get isbn_already_exists => 'ISBN 已存在於資料庫';
+
+  @override
+  String cannot_find_isbn_ncl(Object url) {
+    return '無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：$url';
+  }
+
+  @override
+  String load_books_failed(Object error) {
+    return '載入書籍失敗: $error';
+  }
+
+  @override
+  String add_book_failed(Object error) {
+    return '新增書籍失敗: $error';
+  }
+
+  @override
+  String update_book_failed(Object error) {
+    return '更新書籍失敗: $error';
+  }
+
+  @override
+  String delete_book_failed(Object error) {
+    return '刪除書籍失敗: $error';
   }
 }

@@ -72,6 +72,8 @@ class BookProvider extends ChangeNotifier {
       notifyListeners();
 
       final normalizedIsbn = IsbnService.normalizeIsbn(isbn);
+      AppLogger.debug(
+          'searchBookByIsbn called: raw="$isbn" normalized="$normalizedIsbn"');
 
       // 先檢查本地資料庫
       final localBook = await _dbHelper.getBookByISBN(normalizedIsbn);
@@ -84,10 +86,20 @@ class BookProvider extends ChangeNotifier {
       }
 
       // 從 API 查詢
+      final activeSources = (sources == null || sources.isEmpty)
+          ? ApiSourceRegistry.defaultEnabled()
+          : sources;
+      AppLogger.debug(
+          'activeSources order: ${activeSources.map((s) => ApiSourceRegistry.info(s).displayName).join(', ')}');
+
       final book = await IsbnService.searchByIsbn(
         normalizedIsbn,
-        sources: sources,
-        onSourceStart: onSourceStart,
+        sources: activeSources,
+        onSourceStart: (src) {
+          AppLogger.debug(
+              'starting source: ${ApiSourceRegistry.info(src).displayName}');
+          if (onSourceStart != null) onSourceStart(src);
+        },
       );
 
       if (book == null) {

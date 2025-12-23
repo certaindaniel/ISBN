@@ -8,6 +8,7 @@ import '../providers/settings_provider.dart';
 import '../services/isbn_service.dart';
 import '../models/book.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/manual_isbn_dialog.dart';
 // 使用 framework PopScope 以支援系統預測返回手勢
 
 class ScannerScreen extends StatefulWidget {
@@ -166,12 +167,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
         return StatefulBuilder(
           builder: (context, setState) {
+            final loc = AppLocalizations.of(context)!;
+
             Future<void> doSearch() async {
               final title = titleController.text.trim();
               final author = authorController.text.trim();
               if (title.isEmpty) {
                 if (!mounted) return;
-                final loc = AppLocalizations.of(context)!;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(loc.please_enter_title),
@@ -190,7 +192,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 setState(() => results = list);
               } catch (err) {
                 if (!context.mounted) return;
-                final loc = AppLocalizations.of(context)!;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(loc.query_failed_error(err)),
@@ -213,7 +214,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
               final choice = await showDialog<String?>(
                 context: context,
                 builder: (ctx) {
-                  final loc = AppLocalizations.of(ctx)!;
                   return AlertDialog(
                     title: Text(loc.unfinishedSearchTitle),
                     content: Text(loc.unfinishedSearchContent),
@@ -264,10 +264,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   children: [
                     Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            '以書名查詢（Google Books）',
-                            style: TextStyle(
+                            loc.search_by_title_title,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -286,18 +286,18 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     const SizedBox(height: 12),
                     TextField(
                       controller: titleController,
-                      decoration: const InputDecoration(
-                        labelText: '書名（必填）',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: loc.label_title_required,
+                        border: const OutlineInputBorder(),
                       ),
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: authorController,
-                      decoration: const InputDecoration(
-                        labelText: '作者（可選）',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: loc.author_optional,
+                        border: const OutlineInputBorder(),
                       ),
                       onSubmitted: (_) => doSearch(),
                     ),
@@ -307,7 +307,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       child: ElevatedButton.icon(
                         onPressed: loading ? null : doSearch,
                         icon: const Icon(Icons.search),
-                        label: const Text('查詢'),
+                        label: Text(loc.search_button),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -317,49 +317,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Column(
                           children: [
-                            const Text(
-                              '查無結果（或無可用 ISBN）',
-                              style: TextStyle(color: Colors.grey),
+                            Text(
+                              loc.no_results_text,
+                              style: const TextStyle(color: Colors.grey),
                             ),
                             const SizedBox(height: 8),
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
                                 icon: const Icon(Icons.edit),
-                                label: const Text('手動輸入 ISBN'),
+                                label: Text(loc.manual_isbn_label),
                                 onPressed: () async {
-                                  final isbnController =
-                                      TextEditingController();
-                                  final ok = await showDialog<bool>(
-                                    context: context,
-                                    builder: (ctx) => AlertDialog(
-                                      title: const Text('手動輸入 ISBN'),
-                                      content: TextField(
-                                        controller: isbnController,
-                                        decoration: const InputDecoration(
-                                          hintText: '請輸入 10 或 13 位 ISBN',
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(ctx).pop(false),
-                                          child: const Text('取消'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(ctx).pop(true),
-                                          child: const Text('查詢'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                  if (ok == true) {
+                                  final isbn =
+                                      await showManualIsbnDialog(context);
+                                  if (isbn != null && isbn.isNotEmpty) {
                                     if (!context.mounted) return;
                                     Navigator.of(context).pop();
-                                    await _searchBook(
-                                        isbnController.text.trim());
+                                    await _searchBook(isbn);
                                   }
                                 },
                               ),
@@ -413,9 +387,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('掃描 ISBN'),
+        title: Text(loc.scan_title),
         centerTitle: true,
         elevation: 0,
         actions: [
@@ -481,7 +457,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       ),
                     ),
                     child: Text(
-                      '將書籍條碼放在掃描區域',
+                      loc.scan_area_hint,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.white,
                           ),
@@ -510,7 +486,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              hintText: '手動輸入 ISBN',
+                              hintText: loc.manual_isbn_label,
                               hintStyle: TextStyle(
                                 color:
                                     Colors.white.withAlpha((0.6 * 255).round()),
@@ -521,8 +497,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                               final isbn = value.trim();
                               if (isbn.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('請輸入 ISBN'),
+                                  SnackBar(
+                                    content: Text(loc.please_enter_isbn),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -538,8 +514,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             final isbn = _manualIsbnController.text.trim();
                             if (isbn.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('請輸入 ISBN'),
+                                SnackBar(
+                                  content: Text(loc.please_enter_isbn),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -547,7 +523,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             }
                             await _searchBook(isbn);
                           },
-                          child: const Text('查詢'),
+                          child: Text(loc.search_button),
                         ),
                       ],
                     ),

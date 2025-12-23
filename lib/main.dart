@@ -58,6 +58,10 @@ class IsbnBookManagerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Allow forcing locale via --dart-define=APP_LANGUAGE=en
+    const appLanguage = String.fromEnvironment('APP_LANGUAGE');
+    final forcedLocale = appLanguage.isNotEmpty ? Locale(appLanguage) : null;
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
@@ -71,6 +75,7 @@ class IsbnBookManagerApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: forcedLocale,
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: ThemeData(
           primarySwatch: Colors.blue,

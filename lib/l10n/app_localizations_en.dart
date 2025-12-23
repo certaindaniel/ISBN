@@ -176,6 +176,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_bok_subtitle => 'Taiwan\'s largest online bookstore';
 
   @override
+  String get settings_openlibrary_title => 'Open Library';
+
+  @override
+  String get settings_openlibrary_subtitle => 'Free open bibliographic data';
+
+  @override
   String get settings_eslite_title => 'Eslite';
 
   @override
@@ -188,6 +194,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_google_subtitle => 'Global books database';
 
   @override
+  String get settings_wikipedia_title => 'Wikipedia';
+
+  @override
+  String get settings_wikipedia_subtitle =>
+      'Supplementary bibliographic data from Wikipedia';
+
+  @override
+  String get settings_jike_title => 'Community Chinese API';
+
+  @override
+  String get settings_jike_subtitle =>
+      'Community-maintained Chinese book info (unstable)';
+
+  @override
   String get lexile_title => 'Lexile Lookup';
 
   @override
@@ -195,6 +215,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get manual_isbn_hint => 'Enter 10 or 13 digit ISBN';
+
+  @override
+  String get please_enter_isbn => 'Please enter ISBN';
+
+  @override
+  String get scan_area_hint => 'Place the book barcode in the scan area';
 
   @override
   String get book_not_found => 'No book information found';
@@ -364,7 +390,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get api_test_output_placeholder =>
-      'Tap "Start tests" to run API tests...';
+      'Tap \"Start tests\" to run API tests...';
 
   @override
   String get scan_not_isbn_ean => 'Please scan an ISBN barcode; this is an EAN';

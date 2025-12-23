@@ -43,8 +43,9 @@ class SettingsScreen extends StatelessWidget {
               const Divider(height: 1),
               ...ApiSourceRegistry.all.map(
                 (info) => SwitchListTile(
-                  title: Text(info.displayName),
-                  subtitle: Text(info.description),
+                  title: Text(ApiSourceRegistry.localizedName(loc, info.id)),
+                  subtitle: Text(
+                      ApiSourceRegistry.localizedDescription(loc, info.id)),
                   value: settings.isSourceEnabled(info.id),
                   onChanged: (value) {
                     settings.toggleSource(info.id, value);

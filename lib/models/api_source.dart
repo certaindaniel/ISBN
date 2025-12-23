@@ -1,3 +1,5 @@
+import '../l10n/app_localizations.dart';
+
 enum ApiSource {
   googleBooks,
   openLibrary,
@@ -21,6 +23,32 @@ class ApiSourceInfo {
     required this.requiresKey,
     required this.baseUrl,
   });
+
+  String localizedName(AppLocalizations loc) {
+    switch (id) {
+      case ApiSource.googleBooks:
+        return loc.settings_google_title;
+      case ApiSource.openLibrary:
+        return loc.settings_openlibrary_title;
+      case ApiSource.wikipedia:
+        return loc.settings_wikipedia_title;
+      case ApiSource.jikeFree:
+        return loc.settings_jike_title;
+    }
+  }
+
+  String localizedDescription(AppLocalizations loc) {
+    switch (id) {
+      case ApiSource.googleBooks:
+        return loc.settings_google_subtitle;
+      case ApiSource.openLibrary:
+        return loc.settings_openlibrary_subtitle;
+      case ApiSource.wikipedia:
+        return loc.settings_wikipedia_subtitle;
+      case ApiSource.jikeFree:
+        return loc.settings_jike_subtitle;
+    }
+  }
 }
 
 class ApiSourceRegistry {
@@ -28,7 +56,7 @@ class ApiSourceRegistry {
     ApiSourceInfo(
       id: ApiSource.googleBooks,
       displayName: 'Google Books',
-      description: '覆蓋面廣，含中文書，免金鑰查詢基本資訊。',
+      description: '',
       enabledByDefault: true,
       requiresKey: false,
       baseUrl: 'https://www.googleapis.com/books/v1/volumes?q=isbn=',
@@ -36,7 +64,7 @@ class ApiSourceRegistry {
     ApiSourceInfo(
       id: ApiSource.openLibrary,
       displayName: 'Open Library',
-      description: '完全免費開放資料，補足封面與基本元資料。',
+      description: '',
       enabledByDefault: true,
       requiresKey: false,
       baseUrl: 'https://openlibrary.org/api/books?bibkeys=ISBN:',
@@ -44,7 +72,7 @@ class ApiSourceRegistry {
     ApiSourceInfo(
       id: ApiSource.wikipedia,
       displayName: 'Wikipedia',
-      description: '維基百科參考書籍資訊，補充文獻數據。',
+      description: '',
       enabledByDefault: false,
       requiresKey: false,
       baseUrl:
@@ -52,17 +80,42 @@ class ApiSourceRegistry {
     ),
     ApiSourceInfo(
       id: ApiSource.jikeFree,
-      displayName: '中文第三方免費 API',
-      description: '社群維護的中文書資訊，穩定度較低，預設關閉。',
+      displayName: 'Jike Free',
+      description: '',
       enabledByDefault: false,
       requiresKey: false,
       baseUrl: 'https://api.jike.xyz/situ/book/isbn/',
-    ),
-
+    )
   ];
 
   static ApiSourceInfo info(ApiSource source) {
     return all.firstWhere((item) => item.id == source);
+  }
+
+  static String localizedName(AppLocalizations loc, ApiSource source) {
+    switch (source) {
+      case ApiSource.googleBooks:
+        return loc.settings_google_title;
+      case ApiSource.openLibrary:
+        return loc.settings_openlibrary_title;
+      case ApiSource.wikipedia:
+        return loc.settings_wikipedia_title;
+      case ApiSource.jikeFree:
+        return loc.settings_jike_title;
+    }
+  }
+
+  static String localizedDescription(AppLocalizations loc, ApiSource source) {
+    switch (source) {
+      case ApiSource.googleBooks:
+        return loc.settings_google_subtitle;
+      case ApiSource.openLibrary:
+        return loc.settings_openlibrary_subtitle;
+      case ApiSource.wikipedia:
+        return loc.settings_wikipedia_subtitle;
+      case ApiSource.jikeFree:
+        return loc.settings_jike_subtitle;
+    }
   }
 
   static List<ApiSource> defaultEnabled() {

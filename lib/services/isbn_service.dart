@@ -38,6 +38,7 @@ class IsbnService {
 
     try {
       for (final source in activeSources) {
+        AppLogger.debug('IsbnService: trying source $source for $isbn');
         onSourceStart?.call(source);
         Book? result;
         switch (source) {
@@ -54,7 +55,13 @@ class IsbnService {
             result = await _searchJikeFree(isbn, clientLocal);
             break;
         }
-        if (result != null) return result;
+        if (result != null) {
+          AppLogger.debug(
+              'IsbnService: found book from $source -> ${result.title}');
+          return result;
+        } else {
+          AppLogger.debug('IsbnService: no result from $source');
+        }
       }
       return null;
     } finally {
@@ -69,9 +76,11 @@ class IsbnService {
   static Future<Book?> _searchOpenLibrary(
       String isbn, http.Client client) async {
     try {
+      AppLogger.debug('OpenLibrary: request for ISBN $isbn');
       final response = await client
           .get(Uri.parse('$openLibraryBaseUrl?bibkeys=ISBN:$isbn&format=json'))
           .timeout(_timeout);
+      AppLogger.debug('OpenLibrary: response ${response.statusCode} for $isbn');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -81,6 +90,8 @@ class IsbnService {
           final bookData = data[key];
           final book = _parseOpenLibraryBook(bookData, isbn);
           if (book != null) {
+            AppLogger.debug(
+                'OpenLibrary: parsed title="${book.title}" author="${book.author}"');
             // 檢測語言並獲取 Lexile 分數（如果是英文書）
             final language = _detectLanguage(book.title, book.author);
             int? lexileScore;
@@ -101,14 +112,19 @@ class IsbnService {
   static Future<Book?> _searchGoogleBooks(
       String isbn, http.Client client) async {
     try {
+      AppLogger.debug('GoogleBooks: request for ISBN $isbn');
       final url =
           Uri.parse('https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn');
       final response = await client.get(url).timeout(_timeout);
+      AppLogger.debug('GoogleBooks: response ${response.statusCode} for $isbn');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final items = data['items'] as List<dynamic>?;
-        if (items == null || items.isEmpty) return null;
+        if (items == null || items.isEmpty) {
+          AppLogger.debug('GoogleBooks: no items in response for $isbn');
+          return null;
+        }
 
         final volume = items.first['volumeInfo'];
         if (volume == null) return null;
@@ -131,6 +147,7 @@ class IsbnService {
           lexileScore = await _fetchLexileScore(isbn, title);
         }
 
+        AppLogger.debug('GoogleBooks: parsed title="$title" author="$author"');
         return Book(
           isbn: isbn,
           title: title,

@@ -406,6 +406,18 @@ abstract class AppLocalizations {
   /// **'Taiwan\'s largest online bookstore'**
   String get settings_bok_subtitle;
 
+  /// No description provided for @settings_openlibrary_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Library'**
+  String get settings_openlibrary_title;
+
+  /// No description provided for @settings_openlibrary_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free open bibliographic data'**
+  String get settings_openlibrary_subtitle;
+
   /// No description provided for @settings_eslite_title.
   ///
   /// In en, this message translates to:
@@ -430,6 +442,30 @@ abstract class AppLocalizations {
   /// **'Global books database'**
   String get settings_google_subtitle;
 
+  /// No description provided for @settings_wikipedia_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Wikipedia'**
+  String get settings_wikipedia_title;
+
+  /// No description provided for @settings_wikipedia_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplementary bibliographic data from Wikipedia'**
+  String get settings_wikipedia_subtitle;
+
+  /// No description provided for @settings_jike_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Chinese API'**
+  String get settings_jike_title;
+
+  /// No description provided for @settings_jike_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Community-maintained Chinese book info (unstable)'**
+  String get settings_jike_subtitle;
+
   /// No description provided for @lexile_title.
   ///
   /// In en, this message translates to:
@@ -447,6 +483,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter 10 or 13 digit ISBN'**
   String get manual_isbn_hint;
+
+  /// No description provided for @please_enter_isbn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter ISBN'**
+  String get please_enter_isbn;
+
+  /// No description provided for @scan_area_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the book barcode in the scan area'**
+  String get scan_area_hint;
 
   /// No description provided for @book_not_found.
   ///
@@ -611,54 +659,105 @@ abstract class AppLocalizations {
   String get settings_sources_explain;
 
   /// No description provided for @statistics_tab_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading Stats'**
   String get statistics_tab_reading;
 
   /// No description provided for @statistics_tab_finance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance Stats'**
   String get statistics_tab_finance;
 
   /// No description provided for @stat_overview_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading Overview'**
   String get stat_overview_title;
 
   /// No description provided for @stat_total_books.
+  ///
+  /// In en, this message translates to:
+  /// **'Total books'**
   String get stat_total_books;
 
   /// No description provided for @stat_read.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
   String get stat_read;
 
   /// No description provided for @stat_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
   String get stat_reading;
 
   /// No description provided for @stat_unread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
   String get stat_unread;
 
   /// No description provided for @stat_completion_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion'**
   String get stat_completion_title;
 
   /// No description provided for @finance_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance Overview'**
   String get finance_title;
 
   /// No description provided for @finance_total_spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Total spent'**
   String get finance_total_spent;
 
   /// No description provided for @finance_total_earned.
+  ///
+  /// In en, this message translates to:
+  /// **'Total earned'**
   String get finance_total_earned;
 
   /// No description provided for @finance_total_profit.
+  ///
+  /// In en, this message translates to:
+  /// **'Total profit'**
   String get finance_total_profit;
 
   /// No description provided for @settings_common_websites_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Common lookup websites'**
   String get settings_common_websites_title;
 
   /// No description provided for @take_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
   String get take_photo;
 
   /// No description provided for @language_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Language: {value}'**
   String language_label(Object value);
 
   /// No description provided for @label_lexile.
+  ///
+  /// In en, this message translates to:
+  /// **'Lexile (Measure)'**
   String get label_lexile;
 
   /// No description provided for @profit_calculation.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit calculation'**
   String get profit_calculation;
 
   /// No description provided for @no_enabled_sources.
@@ -706,7 +805,7 @@ abstract class AppLocalizations {
   /// No description provided for @api_test_output_placeholder.
   ///
   /// In en, this message translates to:
-  /// **'Tap "Start tests" to run API tests...'**
+  /// **'Tap \"Start tests\" to run API tests...'**
   String get api_test_output_placeholder;
 
   /// No description provided for @scan_not_isbn_ean.
@@ -726,6 +825,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Query failed: {error}'**
   String query_failed_error(Object error);
+
+  /// No description provided for @error_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String error_prefix(Object message);
 
   /// No description provided for @isbn_error_invalid_format.
   ///
@@ -774,12 +879,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to delete book: {error}'**
   String delete_book_failed(Object error);
-
-  /// No description provided for @error_prefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Error: {message}'**
-  String error_prefix(Object message);
 }
 
 class _AppLocalizationsDelegate

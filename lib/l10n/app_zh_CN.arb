@@ -52,11 +52,17 @@
   "settings_tnla_subtitle": "查询台湾出版书籍信息",
   "settings_bok_title": "博客来",
   "settings_bok_subtitle": "台湾最大网络书店",
+  "settings_openlibrary_title": "Open Library",
+  "settings_openlibrary_subtitle": "完全免费开放资料，补充封面与基本元资料。",
   "settings_eslite_title": "诚品书店",
   "settings_eslite_subtitle": "诚品线上书店",
   "settings_google_title": "Google Books",
   "settings_google_subtitle": "全球书籍数据库"
   ,
+  "settings_wikipedia_title": "Wikipedia",
+  "settings_wikipedia_subtitle": "维基百科参考书籍资讯，补充文献数据。",
+  "settings_jike_title": "中文第三方免費 API",
+  "settings_jike_subtitle": "社群维护的中文书资讯，稳定度较低，预设关闭。",
   "lexile_title": "Lexile 查询",
   "clipboard_paste_tooltip": "贴上回填",
   "refresh_tooltip": "重新整理",
@@ -91,8 +97,8 @@
   "please_enter_title": "請輸入書名",
   "query_failed_error": "查詢失敗: {error}",
   "error_prefix": "錯誤: {message}",
-  "manual_isbn_hint": "请输入 10 或 13 位 ISBN",
-  "book_not_found": "查无书籍信息",
+  "manual_isbn_hint": "请输入 10 或 13 位 ISBN",  "please_enter_isbn": "请输入 ISBN",
+  "scan_area_hint": "将书籍条码放在扫描区域",  "book_not_found": "查无书籍信息",
   "filter_no_books": "此筛选没有书籍",
   "author_optional": "作者（可選）"
 }
