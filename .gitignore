@@ -47,3 +47,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 不應納入版本控管的 build 產物與 log
+build_output.txt
+ios/build/
