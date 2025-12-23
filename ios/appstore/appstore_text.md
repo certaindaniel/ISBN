@@ -48,6 +48,6 @@ book management, ISBN, barcode scan, library, collection, bookshelf, reading lis
 
 
 
-#
+#可以拿來查的 ISBN 
 9789868914766
 9780142408810

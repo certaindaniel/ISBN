@@ -1,9 +1,0 @@
-{
-  "@@locale": "en",
-  "appTitle": "ISBN Book Manager",
-  "books": "Books",
-  "statistics": "Statistics",
-  "scanIsbn": "Scan ISBN",
-  "searchByTitle": "Search by title",
-  "manualIsbn": "Manual ISBN"
-}
