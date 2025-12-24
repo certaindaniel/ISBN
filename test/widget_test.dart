@@ -29,11 +29,11 @@ void main() {
             create: (_) => SettingsProvider()),
         ChangeNotifierProvider<BookProvider>(create: (_) => BookProvider()),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         locale: Locale('zh'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const HomeScreen(),
+        home: HomeScreen(),
       ),
     ));
 

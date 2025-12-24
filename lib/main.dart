@@ -81,6 +81,7 @@ class IsbnBookManagerApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           useMaterial3: true,
         ),
+        debugShowCheckedModeBanner: false,
         home: const HomeScreen(),
         routes: {
           '/scanner': (context) => const _DeferredScannerLoader(),

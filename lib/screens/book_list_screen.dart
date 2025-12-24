@@ -277,6 +277,7 @@ class _BookListScreenState extends State<BookListScreen> {
                                           await parentContext
                                               .read<BookProvider>()
                                               .loadBooks();
+                                          if (!parentContext.mounted) return;
                                           ScaffoldMessenger.of(parentContext)
                                               .showSnackBar(
                                             SnackBar(
@@ -344,6 +345,7 @@ class _BookListScreenState extends State<BookListScreen> {
                                   await context
                                       .read<BookProvider>()
                                       .loadBooks();
+                                  if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
@@ -609,6 +611,7 @@ class _BookListScreenState extends State<BookListScreen> {
                         final result = await nav.pushNamed('/scanner');
                         if (result == true && sheetContext.mounted) {
                           await sheetContext.read<BookProvider>().loadBooks();
+                          if (!sheetContext.mounted) return;
                           ScaffoldMessenger.of(sheetContext).showSnackBar(
                             SnackBar(
                                 content: Text(AppLocalizations.of(sheetContext)!
