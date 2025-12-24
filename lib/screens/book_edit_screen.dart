@@ -786,7 +786,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
                 height: 48,
                 child: ElevatedButton(
                   onPressed: _saveBook,
-                  child: const Text('保存書籍'),
+                  child: Text(AppLocalizations.of(context)!.save_book_button),
                 ),
               ),
             ],
