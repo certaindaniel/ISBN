@@ -9,6 +9,7 @@ import '../services/isbn_service.dart';
 import '../models/book.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/manual_isbn_dialog.dart';
+import '../widgets/title_search_bottom_sheet.dart';
 // 使用 framework PopScope 以支援系統預測返回手勢
 
 class ScannerScreen extends StatefulWidget {
@@ -119,7 +120,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(provider.error ?? loc.cannot_find_book),
+            content: Text(provider.errorCode != null
+                ? provider.localizedError(context)
+                : (provider.error ?? loc.cannot_find_book)),
             backgroundColor: Colors.red,
           ),
         );
@@ -128,9 +131,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
     } catch (e) {
       if (!mounted) return;
       Navigator.of(context).pop();
-      final message = e.toString();
-      if (message.contains('這個是 EAN')) {
-        // 提示並提供以書名查詢的選項
+
+      // 如果 provider 已經設定了 errorCode (來自 IsbnException)，則優先顯示本地化訊息
+      final provider = context.read<BookProvider>();
+      if (provider.errorCode == 'scan_not_isbn_ean') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(loc.scan_not_isbn_ean),
@@ -138,7 +142,15 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
         );
         await _startTitleSearchFlow();
+      } else if (provider.errorCode != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(provider.localizedError(context)),
+            backgroundColor: Colors.red,
+          ),
+        );
       } else {
+        final message = e.toString();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(loc.error_prefix(message)),
@@ -152,236 +164,21 @@ class _ScannerScreenState extends State<ScannerScreen> {
   }
 
   Future<void> _startTitleSearchFlow() async {
-    if (!mounted) return;
-    final result = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      isDismissible: false,
-      enableDrag: false,
-      builder: (context) {
-        final titleController = TextEditingController();
-        final authorController = TextEditingController();
-        List<Book> results = const [];
-        bool loading = false;
-
-        return StatefulBuilder(
-          builder: (context, setState) {
-            final loc = AppLocalizations.of(context)!;
-
-            Future<void> doSearch() async {
-              final title = titleController.text.trim();
-              final author = authorController.text.trim();
-              if (title.isEmpty) {
-                if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(loc.please_enter_title),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-              setState(() => loading = true);
-              try {
-                final list = await IsbnService.searchByTitleAuthor(
-                  title,
-                  author: author.isEmpty ? null : author,
-                  // 可視需要加入語言限制，例如: langRestrict: 'en'
-                );
-                setState(() => results = list);
-              } catch (err) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(loc.query_failed_error(err)),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              } finally {
-                setState(() => loading = false);
-              }
-            }
-
-            Future<bool> confirmClose() async {
-              // 若有未輸入內容或有查詢結果，提示使用者
-              final hasChanges = titleController.text.trim().isNotEmpty ||
-                  authorController.text.trim().isNotEmpty ||
-                  results.isNotEmpty ||
-                  loading;
-              if (!hasChanges) return true;
-
-              final choice = await showDialog<String?>(
-                context: context,
-                builder: (ctx) {
-                  return AlertDialog(
-                    title: Text(loc.unfinishedSearchTitle),
-                    content: Text(loc.unfinishedSearchContent),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(ctx).pop('cancel'),
-                        child: Text(loc.cancel),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(ctx).pop('discard'),
-                        child: Text(loc.discard),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(ctx).pop('search'),
-                        child: Text(loc.performSearch),
-                      ),
-                    ],
-                  );
-                },
-              );
-
-              if (choice == 'discard') return true;
-              if (choice == 'search') {
-                await doSearch();
-                return false;
-              }
-              return false; // cancel or null
-            }
-
-            return PopScope<Object?>(
-              canPop: false,
-              onPopInvokedWithResult: (bool didPop, Object? result) async {
-                if (didPop) return;
-                final shouldClose = await confirmClose();
-                if (shouldClose && context.mounted) {
-                  Navigator.of(context).pop(false);
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 16,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            loc.search_by_title_title,
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: '關閉',
-                          onPressed: () async {
-                            final shouldClose = await confirmClose();
-                            if (shouldClose && context.mounted) {
-                              Navigator.of(context).pop(false);
-                            }
-                          },
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: titleController,
-                      decoration: InputDecoration(
-                        labelText: loc.label_title_required,
-                        border: const OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: authorController,
-                      decoration: InputDecoration(
-                        labelText: loc.author_optional,
-                        border: const OutlineInputBorder(),
-                      ),
-                      onSubmitted: (_) => doSearch(),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: loading ? null : doSearch,
-                        icon: const Icon(Icons.search),
-                        label: Text(loc.search_button),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    if (loading) const LinearProgressIndicator(),
-                    if (!loading && results.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              loc.no_results_text,
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              width: double.infinity,
-                              child: OutlinedButton.icon(
-                                icon: const Icon(Icons.edit),
-                                label: Text(loc.manual_isbn_label),
-                                onPressed: () async {
-                                  final isbn =
-                                      await showManualIsbnDialog(context);
-                                  if (isbn != null && isbn.isNotEmpty) {
-                                    if (!context.mounted) return;
-                                    Navigator.of(context).pop();
-                                    await _searchBook(isbn);
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    if (!loading && results.isNotEmpty)
-                      Flexible(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: results.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (context, index) {
-                            final b = results[index];
-                            return ListTile(
-                              leading: const Icon(Icons.menu_book_outlined),
-                              title: Text(b.title),
-                              subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
-                              onTap: () async {
-                                // 選定後開啟編輯頁
-                                Navigator.of(context).pop();
-                                if (!mounted) return;
-                                final editResult =
-                                    await Navigator.of(this.context).pushNamed(
-                                  '/book-edit',
-                                  arguments: b,
-                                );
-                                if (!mounted) return;
-                                if (editResult == true) {
-                                  Navigator.of(this.context).pop(true);
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+    final book = await showTitleSearchBottomSheet(
+      context,
+      onManualIsbn: (isbn) async {
+        await _searchBook(isbn);
       },
     );
 
-    if (result == true && mounted) {
-      // 已在內部處理返回刷新
+    if (book != null && mounted) {
+      final editResult = await Navigator.of(context).pushNamed(
+        '/book-edit',
+        arguments: book,
+      );
+      if (editResult == true && mounted) {
+        Navigator.of(context).pop(true);
+      }
     }
   }
 

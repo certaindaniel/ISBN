@@ -356,7 +356,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.error ?? loc.save_failed),
+          content: Text(provider.errorCode != null
+              ? provider.localizedError(context)
+              : (provider.error ?? loc.save_failed)),
           backgroundColor: Colors.red,
         ),
       );

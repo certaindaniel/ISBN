@@ -112,6 +112,12 @@ class BookProvider extends ChangeNotifier {
 
       notifyListeners();
       return book;
+    } on IsbnException catch (e) {
+      _error = e.message;
+      _errorCode = e.code;
+      _errorArgs = null;
+      notifyListeners();
+      return null;
     } catch (e) {
       _error = '查詢失敗: $e';
       _errorCode = 'query_failed_error';
@@ -260,6 +266,8 @@ class BookProvider extends ChangeNotifier {
   String localizedError(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     switch (_errorCode) {
+      case 'scan_not_isbn_ean':
+        return loc.scan_not_isbn_ean;
       case 'provider_book_record_sale_failed':
         return loc.provider_book_record_sale_failed(_errorArgs?['error'] ?? '');
       case 'isbn_error_invalid_format':

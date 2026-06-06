@@ -5,6 +5,16 @@ import 'dart:convert';
 import '../models/book.dart';
 import '../models/api_source.dart';
 
+class IsbnException implements Exception {
+  final String message;
+  final String code;
+
+  IsbnException(this.message, this.code);
+
+  @override
+  String toString() => message;
+}
+
 class IsbnService {
   static const String openLibraryBaseUrl = 'https://openlibrary.org/api/books';
   // 可選：外部 Lexile API 基底網址與金鑰，未設定時跳過呼叫
@@ -23,9 +33,9 @@ class IsbnService {
 
     if (!_isValidIsbn(isbn)) {
       if (isEan13ButNotIsbn(isbn)) {
-        throw Exception('請掃描 ISBN 條碼，這個是 EAN');
+        throw IsbnException('請掃描 ISBN 條碼，這個是 EAN', 'scan_not_isbn_ean');
       }
-      throw Exception('無效的 ISBN 格式');
+      throw IsbnException('無效的 ISBN 格式', 'isbn_error_invalid_format');
     }
 
     final activeSources = (sources == null || sources.isEmpty)
