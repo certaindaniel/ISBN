@@ -3,7 +3,7 @@ description: ISBN 掃描書籍管理應用 - 支援 iOS/Mac/Android
 
 publish_to: 'none'
 
-version: 1.0.0+4
+version: 1.1.0+10
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -26,6 +26,10 @@ dependencies:
   
   # URL 啟動器
   url_launcher: ^6.3.1
+  # App Store 評分請求
+  in_app_review: ^2.0.9
+  # 內購（解鎖無限書籍）
+  in_app_purchase: ^3.2.0
   # 內嵌 WebView（iOS 使用 WKWebView）
   webview_flutter: ^4.10.0
   

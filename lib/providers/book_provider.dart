@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../models/api_source.dart';
 import '../services/database_helper.dart';
 import '../services/isbn_service.dart';
+import '../services/purchase_service.dart';
+import '../services/review_service.dart';
 import '../utils/app_logger.dart';
 import '../l10n/app_localizations.dart';
 
@@ -149,6 +153,16 @@ class BookProvider extends ChangeNotifier {
       }
       final bookToSave = book.copyWith(isbn: normalizedIsbn);
 
+      // 免費版書量上限（所有新增路徑都經過這裡）
+      if (!PurchaseService.instance.isUnlocked &&
+          _books.length >= PurchaseService.freeBookLimit) {
+        _error = '已達免費版書籍上限';
+        _errorCode = 'free_limit_reached';
+        _errorArgs = null;
+        notifyListeners();
+        return false;
+      }
+
       // 檢查 ISBN 是否已存在
       final existing = await _dbHelper.getBookByISBN(normalizedIsbn);
       if (existing != null) {
@@ -162,6 +176,7 @@ class BookProvider extends ChangeNotifier {
       await _dbHelper.insertBook(bookToSave);
       await loadBooks();
       await loadStatistics();
+      unawaited(ReviewService.recordSuccess());
       return true;
     } catch (e) {
       _error = '新增書籍失敗: $e';
@@ -274,6 +289,8 @@ class BookProvider extends ChangeNotifier {
         return loc.isbn_error_invalid_format;
       case 'isbn_already_exists':
         return loc.isbn_already_exists;
+      case 'free_limit_reached':
+        return loc.free_limit_reached(PurchaseService.freeBookLimit);
       case 'cannot_find_isbn_ncl':
         return loc.cannot_find_isbn_ncl(_errorArgs?['url'] ?? '');
       case 'load_books_failed':

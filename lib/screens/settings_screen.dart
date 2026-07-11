@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/api_source.dart';
 import '../providers/settings_provider.dart';
+import '../services/purchase_service.dart';
+import '../services/review_service.dart';
 import '../l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -115,6 +117,35 @@ class SettingsScreen extends StatelessWidget {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
                   }
                 },
+              ),
+              const Divider(height: 32, thickness: 8),
+              Consumer<PurchaseService>(
+                builder: (context, purchase, child) => ListTile(
+                  leading: Icon(
+                    purchase.isUnlocked ? Icons.verified : Icons.lock_open,
+                    color: Colors.blue,
+                  ),
+                  title: Text(purchase.isUnlocked
+                      ? loc.paywall_unlocked
+                      : loc.settings_unlock_title),
+                  subtitle: purchase.isUnlocked
+                      ? null
+                      : Text(loc.settings_unlock_subtitle(
+                          PurchaseService.freeBookLimit)),
+                  trailing: purchase.isUnlocked
+                      ? null
+                      : const Icon(Icons.chevron_right),
+                  onTap: purchase.isUnlocked
+                      ? null
+                      : () => Navigator.of(context).pushNamed('/paywall'),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.star_rate, color: Colors.amber),
+                title: Text(loc.settings_rate_title),
+                subtitle: Text(loc.settings_rate_subtitle),
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => ReviewService.openStoreListing(),
               ),
             ],
           );

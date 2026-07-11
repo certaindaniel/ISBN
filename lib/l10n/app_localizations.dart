@@ -879,6 +879,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to delete book: {error}'**
   String delete_book_failed(Object error);
+
+  /// No description provided for @settings_rate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate this App'**
+  String get settings_rate_title;
+
+  /// No description provided for @settings_rate_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying the app? Leave us a review'**
+  String get settings_rate_subtitle;
+
+  /// No description provided for @free_limit_reached.
+  ///
+  /// In en, this message translates to:
+  /// **'Free version limit of {limit} books reached. Unlock unlimited books to continue.'**
+  String free_limit_reached(int limit);
+
+  /// No description provided for @paywall_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Unlimited Books'**
+  String get paywall_title;
+
+  /// No description provided for @paywall_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The free version stores up to {limit} books. Unlock once, keep cataloging forever.'**
+  String paywall_subtitle(int limit);
+
+  /// No description provided for @paywall_feature_unlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited books in your library'**
+  String get paywall_feature_unlimited;
+
+  /// No description provided for @paywall_feature_profit.
+  ///
+  /// In en, this message translates to:
+  /// **'Full profit tracking and statistics, always free'**
+  String get paywall_feature_profit;
+
+  /// No description provided for @paywall_feature_once.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time purchase — no subscription'**
+  String get paywall_feature_once;
+
+  /// No description provided for @paywall_buy.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock for {price}'**
+  String paywall_buy(String price);
+
+  /// No description provided for @paywall_restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchase'**
+  String get paywall_restore;
+
+  /// No description provided for @paywall_unlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited books unlocked'**
+  String get paywall_unlocked;
+
+  /// No description provided for @paywall_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Store unavailable'**
+  String get paywall_unavailable;
+
+  /// No description provided for @settings_unlock_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Unlimited Books'**
+  String get settings_unlock_title;
+
+  /// No description provided for @settings_unlock_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free version: up to {limit} books'**
+  String settings_unlock_subtitle(int limit);
 }
 
 class _AppLocalizationsDelegate

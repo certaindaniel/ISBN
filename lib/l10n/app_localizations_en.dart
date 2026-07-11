@@ -443,4 +443,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String delete_book_failed(Object error) {
     return 'Failed to delete book: $error';
   }
+
+  @override
+  String get settings_rate_title => 'Rate this App';
+
+  @override
+  String get settings_rate_subtitle => 'Enjoying the app? Leave us a review';
+
+  @override
+  String free_limit_reached(int limit) {
+    return 'Free version limit of $limit books reached. Unlock unlimited books to continue.';
+  }
+
+  @override
+  String get paywall_title => 'Unlock Unlimited Books';
+
+  @override
+  String paywall_subtitle(int limit) {
+    return 'The free version stores up to $limit books. Unlock once, keep cataloging forever.';
+  }
+
+  @override
+  String get paywall_feature_unlimited => 'Unlimited books in your library';
+
+  @override
+  String get paywall_feature_profit =>
+      'Full profit tracking and statistics, always free';
+
+  @override
+  String get paywall_feature_once => 'One-time purchase — no subscription';
+
+  @override
+  String paywall_buy(String price) {
+    return 'Unlock for $price';
+  }
+
+  @override
+  String get paywall_restore => 'Restore Purchase';
+
+  @override
+  String get paywall_unlocked => 'Unlimited books unlocked';
+
+  @override
+  String get paywall_unavailable => 'Store unavailable';
+
+  @override
+  String get settings_unlock_title => 'Unlock Unlimited Books';
+
+  @override
+  String settings_unlock_subtitle(int limit) {
+    return 'Free version: up to $limit books';
+  }
 }

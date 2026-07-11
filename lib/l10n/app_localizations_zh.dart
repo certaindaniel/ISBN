@@ -434,6 +434,56 @@ class AppLocalizationsZh extends AppLocalizations {
   String delete_book_failed(Object error) {
     return '刪除書籍失敗: $error';
   }
+
+  @override
+  String get settings_rate_title => '為 App 評分';
+
+  @override
+  String get settings_rate_subtitle => '喜歡這個 App 嗎？留個評論支持我們';
+
+  @override
+  String free_limit_reached(int limit) {
+    return '已達免費版 $limit 本上限，解鎖無限書籍即可繼續建檔。';
+  }
+
+  @override
+  String get paywall_title => '解鎖無限書籍';
+
+  @override
+  String paywall_subtitle(int limit) {
+    return '免費版最多可建檔 $limit 本書。一次解鎖，永久使用。';
+  }
+
+  @override
+  String get paywall_feature_unlimited => '書庫數量無上限';
+
+  @override
+  String get paywall_feature_profit => '利潤追蹤與統計功能永久免費';
+
+  @override
+  String get paywall_feature_once => '一次性買斷，無訂閱';
+
+  @override
+  String paywall_buy(String price) {
+    return '以 $price 解鎖';
+  }
+
+  @override
+  String get paywall_restore => '恢復購買';
+
+  @override
+  String get paywall_unlocked => '已解鎖無限書籍';
+
+  @override
+  String get paywall_unavailable => '商店暫時無法使用';
+
+  @override
+  String get settings_unlock_title => '解鎖無限書籍';
+
+  @override
+  String settings_unlock_subtitle(int limit) {
+    return '免費版最多 $limit 本';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -652,9 +702,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get book_not_found => '查无书籍信息';
 
   @override
-  String get filter_no_books => '此筛选没有书籍';
-
-  @override
   String get refresh_tooltip => '重新整理';
 
   @override
@@ -664,7 +711,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get clipboard_paste_tooltip => '贴上回填';
 
   @override
-  String get author_optional => '作者（可選）';
+  String get author_optional => '作者（可选）';
 
   @override
   String get new_book => '新增书籍';
@@ -728,33 +775,193 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get profit_label => '利润';
 
   @override
-  String get no_enabled_sources => '尚未啟用任何查詢來源，請到設定頁開啟來源';
-
-  @override
-  String get searching_title => '查詢中...';
-
-  @override
-  String source_label(Object value) {
-    return '來源：$value';
+  String settings_enabled_sources(Object enabled, Object total) {
+    return '已启用来源：$enabled / $total';
   }
 
   @override
-  String get cannot_find_book => '無法查詢到書籍資訊';
+  String get settings_sources_explain =>
+      '系统会依照上列顺序逐一查询，失败时自动换下一个来源。所有 API 均为免费第三方服务，稳定度可能会有所差异。';
 
   @override
-  String get scan_not_isbn_ean => '請掃描 ISBN 條碼，這個是 EAN';
+  String get statistics_tab_reading => '阅读统计';
 
   @override
-  String get please_enter_title => '請輸入書名';
+  String get statistics_tab_finance => '金额统计';
+
+  @override
+  String get stat_overview_title => '阅读进度';
+
+  @override
+  String get stat_total_books => '总书籍';
+
+  @override
+  String get stat_read => '已读';
+
+  @override
+  String get stat_reading => '阅读中';
+
+  @override
+  String get stat_unread => '未读';
+
+  @override
+  String get stat_completion_title => '阅读完成度';
+
+  @override
+  String get finance_title => '金额统计';
+
+  @override
+  String get finance_total_spent => '总支出';
+
+  @override
+  String get finance_total_earned => '总收入';
+
+  @override
+  String get finance_total_profit => '总利润';
+
+  @override
+  String get settings_common_websites_title => '常用查询网页';
+
+  @override
+  String get take_photo => '拍摄封面';
+
+  @override
+  String language_label(Object value) {
+    return '语言：$value';
+  }
+
+  @override
+  String get label_lexile => '蓝思值 (Lexile Measure)';
+
+  @override
+  String get profit_calculation => '利润计算';
+
+  @override
+  String get no_enabled_sources => '尚未启用任何查询来源，请到设置页开启来源';
+
+  @override
+  String get searching_title => '查询中...';
+
+  @override
+  String source_label(Object value) {
+    return '来源：$value';
+  }
+
+  @override
+  String get cannot_find_book => '无法查询到书籍信息';
+
+  @override
+  String get api_test_title => 'ISBN API 测试';
+
+  @override
+  String get api_test_start => '开始测试';
+
+  @override
+  String get api_test_running => '测试进行中...';
+
+  @override
+  String get api_test_output_placeholder => '点击「开始测试」执行 API 测试...';
+
+  @override
+  String get scan_not_isbn_ean => '请扫描 ISBN 条码，这个是 EAN';
+
+  @override
+  String get please_enter_title => '请输入书名';
 
   @override
   String query_failed_error(Object error) {
-    return '查詢失敗: $error';
+    return '查询失败: $error';
   }
 
   @override
   String error_prefix(Object message) {
-    return '錯誤: $message';
+    return '错误: $message';
+  }
+
+  @override
+  String get isbn_error_invalid_format => '无效的 ISBN 格式';
+
+  @override
+  String provider_book_record_sale_failed(Object error) {
+    return '记录售出失败：$error';
+  }
+
+  @override
+  String get isbn_already_exists => 'ISBN 已存在于数据库';
+
+  @override
+  String cannot_find_isbn_ncl(Object url) {
+    return '无法查询到此 ISBN 的书籍信息，可前往 NCL 查询：$url';
+  }
+
+  @override
+  String load_books_failed(Object error) {
+    return '加载书籍失败: $error';
+  }
+
+  @override
+  String add_book_failed(Object error) {
+    return '新增书籍失败: $error';
+  }
+
+  @override
+  String update_book_failed(Object error) {
+    return '更新书籍失败: $error';
+  }
+
+  @override
+  String delete_book_failed(Object error) {
+    return '删除书籍失败: $error';
+  }
+
+  @override
+  String get settings_rate_title => '为 App 评分';
+
+  @override
+  String get settings_rate_subtitle => '喜欢这个 App 吗？留个评论支持我们';
+
+  @override
+  String free_limit_reached(int limit) {
+    return '已达免费版 $limit 本上限，解锁无限书籍即可繼續建档。';
+  }
+
+  @override
+  String get paywall_title => '解锁无限书籍';
+
+  @override
+  String paywall_subtitle(int limit) {
+    return '免费版最多可建档 $limit 本书。一次解锁，永久使用。';
+  }
+
+  @override
+  String get paywall_feature_unlimited => '书库数量无上限';
+
+  @override
+  String get paywall_feature_profit => '利润追踪与统计功能永久免费';
+
+  @override
+  String get paywall_feature_once => '一次性买断，无订阅';
+
+  @override
+  String paywall_buy(String price) {
+    return '以 $price 解锁';
+  }
+
+  @override
+  String get paywall_restore => '恢复购买';
+
+  @override
+  String get paywall_unlocked => '已解锁无限书籍';
+
+  @override
+  String get paywall_unavailable => '商店暂时无法使用';
+
+  @override
+  String get settings_unlock_title => '解锁无限书籍';
+
+  @override
+  String settings_unlock_subtitle(int limit) {
+    return '免费版最多 $limit 本';
   }
 }
 
@@ -1187,5 +1394,55 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String delete_book_failed(Object error) {
     return '刪除書籍失敗: $error';
+  }
+
+  @override
+  String get settings_rate_title => '為 App 評分';
+
+  @override
+  String get settings_rate_subtitle => '喜歡這個 App 嗎？留個評論支持我們';
+
+  @override
+  String free_limit_reached(int limit) {
+    return '已達免費版 $limit 本上限，解鎖無限書籍即可繼續建檔。';
+  }
+
+  @override
+  String get paywall_title => '解鎖無限書籍';
+
+  @override
+  String paywall_subtitle(int limit) {
+    return '免費版最多可建檔 $limit 本書。一次解鎖，永久使用。';
+  }
+
+  @override
+  String get paywall_feature_unlimited => '書庫數量無上限';
+
+  @override
+  String get paywall_feature_profit => '利潤追蹤與統計功能永久免費';
+
+  @override
+  String get paywall_feature_once => '一次性買斷，無訂閱';
+
+  @override
+  String paywall_buy(String price) {
+    return '以 $price 解鎖';
+  }
+
+  @override
+  String get paywall_restore => '恢復購買';
+
+  @override
+  String get paywall_unlocked => '已解鎖無限書籍';
+
+  @override
+  String get paywall_unavailable => '商店暫時無法使用';
+
+  @override
+  String get settings_unlock_title => '解鎖無限書籍';
+
+  @override
+  String settings_unlock_subtitle(int limit) {
+    return '免費版最多 $limit 本';
   }
 }

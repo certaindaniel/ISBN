@@ -11,8 +11,7 @@
   "unfinishedSearchTitle": "Unfinished search or changes",
   "unfinishedSearchContent": "You have an unfinished search or input. Perform search, discard changes, or continue editing?",
   "performSearch": "Search",
-  "pleaseFillRequiredFields": "Please fill all required fields"
-  ,
+  "pleaseFillRequiredFields": "Please fill all required fields",
   "bookList_search_hint": "Please enter title",
   "search_failed": "Search failed: {error}",
   "search_button": "Search",
@@ -57,8 +56,7 @@
   "settings_eslite_title": "Eslite",
   "settings_eslite_subtitle": "Eslite online bookstore",
   "settings_google_title": "Google Books",
-  "settings_google_subtitle": "Global books database"
-  ,
+  "settings_google_subtitle": "Global books database",
   "settings_wikipedia_title": "Wikipedia",
   "settings_wikipedia_subtitle": "Supplementary bibliographic data from Wikipedia",
   "settings_jike_title": "Community Chinese API",
@@ -73,8 +71,7 @@
   "refresh_tooltip": "Refresh",
   "example_lexile_hint": "e.g.: 850",
   "clipboard_paste_tooltip": "Paste from clipboard",
-  "author_optional": "Author (optional)"
-  ,
+  "author_optional": "Author (optional)",
   "new_book": "New Book",
   "edit_book": "Edit Book",
   "lexile_need_title_author": "Please enter title and author before searching Lexile",
@@ -93,11 +90,9 @@
   "purchase_date_title": "Purchase Date",
   "sale_date_title": "Sale Date",
   "set_sale_date_label": "Set sale date",
-  "profit_label": "Profit"
-  ,
+  "profit_label": "Profit",
   "settings_enabled_sources": "Enabled sources: {enabled} / {total}",
   "settings_sources_explain": "The system will try enabled sources in order and fall back to the next if a source fails. All APIs are free third-party services and may vary in reliability.",
-
   "statistics_tab_reading": "Reading Stats",
   "statistics_tab_finance": "Finance Stats",
   "stat_overview_title": "Reading Overview",
@@ -126,15 +121,55 @@
   "scan_not_isbn_ean": "Please scan an ISBN barcode; this is an EAN",
   "please_enter_title": "Please enter title",
   "query_failed_error": "Query failed: {error}",
-  "error_prefix": "Error: {message}"
-  ,
+  "error_prefix": "Error: {message}",
   "isbn_error_invalid_format": "Invalid ISBN format",
-  "provider_book_record_sale_failed": "Failed to record sale: {error}"
-  ,
+  "provider_book_record_sale_failed": "Failed to record sale: {error}",
   "isbn_already_exists": "ISBN already exists in database",
   "cannot_find_isbn_ncl": "Unable to find book information. See: {url}",
   "load_books_failed": "Failed to load books: {error}",
   "add_book_failed": "Failed to add book: {error}",
   "update_book_failed": "Failed to update book: {error}",
-  "delete_book_failed": "Failed to delete book: {error}"
+  "delete_book_failed": "Failed to delete book: {error}",
+  "settings_rate_title": "Rate this App",
+  "settings_rate_subtitle": "Enjoying the app? Leave us a review",
+  "free_limit_reached": "Free version limit of {limit} books reached. Unlock unlimited books to continue.",
+  "@free_limit_reached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_title": "Unlock Unlimited Books",
+  "paywall_subtitle": "The free version stores up to {limit} books. Unlock once, keep cataloging forever.",
+  "@paywall_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_feature_unlimited": "Unlimited books in your library",
+  "paywall_feature_profit": "Full profit tracking and statistics, always free",
+  "paywall_feature_once": "One-time purchase — no subscription",
+  "paywall_buy": "Unlock for {price}",
+  "@paywall_buy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywall_restore": "Restore Purchase",
+  "paywall_unlocked": "Unlimited books unlocked",
+  "paywall_unavailable": "Store unavailable",
+  "settings_unlock_title": "Unlock Unlimited Books",
+  "settings_unlock_subtitle": "Free version: up to {limit} books",
+  "@settings_unlock_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -56,8 +56,7 @@
   "settings_eslite_title": "誠品書店",
   "settings_eslite_subtitle": "誠品線上書店",
   "settings_google_title": "Google Books",
-  "settings_google_subtitle": "全球書籍資料庫"
-  ,
+  "settings_google_subtitle": "全球書籍資料庫",
   "settings_wikipedia_title": "Wikipedia",
   "settings_wikipedia_subtitle": "維基百科參考書籍資訊，補充文獻數據。",
   "settings_jike_title": "中文第三方免費 API",
@@ -88,7 +87,6 @@
   "profit_label": "利潤",
   "settings_enabled_sources": "已啟用來源：{enabled} / {total}",
   "settings_sources_explain": "系統會依照上列順序逐一查詢，失敗時自動換下一個來源。所有 API 均為免費第三方服務，穩定度可能會有所差異。",
-
   "statistics_tab_reading": "閱讀統計",
   "statistics_tab_finance": "金額統計",
   "stat_overview_title": "閱讀進度",
@@ -111,8 +109,7 @@
   "please_enter_isbn": "請輸入 ISBN",
   "scan_area_hint": "將書籍條碼放在掃描區域",
   "book_not_found": "查無書籍資訊",
-  "filter_no_books": "這個篩選沒有書籍"
-  ,
+  "filter_no_books": "這個篩選沒有書籍",
   "no_enabled_sources": "尚未啟用任何查詢來源，請到設定頁開啟來源",
   "searching_title": "查詢中...",
   "source_label": "來源：{value}",
@@ -124,15 +121,55 @@
   "scan_not_isbn_ean": "請掃描 ISBN 條碼，這個是 EAN",
   "please_enter_title": "請輸入書名",
   "query_failed_error": "查詢失敗: {error}",
-  "error_prefix": "錯誤: {message}"
-  ,
+  "error_prefix": "錯誤: {message}",
   "isbn_error_invalid_format": "無效的 ISBN 格式",
-  "provider_book_record_sale_failed": "記錄售出失敗：{error}"
-  ,
+  "provider_book_record_sale_failed": "記錄售出失敗：{error}",
   "isbn_already_exists": "ISBN 已存在於資料庫",
   "cannot_find_isbn_ncl": "無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：{url}",
   "load_books_failed": "載入書籍失敗: {error}",
   "add_book_failed": "新增書籍失敗: {error}",
   "update_book_failed": "更新書籍失敗: {error}",
-  "delete_book_failed": "刪除書籍失敗: {error}"
+  "delete_book_failed": "刪除書籍失敗: {error}",
+  "settings_rate_title": "為 App 評分",
+  "settings_rate_subtitle": "喜歡這個 App 嗎？留個評論支持我們",
+  "free_limit_reached": "已達免費版 {limit} 本上限，解鎖無限書籍即可繼續建檔。",
+  "@free_limit_reached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_title": "解鎖無限書籍",
+  "paywall_subtitle": "免費版最多可建檔 {limit} 本書。一次解鎖，永久使用。",
+  "@paywall_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_feature_unlimited": "書庫數量無上限",
+  "paywall_feature_profit": "利潤追蹤與統計功能永久免費",
+  "paywall_feature_once": "一次性買斷，無訂閱",
+  "paywall_buy": "以 {price} 解鎖",
+  "@paywall_buy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywall_restore": "恢復購買",
+  "paywall_unlocked": "已解鎖無限書籍",
+  "paywall_unavailable": "商店暫時無法使用",
+  "settings_unlock_title": "解鎖無限書籍",
+  "settings_unlock_subtitle": "免費版最多 {limit} 本",
+  "@settings_unlock_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -8,8 +8,10 @@ import 'screens/book_edit_screen.dart';
 import 'screens/statistics_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/api_test_screen.dart';
+import 'screens/paywall_screen.dart';
 import 'providers/book_provider.dart';
 import 'providers/settings_provider.dart';
+import 'services/purchase_service.dart';
 import 'models/book.dart';
 
 void main() async {
@@ -66,6 +68,7 @@ class IsbnBookManagerApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
         ChangeNotifierProvider(create: (_) => BookProvider()..initialize()),
+        ChangeNotifierProvider.value(value: PurchaseService.instance..initialize()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -94,6 +97,7 @@ class IsbnBookManagerApp extends StatelessWidget {
           '/book-list': (context) => const BookListScreen(),
           '/statistics': (context) => const StatisticsScreen(),
           '/settings': (context) => const SettingsScreen(),
+          '/paywall': (context) => const PaywallScreen(),
           '/api-test': (context) => const ApiTestScreen(),
         },
       ),

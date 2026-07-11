@@ -11,8 +11,7 @@
   "unfinishedSearchTitle": "有未完成的查询或更改",
   "unfinishedSearchContent": "您有尚未完成的查询或输入，要执行查询、放弃更改还是继续编辑？",
   "performSearch": "执行查询",
-  "pleaseFillRequiredFields": "请填写所有必填栏位"
-  ,
+  "pleaseFillRequiredFields": "请填写所有必填栏位",
   "bookList_search_hint": "请输入书名",
   "search_failed": "查询失败: {error}",
   "search_button": "查询",
@@ -57,8 +56,7 @@
   "settings_eslite_title": "诚品书店",
   "settings_eslite_subtitle": "诚品线上书店",
   "settings_google_title": "Google Books",
-  "settings_google_subtitle": "全球书籍数据库"
-  ,
+  "settings_google_subtitle": "全球书籍数据库",
   "settings_wikipedia_title": "Wikipedia",
   "settings_wikipedia_subtitle": "维基百科参考书籍资讯，补充文献数据。",
   "settings_jike_title": "中文第三方免費 API",
@@ -66,8 +64,7 @@
   "lexile_title": "Lexile 查询",
   "clipboard_paste_tooltip": "贴上回填",
   "refresh_tooltip": "重新整理",
-  "example_lexile_hint": "例如：850"
-  ,
+  "example_lexile_hint": "例如：850",
   "new_book": "新增书籍",
   "edit_book": "编辑书籍",
   "lexile_need_title_author": "请先填入书名与作者再查询 Lexile",
@@ -131,5 +128,47 @@
   "api_test_title": "ISBN API 测试",
   "api_test_start": "开始测试",
   "api_test_running": "测试进行中...",
-  "api_test_output_placeholder": "点击「开始测试」执行 API 测试..."
+  "api_test_output_placeholder": "点击「开始测试」执行 API 测试...",
+  "settings_rate_title": "为 App 评分",
+  "settings_rate_subtitle": "喜欢这个 App 吗？留个评论支持我们",
+  "free_limit_reached": "已达免费版 {limit} 本上限，解锁无限书籍即可繼續建档。",
+  "@free_limit_reached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_title": "解锁无限书籍",
+  "paywall_subtitle": "免费版最多可建档 {limit} 本书。一次解锁，永久使用。",
+  "@paywall_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "paywall_feature_unlimited": "书库数量无上限",
+  "paywall_feature_profit": "利润追踪与统计功能永久免费",
+  "paywall_feature_once": "一次性买断，无订阅",
+  "paywall_buy": "以 {price} 解锁",
+  "@paywall_buy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywall_restore": "恢复购买",
+  "paywall_unlocked": "已解锁无限书籍",
+  "paywall_unavailable": "商店暂时无法使用",
+  "settings_unlock_title": "解锁无限书籍",
+  "settings_unlock_subtitle": "免费版最多 {limit} 本",
+  "@settings_unlock_subtitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
   }
+}

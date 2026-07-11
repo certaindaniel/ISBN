@@ -354,6 +354,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
       );
       Navigator.of(context).pop(true);
     } else if (mounted) {
+      final hitFreeLimit = provider.errorCode == 'free_limit_reached';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorCode != null
@@ -363,6 +364,9 @@ class _BookEditScreenState extends State<BookEditScreen> {
         ),
       );
       provider.clearError();
+      if (hitFreeLimit) {
+        Navigator.of(context).pushNamed('/paywall');
+      }
     }
   }
 
