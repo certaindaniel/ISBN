@@ -23,9 +23,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>需要使用相機掃描書籍條碼</string>
+	<string>The app needs camera access to scan book ISBN barcodes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>允許從相冊選擇書籍封面圖片</string>
+	<string>The app needs photo library access to select book cover images</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
