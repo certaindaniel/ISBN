@@ -25,8 +25,13 @@ import StoreKit
             do {
               let transaction = try await AppTransaction.shared
               switch transaction {
-              case .verified(let appTransaction), .unverified(let appTransaction, _):
+              case .verified(let appTransaction)
+                where appTransaction.environment == .production:
+                // sandbox/TestFlight 的 originalAppVersion 恆為 "1.0"，
+                // 非 production 一律不豁免，否則 App Review 裝置會被誤判為老買家（2.1(b) 退件）
                 result(appTransaction.originalAppVersion)
+              default:
+                result(nil)
               }
             } catch {
               result(nil)
