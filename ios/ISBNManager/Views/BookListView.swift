@@ -25,6 +25,7 @@ struct BookListView: View {
         case "unread": return store.books.filter { $0.status == "unread" }
         case "reading": return store.books.filter { $0.status == "reading" }
         case "read": return store.books.filter { $0.status == "read" }
+        case "wishlist": return store.books.filter { $0.status == "wishlist" }
         default: return store.books
         }
     }
@@ -128,6 +129,7 @@ struct BookListView: View {
                 filterChip("unread", s.t("filter_unread"))
                 filterChip("reading", s.t("filter_reading"))
                 filterChip("read", s.t("filter_read"))
+                filterChip("wishlist", s.t("filter_wishlist"))
             }
             .padding(.vertical, 4)
         }
@@ -240,6 +242,10 @@ struct BookRow: View {
                 } else if book.status == "read", book.finishDate != nil {
                     Text("✓").font(.caption).foregroundColor(.green)
                 }
+                if let tags = book.tags {
+                    Text(tags).font(.caption2).foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
             }
             Spacer()
         }
@@ -271,8 +277,12 @@ struct BookRow: View {
     }
 
     private var statusBadge: some View {
-        let color: Color = book.status == "read" ? .green : (book.status == "reading" ? .orange : .gray)
-        let label = book.status == "read" ? s.t("filter_read") : (book.status == "reading" ? s.t("filter_reading") : s.t("filter_unread"))
+        let color: Color = book.status == "read" ? .green
+            : (book.status == "reading" ? .orange
+            : (book.status == "wishlist" ? .purple : .gray))
+        let label = book.status == "read" ? s.t("filter_read")
+            : (book.status == "reading" ? s.t("filter_reading")
+            : (book.status == "wishlist" ? s.t("filter_wishlist") : s.t("filter_unread")))
         return Text(label)
             .font(.caption2)
             .padding(.horizontal, 6).padding(.vertical, 2)

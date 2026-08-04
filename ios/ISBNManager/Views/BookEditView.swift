@@ -190,6 +190,7 @@ struct BookEditView: View {
                 Text(s.t("filter_unread")).tag("unread")
                 Text(s.t("filter_reading")).tag("reading")
                 Text(s.t("filter_read")).tag("read")
+                Text(s.t("filter_wishlist")).tag("wishlist")
             }.pickerStyle(.segmented)
         }
         .padding(12)
@@ -240,7 +241,12 @@ struct BookEditView: View {
     }
 
     private var readStatusLabel: String {
-        readStatus == "read" ? s.t("filter_read") : (readStatus == "reading" ? s.t("filter_reading") : s.t("filter_unread"))
+        switch readStatus {
+        case "read": return s.t("filter_read")
+        case "reading": return s.t("filter_reading")
+        case "wishlist": return s.t("filter_wishlist")
+        default: return s.t("filter_unread")
+        }
     }
 
     // MARK: - Lexile

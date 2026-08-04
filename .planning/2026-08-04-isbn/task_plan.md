@@ -4,7 +4,7 @@
 完成 ISBN 書籍管理 App 的查書可靠度提升（本地快取、NLC 來源、429/503 重試、評估 NLCISBNPlugin），並補完先前未實作的功能（閱讀目標/連續天數、願望清單 TBR、iCloud 同步、書本估價、AI 推薦），全部建置+測試通過，commit + push，並安裝到實機。
 
 ## Current Phase
-Phase 4（願望清單 TBR + 標籤）
+Phase 5（iCloud 同步）
 
 ## Phases
 
@@ -28,9 +28,10 @@ Phase 4（願望清單 TBR + 標籤）
 - **Status:** complete
 
 ### Phase 4: 願望清單 TBR + 標籤
-- [ ] 新增 wishlist 狀態與 TBR 篩選
-- [ ] 標籤輸入/顯示（部分已實作）
-- **Status:** pending
+- [x] 新增 wishlist 狀態（編輯 picker）與列表「想讀」篩選
+- [x] 標籤輸入（已實作）+ 列表標籤顯示
+- [x] 狀態徽章支援想讀（紫色）
+- **Status:** complete
 
 ### Phase 5: iCloud 同步
 - [ ] CloudKit/entitlement 設定

@@ -37,6 +37,16 @@
 - Files created/modified:
   - Database.swift, BookStore.swift, StatisticsView.swift, Localized.swift, LocalizedTables.swift, DatabaseMigrationTests.swift
 
+### Phase 4: 願望清單 TBR + 標籤
+- **Status:** complete
+- Actions taken:
+  - BookEditView 閱讀狀態 picker 新增「想讀」(wishlist)
+  - BookListView 新增 wishlist 篩選 chip、filteredBooks 分支、狀態徽章支援（紫色）
+  - BookRow 顯示標籤
+  - 新增 filter_wishlist 三語系鍵；13 測試全過
+- Files created/modified:
+  - BookEditView.swift, BookListView.swift, LocalizedTables.swift
+
 ## Test Results
 | Test | Input | Expected | Actual | Status |
 |------|-------|----------|--------|--------|
@@ -56,8 +66,8 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 4（願望清單 TBR + 標籤） |
-| Where am I going? | Phase 4-8 |
+| Where am I? | Phase 5（iCloud 同步） |
+| Where am I going? | Phase 5-8 |
 | What's the goal? | 可靠度+功能補完+commit/push+實機安裝 |
 | What have I learned? | findings.md |
 | What have I done? | 本檔案 |
