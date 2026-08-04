@@ -13,6 +13,16 @@ final class SyncService {
 
     /// 推本機所有書籍到 iCloud；拉遠端並合併缺失的書。回傳錯誤訊息（nil = 成功）。
     func sync() async -> String? {
+        // 先確認 iCloud 帳號可用與 container 可存取
+        do {
+            let status = try await container.accountStatus()
+            if status != .available {
+                return "account_status_\(status.rawValue)"
+            }
+        } catch {
+            return "account_status_check_failed: \(cloudKitErrorDetail(error))"
+        }
+
         let localBooks = Database.shared.getAllBooks()
         var records: [CKRecord] = []
         for book in localBooks {
@@ -22,7 +32,7 @@ final class SyncService {
             do {
                 try await saveRecords(records)
             } catch {
-                return "icloud_push_failed"
+                return "icloud_push_failed: \(cloudKitErrorDetail(error))"
             }
         }
 
@@ -35,9 +45,16 @@ final class SyncService {
                 }
             }
         } catch {
-            return "icloud_pull_failed"
+            return "icloud_pull_failed: \(cloudKitErrorDetail(error))"
         }
         return nil
+    }
+
+    private func cloudKitErrorDetail(_ error: Error) -> String {
+        if let ck = error as? CKError {
+            return "CKError \(ck.code.rawValue): \(ck.localizedDescription)"
+        }
+        return error.localizedDescription
     }
 
     private func saveRecords(_ records: [CKRecord]) async throws {

@@ -211,6 +211,10 @@ struct SettingsView: View {
 
     private func runSync() async {
         let error = await SyncService.shared.sync()
-        syncMessage = error == nil ? s.t("sync_success") : s.t("sync_failed")
+        if error == nil {
+            syncMessage = s.t("sync_success")
+        } else {
+            syncMessage = error
+        }
     }
 }
