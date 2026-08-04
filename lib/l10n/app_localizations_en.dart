@@ -12,6 +12,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'ISBN Book Manager';
 
   @override
+  String get unknown_title => 'Unknown title';
+
+  @override
+  String get unknown_author => 'Unknown author';
+
+  @override
+  String get unknown_publisher => 'Unknown publisher';
+
+  @override
   String get books => 'Books';
 
   @override

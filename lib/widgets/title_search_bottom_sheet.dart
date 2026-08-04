@@ -217,8 +217,11 @@ class _TitleSearchBottomSheetState extends State<TitleSearchBottomSheet> {
                     final b = _results[index];
                     return ListTile(
                       leading: const Icon(Icons.menu_book_outlined),
-                      title: Text(b.title),
-                      subtitle: Text('${b.author} • ISBN: ${b.isbn}'),
+                      title: Text(b.title.isEmpty
+                          ? AppLocalizations.of(context)!.unknown_title
+                          : b.title),
+                      subtitle: Text(
+                          '${b.author.isEmpty ? AppLocalizations.of(context)!.unknown_author : b.author} • ISBN: ${b.isbn}'),
                       onTap: () {
                         Navigator.of(context).pop(b);
                       },

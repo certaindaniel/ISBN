@@ -41,8 +41,7 @@ class _BookListScreenState extends State<BookListScreen> {
           return;
         }
 
-        final sourceNotifier =
-            ValueNotifier<String>(locParent.searching_title);
+        final sourceNotifier = ValueNotifier<String>(locParent.searching_title);
 
         showDialog(
           context: parentContext,
@@ -471,15 +470,16 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: _buildCoverImage(),
-        title: Text(book.title),
+        title: Text(book.title.isEmpty ? loc.unknown_title : book.title),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(book.author),
+            Text(book.author.isEmpty ? loc.unknown_author : book.author),
             const SizedBox(height: 8),
             Row(
               children: [

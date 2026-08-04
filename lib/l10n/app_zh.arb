@@ -1,6 +1,9 @@
 {
   "@@@locale": "zh",
   "appTitle": "ISBN 書籍管理",
+  "unknown_title": "未知標題",
+  "unknown_author": "未知作者",
+  "unknown_publisher": "未知出版社",
   "books": "書籍",
   "statistics": "統計",
   "unsavedChangesTitle": "有未儲存的變更",

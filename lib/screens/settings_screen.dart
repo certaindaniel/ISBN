@@ -13,6 +13,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final isZh = Localizations.localeOf(context).languageCode == 'zh';
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.settings_title),
@@ -69,43 +70,63 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 subtitle: Text(loc.settings_manual_query_subtitle),
               ),
-              ListTile(
-                leading: const Icon(Icons.public, color: Colors.blue),
-                title: Text(loc.settings_tnla_title),
-                subtitle: Text(loc.settings_tnla_subtitle),
-                trailing: const Icon(Icons.open_in_new),
-                onTap: () async {
-                  final uri = Uri.parse(
-                      'https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple');
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.book, color: Colors.orange),
-                title: Text(loc.settings_bok_title),
-                subtitle: Text(loc.settings_bok_subtitle),
-                trailing: const Icon(Icons.open_in_new),
-                onTap: () async {
-                  final uri = Uri.parse('https://www.books.com.tw/');
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.library_books, color: Colors.green),
-                title: Text(loc.settings_eslite_title),
-                subtitle: Text(loc.settings_eslite_subtitle),
-                trailing: const Icon(Icons.open_in_new),
-                onTap: () async {
-                  final uri = Uri.parse('https://www.eslite.com/');
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
+              // 台灣書目站只對中文使用者有用，其他語系隱藏
+              if (isZh) ...[
+                ListTile(
+                  leading: const Icon(Icons.public, color: Colors.blue),
+                  title: Text(loc.settings_tnla_title),
+                  subtitle: Text(loc.settings_tnla_subtitle),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () async {
+                    final uri = Uri.parse(
+                        'https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.book, color: Colors.orange),
+                  title: Text(loc.settings_bok_title),
+                  subtitle: Text(loc.settings_bok_subtitle),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () async {
+                    final uri = Uri.parse('https://www.books.com.tw/');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.library_books, color: Colors.green),
+                  title: Text(loc.settings_eslite_title),
+                  subtitle: Text(loc.settings_eslite_subtitle),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () async {
+                    final uri = Uri.parse('https://www.eslite.com/');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                ),
+              ],
+              if (!isZh)
+                ListTile(
+                  leading: const Icon(Icons.public, color: Colors.blue),
+                  title: Text(loc.settings_openlibrary_title),
+                  subtitle: Text(loc.settings_openlibrary_subtitle),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () async {
+                    final uri = Uri.parse('https://openlibrary.org/');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                ),
               ListTile(
                 leading: const Icon(Icons.search, color: Colors.red),
                 title: Text(loc.settings_google_title),

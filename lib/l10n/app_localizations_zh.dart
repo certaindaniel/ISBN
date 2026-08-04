@@ -12,6 +12,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appTitle => 'ISBN 書籍管理';
 
   @override
+  String get unknown_title => '未知標題';
+
+  @override
+  String get unknown_author => '未知作者';
+
+  @override
+  String get unknown_publisher => '未知出版社';
+
+  @override
   String get books => '書籍';
 
   @override
@@ -494,6 +503,15 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get appTitle => 'ISBN 书籍管理';
 
   @override
+  String get unknown_title => '未知标题';
+
+  @override
+  String get unknown_author => '未知作者';
+
+  @override
+  String get unknown_publisher => '未知出版社';
+
+  @override
   String get books => '书籍';
 
   @override
@@ -971,6 +989,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get appTitle => 'ISBN 書籍管理';
+
+  @override
+  String get unknown_title => '未知標題';
+
+  @override
+  String get unknown_author => '未知作者';
+
+  @override
+  String get unknown_publisher => '未知出版社';
 
   @override
   String get books => '書籍';

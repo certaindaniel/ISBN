@@ -139,12 +139,12 @@ class IsbnService {
         final volume = items.first['volumeInfo'];
         if (volume == null) return null;
 
-        final title = volume['title'] ?? '未知標題';
+        final title = volume['title'] ?? '';
         final authors = volume['authors'] as List<dynamic>?;
         final author = authors != null && authors.isNotEmpty
             ? authors.first.toString()
-            : '未知作者';
-        final publisher = volume['publisher'] ?? '未知出版社';
+            : '';
+        final publisher = volume['publisher'] ?? '';
         final coverUrl = volume['imageLinks'] != null
             ? volume['imageLinks']['thumbnail'] ??
                 volume['imageLinks']['smallThumbnail']
@@ -297,12 +297,12 @@ class IsbnService {
       // 若無 ISBN，略過（本系統資料模型要求有 ISBN）
       if (isbn == null || isbn.isEmpty) continue;
 
-      final bookTitle = volume['title'] ?? '未知標題';
+      final bookTitle = volume['title'] ?? '';
       final authors = volume['authors'] as List<dynamic>?;
       final bookAuthor = (authors != null && authors.isNotEmpty)
           ? authors.first.toString()
-          : '未知作者';
-      final publisher = volume['publisher'] ?? '未知出版社';
+          : '';
+      final publisher = volume['publisher'] ?? '';
       final coverUrl = volume['imageLinks'] != null
           ? volume['imageLinks']['thumbnail'] ??
               volume['imageLinks']['smallThumbnail']
@@ -369,15 +369,15 @@ class IsbnService {
         }
         if (isbn == null) continue; // 沒有可用 ISBN 則略過
 
-        final bookTitle = (doc['title'] as String?) ?? '未知標題';
+        final bookTitle = (doc['title'] as String?) ?? '';
         final authorNames = (doc['author_name'] as List?)?.cast<String>();
         final bookAuthor = (authorNames != null && authorNames.isNotEmpty)
             ? authorNames.first
-            : '未知作者';
+            : '';
         final publishers = (doc['publisher'] as List?)?.cast<String>();
         final publisher = (publishers != null && publishers.isNotEmpty)
             ? publishers.first
-            : '未知出版社';
+            : '';
         final coverUrl = 'https://covers.openlibrary.org/b/isbn/$isbn-M.jpg';
         final language = _detectLanguage(bookTitle, bookAuthor);
 
@@ -413,15 +413,15 @@ class IsbnService {
       final payload = data['data'] ?? data;
       if (payload == null) return null;
 
-      final title = payload['title'] ?? '未知標題';
+      final title = payload['title'] ?? '';
       final authorRaw = payload['author'] ?? payload['authors'];
-      String author = '未知作者';
+      String author = '';
       if (authorRaw is List && authorRaw.isNotEmpty) {
         author = authorRaw.first.toString();
       } else if (authorRaw is String && authorRaw.isNotEmpty) {
         author = authorRaw;
       }
-      final publisher = payload['publisher'] ?? '未知出版社';
+      final publisher = payload['publisher'] ?? '';
       final coverUrl = payload['images']?['large'] ?? payload['image'];
 
       // Jike 通常提供中文書籍，所以假設語言為中文
@@ -467,9 +467,9 @@ class IsbnService {
       if (snippet.isNotEmpty) {
         return Book(
           isbn: isbn,
-          title: firstResult['title'] ?? '未知標題',
-          author: '未知作者',
-          publisher: '未知出版社',
+          title: firstResult['title'] ?? '',
+          author: '',
+          publisher: '',
           coverUrl: null,
           purchasePrice: 0.0,
           purchaseDate: DateTime.now(),
@@ -484,14 +484,14 @@ class IsbnService {
 
   static Book? _parseOpenLibraryBook(dynamic data, String isbn) {
     try {
-      final title = data['title'] ?? '未知標題';
+      final title = data['title'] ?? '';
       final author = (data['authors'] != null && data['authors'].isNotEmpty)
           ? data['authors'][0]['name']
-          : '未知作者';
+          : '';
       final publisher =
           (data['publishers'] != null && data['publishers'].isNotEmpty)
               ? data['publishers'][0]['name']
-              : '未知出版社';
+              : '';
       final coverUrl = data['cover'] != null ? data['cover']['large'] : null;
 
       return Book(

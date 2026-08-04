@@ -1,6 +1,9 @@
 {
   "@@@locale": "en",
   "appTitle": "ISBN Book Manager",
+  "unknown_title": "Unknown title",
+  "unknown_author": "Unknown author",
+  "unknown_publisher": "Unknown publisher",
   "books": "Books",
   "statistics": "Statistics",
   "unsavedChangesTitle": "Unsaved changes",

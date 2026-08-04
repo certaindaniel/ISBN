@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/material.dart';
 import '../models/book.dart';
@@ -107,11 +108,14 @@ class BookProvider extends ChangeNotifier {
       );
 
       if (book == null) {
-        final nclUrl =
-            'https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple&isbn=$normalizedIsbn';
-        _error = '無法查詢到此 ISBN 的書籍資訊，可前往 NCL 查詢：$nclUrl';
+        // 中文使用者導台灣國圖，其他語系導 Open Library
+        final isZh = PlatformDispatcher.instance.locale.languageCode == 'zh';
+        final fallbackUrl = isZh
+            ? 'https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple&isbn=$normalizedIsbn'
+            : 'https://openlibrary.org/isbn/$normalizedIsbn';
+        _error = '無法查詢到此 ISBN 的書籍資訊，可前往查詢：$fallbackUrl';
         _errorCode = 'cannot_find_isbn_ncl';
-        _errorArgs = {'url': nclUrl};
+        _errorArgs = {'url': fallbackUrl};
       }
 
       notifyListeners();
