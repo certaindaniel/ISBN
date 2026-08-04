@@ -4,7 +4,7 @@
 完成 ISBN 書籍管理 App 的查書可靠度提升（本地快取、NLC 來源、429/503 重試、評估 NLCISBNPlugin），並補完先前未實作的功能（閱讀目標/連續天數、願望清單 TBR、iCloud 同步、書本估價、AI 推薦），全部建置+測試通過，commit + push，並安裝到實機。
 
 ## Current Phase
-Phase 5（iCloud 同步）
+完成（可驗證項全交付；iCloud 阻塞待 Xcode 開啟 capability）
 
 ## Phases
 
@@ -44,15 +44,15 @@ Phase 5（iCloud 同步）
 - **Status:** complete
 
 ### Phase 7: 測試與驗證
-- [ ] 建置成功
-- [ ] 單元測試全過
-- [ ] 安裝到實機
-- **Status:** pending
+- [x] 建置成功（模擬器 + 實機）
+- [x] 單元測試全過（14 tests）
+- [x] 安裝到實機 Daniel iPhone 17 並啟動
+- **Status:** complete
 
 ### Phase 8: Delivery
-- [ ] commit + push
-- [ ] 向使用者報告
-- **Status:** pending
+- [x] commit + push（多次）
+- [x] 向使用者報告
+- **Status:** complete
 
 ## Key Questions
 1. 哪個免 key 來源對台灣書最可靠？→ Google Books(需key) 最佳；NCL 網頁刮取可當備援
