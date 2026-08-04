@@ -115,6 +115,27 @@ final class Database {
             }
         }
         sqlite3_exec(db, "PRAGMA user_version = 4", nil, nil, nil)
+        createCacheTable()
+    }
+
+    /// 建立本地 ISBN 查詢快取表（冪等）。成功查詢結果存這裡，重掃秒回、省 API 額度。
+    private func createCacheTable() {
+        guard let db else { return }
+        sqlite3_exec(db, """
+        CREATE TABLE IF NOT EXISTS isbn_cache(
+          isbn TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          author TEXT NOT NULL,
+          publisher TEXT NOT NULL,
+          coverUrl TEXT,
+          description TEXT,
+          purchasePrice REAL NOT NULL DEFAULT 0,
+          purchaseDate TEXT NOT NULL,
+          language TEXT,
+          lexileScore INTEGER,
+          createdAt TEXT NOT NULL
+        )
+        """, nil, nil, nil)
     }
 
     private func lastErrorMessage(_ db: OpaquePointer?) -> String {
@@ -185,6 +206,72 @@ final class Database {
         defer { sqlite3_finalize(stmt) }
         if sqlite3_step(stmt) == SQLITE_ROW { return book(from: stmt) }
         return nil
+    }
+
+    // MARK: - ISBN 查詢快取
+
+    /// 讀取快取的查詢結果；無則回傳 nil。
+    func cachedBook(_ isbn: String) -> Book? {
+        guard let db else { return nil }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT * FROM isbn_cache WHERE isbn = ? LIMIT 1", -1, &stmt, nil) == SQLITE_OK else { return nil }
+        sqlite3_bind_text(stmt, 1, isbn, -1, SQLITE_TRANSIENT)
+        defer { sqlite3_finalize(stmt) }
+        if sqlite3_step(stmt) == SQLITE_ROW { return cachedBook(from: stmt) }
+        return nil
+    }
+
+    /// 存入快取；同 ISBN 以 replace 覆寫。
+    @discardableResult
+    func saveCachedBook(_ book: Book) -> Bool {
+        guard let db else { return false }
+        var stmt: OpaquePointer?
+        let sql = """
+        INSERT OR REPLACE INTO isbn_cache(isbn, title, author, publisher, coverUrl, description,
+          purchasePrice, purchaseDate, language, lexileScore, createdAt)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+        """
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return false }
+        sqlite3_bind_text(stmt, 1, book.isbn, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 2, book.title, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 3, book.author, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 4, book.publisher, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 5, book.coverUrl, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 6, book.description, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_double(stmt, 7, book.purchasePrice)
+        sqlite3_bind_text(stmt, 8, book.purchaseDate.iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 9, book.language, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_int(stmt, 10, Int32(book.lexileScore ?? 0))
+        sqlite3_bind_text(stmt, 11, Date().iso8601, -1, SQLITE_TRANSIENT)
+        let rc = sqlite3_step(stmt)
+        sqlite3_finalize(stmt)
+        return rc == SQLITE_DONE
+    }
+
+    private func cachedBook(from stmt: OpaquePointer?) -> Book? {
+        guard let stmt else { return nil }
+        func text(_ name: String) -> String? {
+            guard let i = columnIndex(name, in: stmt) else { return nil }
+            let ptr = sqlite3_column_text(stmt, i)
+            return ptr != nil ? String(cString: ptr!) : nil
+        }
+        func intVal(_ name: String) -> Int? {
+            guard let i = columnIndex(name, in: stmt) else { return nil }
+            return Int(sqlite3_column_int64(stmt, i))
+        }
+        func optionalInt(_ name: String) -> Int? {
+            guard let i = columnIndex(name, in: stmt) else { return nil }
+            return sqlite3_column_type(stmt, i) == SQLITE_NULL ? nil : Int(sqlite3_column_int64(stmt, i))
+        }
+        guard let isbn = text("isbn") else { return nil }
+        return Book(id: nil, isbn: isbn,
+                    title: text("title") ?? "",
+                    author: text("author") ?? "",
+                    publisher: text("publisher") ?? "",
+                    coverUrl: text("coverUrl"), description: text("description"),
+                    purchasePrice: sqlite3_column_double(stmt, columnIndex("purchasePrice", in: stmt)!),
+                    purchaseDate: Date(iso8601: text("purchaseDate") ?? ""),
+                    language: text("language"), lexileScore: optionalInt("lexileScore"))
     }
 
     func updateBook(_ book: Book) -> Bool {

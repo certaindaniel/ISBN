@@ -135,6 +135,8 @@ extension ISBNService {
             }
             throw IsbnError(message: "無效的 ISBN 格式", code: "isbn_error_invalid_format")
         }
+        // 本地快取優先：同一 ISBN 已查過就直接回，省額度、秒回。
+        if let cached = Database.shared.cachedBook(isbn) { return cached }
         let active = sources.isEmpty ? ApiSource.defaultEnabled() : sources
         var results: [ApiSource: Book] = [:]
         await withTaskGroup(of: (ApiSource, Book?).self) { group in
@@ -150,7 +152,10 @@ extension ISBNService {
             }
         }
         for source in active {
-            if let book = results[source] { return book }
+            if let book = results[source] {
+                Database.shared.saveCachedBook(book)
+                return book
+            }
         }
         return nil
     }
@@ -167,12 +172,29 @@ extension ISBNService {
         }
     }
 
+    /// 帶退避重試的網路取回：429(額度)/503(伺服器) 時等待 1.5 秒重試一次。
+    private static func retryFetch(_ req: URLRequest) async -> (Data, HTTPURLResponse)? {
+        for attempt in 0..<2 {
+            do {
+                let (data, resp) = try await URLSession.shared.data(for: req)
+                guard let http = resp as? HTTPURLResponse else { return nil }
+                if (http.statusCode == 429 || http.statusCode == 503) && attempt == 0 {
+                    try? await Task.sleep(nanoseconds: 1_500_000_000)
+                    continue
+                }
+                return (data, http)
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
+
     static func searchOpenLibrary(_ isbn: String) async throws -> Book? {
         guard let url = URL(string: "\(openLibraryBaseURL)?bibkeys=ISBN:\(isbn)&format=json") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let bookData = obj["ISBN:\(isbn)"] as? [String: Any] else { return nil }
         let title = bookData["title"] as? String ?? ""
@@ -199,8 +221,7 @@ extension ISBNService {
         guard let url = URL(string: base) else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let items = obj["items"] as? [Any], !items.isEmpty,
               let volume = (items.first as? [String: Any])?["volumeInfo"] as? [String: Any] else { return nil }
@@ -225,8 +246,7 @@ extension ISBNService {
         guard let url = URL(string: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=\(enc)&format=json&srprop=snippet") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let search = (obj["query"] as? [String: Any])?["search"] as? [Any],
               !search.isEmpty,
@@ -242,8 +262,7 @@ extension ISBNService {
         guard let url = URL(string: "https://api.jike.xyz/situ/book/isbn/\(isbn)?apikey=\(key)") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: 8)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
         let payload = (obj["data"] as? [String: Any]) ?? obj
         let title = payload["title"] as? String ?? ""
@@ -275,8 +294,7 @@ extension ISBNService {
         guard let url = comps.url else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let bindings = (obj["results"] as? [String: Any])?["bindings"] as? [Any],
               let first = bindings.first as? [String: Any] else { return nil }
@@ -300,8 +318,7 @@ extension ISBNService {
         guard let url = URL(string: "https://www.loc.gov/search/?q=isbn:\(isbn)&fo=json") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
-        let (data, resp) = try await URLSession.shared.data(for: req)
-        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let results = obj["results"] as? [Any], !results.isEmpty,
               let first = results.first as? [String: Any] else { return nil }

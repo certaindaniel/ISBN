@@ -223,4 +223,22 @@ final class DatabaseMigrationTests: XCTestCase {
         XCTAssertTrue(db.deleteBook(id: Int(created!)))
         XCTAssertEqual(db.getAllBooks().count, 2)
     }
+
+    /// ISBN 查詢快取：寫入後可讀回，重掃秒回。
+    func testIsbnCacheRoundTrip() {
+        let p = file("cache.db")
+        let db = Database(dbPath: p)
+        let book = Book(isbn: "9780140328721", title: "1984", author: "Orwell", publisher: "Penguin",
+                        purchasePrice: 10.5, purchaseDate: Date(), language: "en", lexileScore: 900)
+        XCTAssertTrue(db.saveCachedBook(book))
+        let cached = db.cachedBook("9780140328721")
+        XCTAssertNotNil(cached)
+        XCTAssertEqual(cached?.title, "1984")
+        XCTAssertEqual(cached?.author, "Orwell")
+        XCTAssertEqual(cached?.publisher, "Penguin")
+        XCTAssertEqual(cached?.language, "en")
+        XCTAssertEqual(cached?.lexileScore, 900)
+        XCTAssertEqual(cached?.purchasePrice, 10.5)
+        XCTAssertNil(db.cachedBook("9780000000000"))
+    }
 }
