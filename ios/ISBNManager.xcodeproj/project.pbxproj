@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22BCED4FFD4D354DC372DFC5 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD497D692910E562F2D0333 /* Database.swift */; };
+		34D058A79992BAA71D3B8197 /* ApiTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE1308CB77A160D3554ABF8 /* ApiTestView.swift */; };
+		36F07207C1AA6FDDA86A6F23 /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFFEE85BE98EE1B69C2B8B2 /* Localized.swift */; };
+		3918DE13D4E4491D9BD86BB5 /* ISBNService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153600754DA2D9B8E30B3EC9 /* ISBNService.swift */; };
+		441F0AB3419B5D4BFC4CA004 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A71303F3D2EDEDD1A5702 /* PurchaseService.swift */; };
+		44D30BAF29BC312855E8B62C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E4C99CABCD73D68EC820BB /* RootView.swift */; };
+		54CCC481951FD2F09330C57F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A5F90445D1E579F97DE8BC /* Assets.xcassets */; };
+		6FD93D017C4D556A3BDFF80D /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803F904CF42BC28B2B8E06A8 /* ScannerView.swift */; };
+		7E0D638CC89F24EC5E84045D /* ISBNManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F648CEBD3C3FAC0CC527A3 /* ISBNManagerApp.swift */; };
+		978AAF34F40A6C0DA80768B1 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF75A488A3E4F0D8B3C8B02 /* Book.swift */; };
+		A18FB956F738E19763102D12 /* BookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34B53A16E7D76C773191658 /* BookListView.swift */; };
+		A53E68E10A8FD9F1202B63A7 /* BookStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962CB541F52E51B393F0E33C /* BookStore.swift */; };
+		AE105305EBAEB708CC904BFD /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1EEB3B1C65CBB41CDF6EE8 /* StatisticsView.swift */; };
+		AEF0673087C53126A5AD9F89 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25E705B7DFB4B7A9D2036C4 /* SettingsView.swift */; };
+		B1F0EBBD739FCDA438DBDCCE /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9432A3878CD82C18748A0864 /* ReviewService.swift */; };
+		B7A42BC2184D261F5959534A /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70339D0ADA98DCB9D1F2D19 /* DatabaseMigrationTests.swift */; };
+		B9B68F7B14305B06F1DFD9DB /* LexileWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489220B18DA270AC4E7F93D1 /* LexileWebView.swift */; };
+		D2A016324CDBC8BC6100F4D1 /* HelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177D71B1D02688E2FCA19C20 /* HelperViews.swift */; };
+		DBAD3FF42CC791DE665C0DF2 /* TitleSearchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944E826756438EF15EDD41F7 /* TitleSearchSheet.swift */; };
+		E0372D788DDB3D93B4D0BB1E /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACA76A21A60A8181FE83E0 /* PaywallView.swift */; };
+		E22F703E5C3EA66E2404E424 /* BookEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC353AE555437E2994B64 /* BookEditView.swift */; };
+		EA4275607DD2AF928BFEB84C /* LocalizedTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6106F384D69E68DF9B00C55 /* LocalizedTables.swift */; };
+		EC34482D6B45E712C2E96DF1 /* ApiSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1811290BA975077527E3A8 /* ApiSource.swift */; };
+		FA3F32F7FD6B77E4DE180DDE /* ISBNServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D65E50E3BDC29397401C8C3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37C942731B51976EE4C54692 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42A2DBFEF8E52F8AEE0DF610;
+			remoteInfo = ISBNManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		153600754DA2D9B8E30B3EC9 /* ISBNService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNService.swift; sourceTree = "<group>"; };
+		177D71B1D02688E2FCA19C20 /* HelperViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperViews.swift; sourceTree = "<group>"; };
+		1F1811290BA975077527E3A8 /* ApiSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSource.swift; sourceTree = "<group>"; };
+		22A5F90445D1E579F97DE8BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3A4A71303F3D2EDEDD1A5702 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
+		3C1182AD1E284C7C549B6E6E /* ISBNManagerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ISBNManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FFFEE85BE98EE1B69C2B8B2 /* Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
+		405AC353AE555437E2994B64 /* BookEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEditView.swift; sourceTree = "<group>"; };
+		489220B18DA270AC4E7F93D1 /* LexileWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexileWebView.swift; sourceTree = "<group>"; };
+		803F904CF42BC28B2B8E06A8 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
+		8CF75A488A3E4F0D8B3C8B02 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		9432A3878CD82C18748A0864 /* ReviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewService.swift; sourceTree = "<group>"; };
+		944E826756438EF15EDD41F7 /* TitleSearchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSearchSheet.swift; sourceTree = "<group>"; };
+		94ACA76A21A60A8181FE83E0 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		962CB541F52E51B393F0E33C /* BookStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStore.swift; sourceTree = "<group>"; };
+		9DD497D692910E562F2D0333 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		B0F648CEBD3C3FAC0CC527A3 /* ISBNManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNManagerApp.swift; sourceTree = "<group>"; };
+		B2E4C99CABCD73D68EC820BB /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		B70339D0ADA98DCB9D1F2D19 /* DatabaseMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseMigrationTests.swift; sourceTree = "<group>"; };
+		D25E705B7DFB4B7A9D2036C4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D6106F384D69E68DF9B00C55 /* LocalizedTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedTables.swift; sourceTree = "<group>"; };
+		DB7AA66EE80F6C095BD56402 /* ISBNManager.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ISBNManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD1EEB3B1C65CBB41CDF6EE8 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNServiceTests.swift; sourceTree = "<group>"; };
+		F34B53A16E7D76C773191658 /* BookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
+		FCE1308CB77A160D3554ABF8 /* ApiTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiTestView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		04358D1D768912FAA4AA20C8 /* ISBNManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				B70339D0ADA98DCB9D1F2D19 /* DatabaseMigrationTests.swift */,
+				F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */,
+			);
+			path = ISBNManagerTests;
+			sourceTree = "<group>";
+		};
+		282B1E1A2A0741F015C6F14C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1F1811290BA975077527E3A8 /* ApiSource.swift */,
+				8CF75A488A3E4F0D8B3C8B02 /* Book.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		339D61114EE3397DC51287EF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				962CB541F52E51B393F0E33C /* BookStore.swift */,
+				9DD497D692910E562F2D0333 /* Database.swift */,
+				153600754DA2D9B8E30B3EC9 /* ISBNService.swift */,
+				3A4A71303F3D2EDEDD1A5702 /* PurchaseService.swift */,
+				9432A3878CD82C18748A0864 /* ReviewService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		3EE6CA7192F2CFA052BF54C4 = {
+			isa = PBXGroup;
+			children = (
+				CF8F35CD6772836500A2DF05 /* ISBNManager */,
+				04358D1D768912FAA4AA20C8 /* ISBNManagerTests */,
+				D11E0E78292B9E796DF7397F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7EAFAD71D5160A74B375F9B6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FCE1308CB77A160D3554ABF8 /* ApiTestView.swift */,
+				405AC353AE555437E2994B64 /* BookEditView.swift */,
+				F34B53A16E7D76C773191658 /* BookListView.swift */,
+				177D71B1D02688E2FCA19C20 /* HelperViews.swift */,
+				489220B18DA270AC4E7F93D1 /* LexileWebView.swift */,
+				94ACA76A21A60A8181FE83E0 /* PaywallView.swift */,
+				B2E4C99CABCD73D68EC820BB /* RootView.swift */,
+				803F904CF42BC28B2B8E06A8 /* ScannerView.swift */,
+				D25E705B7DFB4B7A9D2036C4 /* SettingsView.swift */,
+				DD1EEB3B1C65CBB41CDF6EE8 /* StatisticsView.swift */,
+				944E826756438EF15EDD41F7 /* TitleSearchSheet.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CF8F35CD6772836500A2DF05 /* ISBNManager */ = {
+			isa = PBXGroup;
+			children = (
+				22A5F90445D1E579F97DE8BC /* Assets.xcassets */,
+				B0F648CEBD3C3FAC0CC527A3 /* ISBNManagerApp.swift */,
+				F467CA855E0100AB0B6BE549 /* Localization */,
+				282B1E1A2A0741F015C6F14C /* Models */,
+				339D61114EE3397DC51287EF /* Services */,
+				7EAFAD71D5160A74B375F9B6 /* Views */,
+			);
+			path = ISBNManager;
+			sourceTree = "<group>";
+		};
+		D11E0E78292B9E796DF7397F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DB7AA66EE80F6C095BD56402 /* ISBNManager.app */,
+				3C1182AD1E284C7C549B6E6E /* ISBNManagerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F467CA855E0100AB0B6BE549 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				3FFFEE85BE98EE1B69C2B8B2 /* Localized.swift */,
+				D6106F384D69E68DF9B00C55 /* LocalizedTables.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1EC5E3E69A0107165D3EE586 /* ISBNManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD65EB8F7AEA3672BB5C12E5 /* Build configuration list for PBXNativeTarget "ISBNManagerTests" */;
+			buildPhases = (
+				E01A6CE9F536408B86452B61 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4ADFEF47BC5D869F2ACD47BD /* PBXTargetDependency */,
+			);
+			name = ISBNManagerTests;
+			packageProductDependencies = (
+			);
+			productName = ISBNManagerTests;
+			productReference = 3C1182AD1E284C7C549B6E6E /* ISBNManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		42A2DBFEF8E52F8AEE0DF610 /* ISBNManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EFF00B144723D1C4B5E3D9EB /* Build configuration list for PBXNativeTarget "ISBNManager" */;
+			buildPhases = (
+				21B5EEF9E062E8F4C9906A38 /* Sources */,
+				ABF775AECEF60BC86D665C06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ISBNManager;
+			packageProductDependencies = (
+			);
+			productName = ISBNManager;
+			productReference = DB7AA66EE80F6C095BD56402 /* ISBNManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		37C942731B51976EE4C54692 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					1EC5E3E69A0107165D3EE586 = {
+						ProvisioningStyle = Automatic;
+					};
+					42A2DBFEF8E52F8AEE0DF610 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = AB49219AC8E0B5F1CF3C9076 /* Build configuration list for PBXProject "ISBNManager" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3EE6CA7192F2CFA052BF54C4;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D11E0E78292B9E796DF7397F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42A2DBFEF8E52F8AEE0DF610 /* ISBNManager */,
+				1EC5E3E69A0107165D3EE586 /* ISBNManagerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ABF775AECEF60BC86D665C06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CCC481951FD2F09330C57F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		21B5EEF9E062E8F4C9906A38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC34482D6B45E712C2E96DF1 /* ApiSource.swift in Sources */,
+				34D058A79992BAA71D3B8197 /* ApiTestView.swift in Sources */,
+				978AAF34F40A6C0DA80768B1 /* Book.swift in Sources */,
+				E22F703E5C3EA66E2404E424 /* BookEditView.swift in Sources */,
+				A18FB956F738E19763102D12 /* BookListView.swift in Sources */,
+				A53E68E10A8FD9F1202B63A7 /* BookStore.swift in Sources */,
+				22BCED4FFD4D354DC372DFC5 /* Database.swift in Sources */,
+				D2A016324CDBC8BC6100F4D1 /* HelperViews.swift in Sources */,
+				7E0D638CC89F24EC5E84045D /* ISBNManagerApp.swift in Sources */,
+				3918DE13D4E4491D9BD86BB5 /* ISBNService.swift in Sources */,
+				B9B68F7B14305B06F1DFD9DB /* LexileWebView.swift in Sources */,
+				36F07207C1AA6FDDA86A6F23 /* Localized.swift in Sources */,
+				EA4275607DD2AF928BFEB84C /* LocalizedTables.swift in Sources */,
+				E0372D788DDB3D93B4D0BB1E /* PaywallView.swift in Sources */,
+				441F0AB3419B5D4BFC4CA004 /* PurchaseService.swift in Sources */,
+				B1F0EBBD739FCDA438DBDCCE /* ReviewService.swift in Sources */,
+				44D30BAF29BC312855E8B62C /* RootView.swift in Sources */,
+				6FD93D017C4D556A3BDFF80D /* ScannerView.swift in Sources */,
+				AEF0673087C53126A5AD9F89 /* SettingsView.swift in Sources */,
+				AE105305EBAEB708CC904BFD /* StatisticsView.swift in Sources */,
+				DBAD3FF42CC791DE665C0DF2 /* TitleSearchSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E01A6CE9F536408B86452B61 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7A42BC2184D261F5959534A /* DatabaseMigrationTests.swift in Sources */,
+				FA3F32F7FD6B77E4DE180DDE /* ISBNServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4ADFEF47BC5D869F2ACD47BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42A2DBFEF8E52F8AEE0DF610 /* ISBNManager */;
+			targetProxy = D65E50E3BDC29397401C8C3B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		02EC8D00C8D982672964A044 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 11;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ISBNManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.daniel.isbn;
+				PRODUCT_NAME = ISBNManager;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		514EC0DBB3203D3C773BE555 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		594B4C88EB77146A183E1E21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.daniel.isbn.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ISBNManager.app/ISBNManager";
+			};
+			name = Debug;
+		};
+		BB8735CAEF0B2F8794740B00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E9A35D2BC9FE0E273AD905E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.daniel.isbn.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ISBNManager.app/ISBNManager";
+			};
+			name = Release;
+		};
+		EDD8A26F8A1205E8536D436E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 11;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ISBNManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.daniel.isbn;
+				PRODUCT_NAME = ISBNManager;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB49219AC8E0B5F1CF3C9076 /* Build configuration list for PBXProject "ISBNManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				514EC0DBB3203D3C773BE555 /* Debug */,
+				BB8735CAEF0B2F8794740B00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EFF00B144723D1C4B5E3D9EB /* Build configuration list for PBXNativeTarget "ISBNManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EDD8A26F8A1205E8536D436E /* Debug */,
+				02EC8D00C8D982672964A044 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FD65EB8F7AEA3672BB5C12E5 /* Build configuration list for PBXNativeTarget "ISBNManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				594B4C88EB77146A183E1E21 /* Debug */,
+				E9A35D2BC9FE0E273AD905E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 37C942731B51976EE4C54692 /* Project object */;
+}

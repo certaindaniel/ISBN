@@ -1,0 +1,62 @@
+name: ISBNManager
+options:
+  bundleIdPrefix: com.daniel
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+  xcodeVersion: "26.6"
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  ISBNManager:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: ISBNManager
+        excludes:
+          - "Info.plist"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.daniel.isbn
+        PRODUCT_NAME: ISBNManager
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: ISBNManager/Info.plist
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CURRENT_PROJECT_VERSION: "11"
+        MARKETING_VERSION: "1.1.0"
+        ENABLE_PREVIEWS: YES
+  ISBNManagerTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: ISBNManagerTests
+    dependencies:
+      - target: ISBNManager
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.daniel.isbn.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ISBNManager:
+    build:
+      targets:
+        ISBNManager: all
+        ISBNManagerTests: [test]
+    test:
+      targets:
+        - ISBNManagerTests
+    run:
+      config: Debug
+    archive:
+      config: Release
