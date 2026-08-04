@@ -26,10 +26,21 @@
   - ApiSource.swift, ISBNService.swift, SettingsView.swift, LocalizedTables.swift
   - Database.swift（isbn_cache 表 + 方法）、DatabaseMigrationTests.swift
 
+### Phase 3: 閱讀目標 + 連續天數
+- **Status:** complete
+- Actions taken:
+  - 新增 reading_log/settings 表、recordReading/currentStreak/bestStreak/setSetting/getSetting/finishedBooksThisYear
+  - BookStore 標記已讀時 recordReading
+  - StatisticsView 新增 goalsCard（年度目標輸入、進度、目前/最佳連續天數）
+  - 修正 calendarDay 實例方法→自由函式 dayBefore、Date(dayKey:) 非 optional 綁定
+  - 新增 testReadingStreakAndGoal，13 測試全過
+- Files created/modified:
+  - Database.swift, BookStore.swift, StatisticsView.swift, Localized.swift, LocalizedTables.swift, DatabaseMigrationTests.swift
+
 ## Test Results
 | Test | Input | Expected | Actual | Status |
 |------|-------|----------|--------|--------|
-| 單元測試(11) | xcodebuild test | 全過 | 全過 | ✓ |
+| 單元測試(13) | xcodebuild test | 全過 | 全過 | ✓ |
 | 建置 | xcodebuild build | 成功 | 成功 | ✓ |
 | 實機安裝+啟動 | devicectl install+launch | 成功 | 成功 | ✓ |
 
@@ -39,12 +50,14 @@
 | 2026-08-04 | apply_patch 長內容截斷 | 1 | 拆成小 patch |
 | 2026-08-04 | 測試 progress DEFAULT 0 致 0.0 | 1 | 改無預設值為 NULL |
 | 2026-08-04 | 簽名缺 development team | 1 | 用 team NKY2898W74 自動簽名 |
+| 2026-08-05 | calendarDay 實例方法當自由函式 | 1 | 改自由函式 dayBefore |
+| 2026-08-05 | Date(dayKey:) optional 綁定錯誤 | 1 | 改為非 optional let |
 
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 2（查書可靠度） |
-| Where am I going? | Phase 3-8 |
+| Where am I? | Phase 4（願望清單 TBR + 標籤） |
+| Where am I going? | Phase 4-8 |
 | What's the goal? | 可靠度+功能補完+commit/push+實機安裝 |
 | What have I learned? | findings.md |
 | What have I done? | 本檔案 |

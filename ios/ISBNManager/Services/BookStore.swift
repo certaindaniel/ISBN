@@ -117,6 +117,9 @@ final class BookStore: ObservableObject {
         var toSave = book
         toSave.isbn = normalized
         db.updateBook(toSave)
+        if toSave.status == "read" {
+            db.recordReading()
+        }
         await refresh()
         isLoading = false
         return true

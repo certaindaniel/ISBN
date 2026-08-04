@@ -241,4 +241,21 @@ final class DatabaseMigrationTests: XCTestCase {
         XCTAssertEqual(cached?.purchasePrice, 10.5)
         XCTAssertNil(db.cachedBook("9780000000000"))
     }
+
+    /// 閱讀連續天數與年度目標設定。
+    func testReadingStreakAndGoal() {
+        let p = file("streak.db")
+        let db = Database(dbPath: p)
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
+        db.recordReading(today)
+        db.recordReading(yesterday)
+        XCTAssertGreaterThanOrEqual(db.currentStreak(), 2)
+        XCTAssertGreaterThanOrEqual(db.bestStreak(), 2)
+
+        db.setSetting("reading_goal_year", "30")
+        XCTAssertEqual(db.getSetting("reading_goal_year"), "30")
+        db.setSetting("reading_goal_year", "40")
+        XCTAssertEqual(db.getSetting("reading_goal_year"), "40")
+    }
 }

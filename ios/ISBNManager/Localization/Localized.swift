@@ -141,6 +141,16 @@ struct Strings {
         t("search_failed", ["error": error])
     }
 
+    func goalsDone(_ done: Int, _ goal: Int) -> String {
+        t("goals_done", ["done": String(done), "goal": String(goal)])
+    }
+    func goalsStreakCurrent(_ current: Int) -> String {
+        t("goals_streak_current", ["current": String(current)])
+    }
+    func goalsStreakBest(_ best: Int) -> String {
+        t("goals_streak_best", ["best": String(best)])
+    }
+
     // MARK: - 動態多國語設定（新增）
     var settingsLanguageTitle: String { t("settings_language_title") }
     var languageSectionTitle: String { t("language_section_title") }

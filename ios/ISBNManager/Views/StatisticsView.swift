@@ -4,6 +4,7 @@ import SwiftUI
 struct StatisticsView: View {
     @EnvironmentObject var store: BookStore
     @ObservedObject private var locale = LocaleManager.shared
+    @State private var goalText = ""
     private var s: Strings { locale.strings }
 
     var body: some View {
@@ -20,10 +21,61 @@ struct StatisticsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 overviewCard
+                goalsCard
                 if store.statistics.totalBooks > 0 { completionCard }
             }
             .padding(16)
+            .onAppear {
+                goalText = Database.shared.getSetting("reading_goal_year") ?? ""
+            }
         }
+    }
+
+    // MARK: - 閱讀目標與連續天數
+
+    private var goalsCard: some View {
+        let goal = Int(goalText) ?? 20
+        let done = Database.shared.finishedBooksThisYear()
+        let percent = goal > 0 ? Double(done) / Double(goal) : 0
+        let current = Database.shared.currentStreak()
+        let best = Database.shared.bestStreak()
+
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(s.t("goals_title")).font(.headline)
+                Spacer()
+                TextField(s.t("goals_hint"), text: $goalText)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 60)
+                    .onSubmit { saveGoal(goalText) }
+            }
+
+            Text(s.goalsDone(done, goal))
+                .font(.subheadline).foregroundColor(.secondary)
+
+            ProgressView(value: min(percent, 1.0), total: 1.0)
+                .tint(.green)
+
+            Text(String(format: s.t("goals_percent"), percent * 100))
+                .font(.caption).foregroundColor(.green)
+
+            HStack {
+                Image(systemName: "flame.fill").foregroundColor(.orange)
+                Text(s.goalsStreakCurrent(current))
+                    .font(.subheadline)
+                Spacer()
+                Text(s.goalsStreakBest(best))
+                    .font(.caption).foregroundColor(.secondary)
+            }
+        }
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)).shadow(color: .black.opacity(0.1), radius: 2))
+    }
+
+    private func saveGoal(_ text: String) {
+        let goal = Int(text.trimmingCharacters(in: .whitespaces)) ?? 20
+        Database.shared.setSetting("reading_goal_year", String(goal))
     }
 
     private var overviewCard: some View {

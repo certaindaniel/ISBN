@@ -116,6 +116,7 @@ final class Database {
         }
         sqlite3_exec(db, "PRAGMA user_version = 4", nil, nil, nil)
         createCacheTable()
+        createReadingTables()
     }
 
     /// 建立本地 ISBN 查詢快取表（冪等）。成功查詢結果存這裡，重掃秒回、省 API 額度。
@@ -136,6 +137,116 @@ final class Database {
           createdAt TEXT NOT NULL
         )
         """, nil, nil, nil)
+    }
+
+    /// 建立每日閱讀記錄與設定表（冪等）。reading_log 用於連續天數計算。
+    private func createReadingTables() {
+        guard let db else { return }
+        sqlite3_exec(db, """
+        CREATE TABLE IF NOT EXISTS reading_log(
+          date TEXT PRIMARY KEY,
+          books INTEGER DEFAULT 1
+        )
+        """, nil, nil, nil)
+        sqlite3_exec(db, """
+        CREATE TABLE IF NOT EXISTS settings(
+          key TEXT PRIMARY KEY,
+          value TEXT
+        )
+        """, nil, nil, nil)
+    }
+
+    // MARK: - 閱讀記錄與設定
+
+    /// 記錄某天有閱讀活動（finish 一本書即記一次）。
+    func recordReading(_ date: Date = Date()) {
+        guard let db else { return }
+        let key = date.dayKey
+        sqlite3_exec(db, "INSERT INTO reading_log(date, books) VALUES('\(key)', 1) ON CONFLICT(date) DO UPDATE SET books = books + 1", nil, nil, nil)
+    }
+
+    /// 目前連續天數：以今天往回連續有記錄的天數（今天無記錄則為 0）。
+    func currentStreak() -> Int {
+        guard let db else { return 0 }
+        let today = Date().dayKey
+        var streak = 0
+        var cursor = Date()
+        for _ in 0..<3650 {
+            let key = cursor.dayKey
+            if key > today { cursor = dayBefore(cursor); continue }
+            if !readingLogExists(key) { break }
+            streak += 1
+            cursor = dayBefore(cursor)
+        }
+        return streak
+    }
+
+    private func readingLogExists(_ key: String) -> Bool {
+        guard let db else { return false }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT 1 FROM reading_log WHERE date = ?", -1, &stmt, nil) == SQLITE_OK else { return false }
+        sqlite3_bind_text(stmt, 1, key, -1, SQLITE_TRANSIENT)
+        defer { sqlite3_finalize(stmt) }
+        return sqlite3_step(stmt) == SQLITE_ROW
+    }
+
+    /// 歷史最佳連續天數（依日期排序連續天數的最大值）。
+    func bestStreak() -> Int {
+        guard let db else { return 0 }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT date FROM reading_log ORDER BY date", -1, &stmt, nil) == SQLITE_OK else { return 0 }
+        defer { sqlite3_finalize(stmt) }
+        var best = 0, run = 0
+        var prev: String?
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            if let ptr = sqlite3_column_text(stmt, 0) {
+                let d = String(cString: ptr)
+                if let p = prev, consecutive(p, d) {
+                    run += 1
+                } else {
+                    run = 1
+                }
+                prev = d
+                best = max(best, run)
+            }
+        }
+        return best
+    }
+
+    private func consecutive(_ a: String, _ b: String) -> Bool {
+        let da = Date(dayKey: a)
+        let db2 = Date(dayKey: b)
+        return dayBefore(db2).dayKey == a
+    }
+
+    func setSetting(_ key: String, _ value: String) {
+        guard let db else { return }
+        sqlite3_exec(db, "INSERT INTO settings(key, value) VALUES('\(key)', '\(value)') ON CONFLICT(key) DO UPDATE SET value = excluded.value", nil, nil, nil)
+    }
+
+    func getSetting(_ key: String) -> String? {
+        guard let db else { return nil }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT value FROM settings WHERE key = ?", -1, &stmt, nil) == SQLITE_OK else { return nil }
+        sqlite3_bind_text(stmt, 1, key, -1, SQLITE_TRANSIENT)
+        defer { sqlite3_finalize(stmt) }
+        if sqlite3_step(stmt) == SQLITE_ROW, let ptr = sqlite3_column_text(stmt, 0) {
+            return String(cString: ptr)
+        }
+        return nil
+    }
+
+    /// 今年完成閱讀的書籍數（finishDate 落在今年）。
+    func finishedBooksThisYear() -> Int {
+        guard let db else { return 0 }
+        let year = Calendar.current.component(.year, from: Date())
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM books WHERE finishDate LIKE '\(year)-%'", -1, &stmt, nil) == SQLITE_OK else { return 0 }
+        defer { sqlite3_finalize(stmt) }
+        if sqlite3_step(stmt) == SQLITE_ROW {
+            return Int(sqlite3_column_int64(stmt, 0))
+        }
+        return 0
     }
 
     private func lastErrorMessage(_ db: OpaquePointer?) -> String {
@@ -440,4 +551,30 @@ extension Date {
         f.formatOptions = [.withInternetDateTime]
         self = f.date(from: iso8601) ?? Date()
     }
+
+    /// yyyy-MM-dd 日期鍵。
+    var dayKey: String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd"
+        return f.string(from: self)
+    }
+
+    init(dayKey: String) {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd"
+        self = f.date(from: dayKey) ?? Date()
+    }
+
+}
+
+/// 前一天（依日期鍵計算）。
+private func dayBefore(_ date: Date) -> Date {
+    let f = DateFormatter()
+    f.locale = Locale(identifier: "en_US_POSIX")
+    f.dateFormat = "yyyy-MM-dd"
+    let key = f.string(from: date)
+    let d = f.date(from: key) ?? date
+    return Calendar.current.date(byAdding: .day, value: -1, to: d) ?? d
 }
