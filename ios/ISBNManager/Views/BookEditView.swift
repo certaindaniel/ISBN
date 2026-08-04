@@ -20,8 +20,12 @@ struct BookEditView: View {
     @State private var lexileText = ""
     @State private var purchaseDate = Date()
     @State private var saleDate: Date?
+    @State private var startDate: Date?
+    @State private var finishDate: Date?
+    @State private var progressText = ""
     @State private var language: String?
     @State private var readStatus = "unread"
+    @State private var tags = ""
     @State private var coverImageData: Data?
     @State private var showImagePicker = false
     @State private var showLexile = false
@@ -61,6 +65,7 @@ struct BookEditView: View {
                     }
 
                     readStatusSection
+                    progressSection
                     lexileSection
                     purchaseSection
                     saleSection
@@ -91,10 +96,13 @@ struct BookEditView: View {
             }
         }
         .sheet(isPresented: $showDatePicker) {
-            DatePickerSheet(initial: datePickerTarget ? purchaseDate : (saleDate ?? Date()),
-                            maxDate: Date()) { picked in
-                if datePickerTarget { purchaseDate = picked }
-                else { saleDate = picked }
+            DatePickerSheet(initial: datePickerInitial(), maxDate: Date()) { picked in
+                switch datePickerKind {
+                case .purchase: purchaseDate = picked
+                case .sale: saleDate = picked
+                case .start: startDate = picked
+                case .finish: finishDate = picked
+                }
                 showDatePicker = false
             }
         }
@@ -188,6 +196,49 @@ struct BookEditView: View {
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
     }
 
+    // MARK: - 閱讀進度
+
+    private var progressSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(s.t("progress_title")).font(.subheadline).bold()
+
+            HStack {
+                Text(s.t("progress_start"))
+                Spacer()
+                Text(startDate.map(dateString) ?? s.t("progress_none"))
+                    .foregroundColor(startDate != nil ? .primary : .secondary)
+            }
+            .padding(10)
+            .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
+            .onTapGesture { pickDate(.start) }
+
+            HStack {
+                Text(s.t("progress_finish"))
+                Spacer()
+                Text(finishDate.map(dateString) ?? s.t("progress_none"))
+                    .foregroundColor(finishDate != nil ? .primary : .secondary)
+            }
+            .padding(10)
+            .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
+            .onTapGesture { pickDate(.finish) }
+
+            if readStatus == "reading" {
+                HStack {
+                    Text(s.t("progress_percent")).foregroundColor(.secondary)
+                    Slider(value: Binding(
+                        get: { Double(progressText) ?? 0 },
+                        set: { progressText = String(Int($0)) }
+                    ), in: 0...100, step: 1)
+                    Text("\(progressText.isEmpty ? "0" : progressText)%").frame(width: 40)
+                }
+            }
+
+            TextField(s.t("tags_hint"), text: $tags).textFieldStyle(.roundedBorder)
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.purple.opacity(0.08)))
+    }
+
     private var readStatusLabel: String {
         readStatus == "read" ? s.t("filter_read") : (readStatus == "reading" ? s.t("filter_reading") : s.t("filter_unread"))
     }
@@ -224,7 +275,7 @@ struct BookEditView: View {
             }
             .padding(10)
             .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-            .onTapGesture { pickDate(true) }
+            .onTapGesture { pickDate(.purchase) }
         }
     }
 
@@ -240,9 +291,9 @@ struct BookEditView: View {
                 }
                 .padding(10)
                 .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-                .onTapGesture { pickDate(false) }
+                .onTapGesture { pickDate(.sale) }
             } else {
-                Button(s.t("set_sale_date_label")) { pickDate(false) }
+                Button(s.t("set_sale_date_label")) { pickDate(.sale) }
             }
         }
     }
@@ -293,9 +344,13 @@ struct BookEditView: View {
         description = book.description ?? ""
         purchasePriceText = String(format: "%.2f", book.purchasePrice)
         if let sale = book.salePrice { salePriceText = String(format: "%.2f", sale) }
+        startDate = book.startDate
+        finishDate = book.finishDate
+        if let p = book.progress { progressText = String(Int(p)) }
         if let lexile = book.lexileScore { lexileText = String(lexile) }
         purchaseDate = book.purchaseDate
         saleDate = book.saleDate
+        tags = book.tags ?? ""
         language = book.language
         readStatus = book.status
     }
@@ -316,6 +371,10 @@ struct BookEditView: View {
         if lexileText.trimmingCharacters(in: .whitespaces) != (book.lexileScore.map(String.init) ?? "") { return true }
         if purchaseDate != book.purchaseDate { return true }
         if saleDate != book.saleDate { return true }
+        if startDate != book.startDate { return true }
+        if finishDate != book.finishDate { return true }
+        if progressText.trimmingCharacters(in: .whitespaces) != (book.progress.map { String(Int($0)) } ?? "") { return true }
+        if tags.trimmingCharacters(in: .whitespaces) != (book.tags ?? "") { return true }
         if readStatus != book.status { return true }
         if language != book.language { return true }
         return false
@@ -336,8 +395,11 @@ struct BookEditView: View {
                         purchasePrice: Double(purchasePriceText) ?? 0,
                         salePrice: salePriceText.isEmpty ? nil : Double(salePriceText),
                         purchaseDate: purchaseDate, saleDate: saleDate,
+                        startDate: startDate, finishDate: finishDate,
+                        progress: progressText.isEmpty ? nil : Double(progressText),
                         quantity: initialBook?.quantity ?? 1, status: readStatus,
-                        language: language, lexileScore: lexileText.isEmpty ? nil : Int(lexileText))
+                        language: language, lexileScore: lexileText.isEmpty ? nil : Int(lexileText),
+                        tags: tags.isEmpty ? nil : tags.trimmingCharacters(in: .whitespaces))
         Task {
             let ok = isNew ? await store.addBook(book) : await store.updateBook(book)
             if ok {
@@ -366,13 +428,24 @@ struct BookEditView: View {
         }
     }
 
-    private func pickDate(_ isPurchase: Bool) {
-        datePickerTarget = isPurchase
+    private func pickDate(_ kind: DateKind) {
+        datePickerKind = kind
         showDatePicker = true
     }
 
+    private func datePickerInitial() -> Date {
+        switch datePickerKind {
+        case .purchase: return purchaseDate
+        case .sale: return saleDate ?? Date()
+        case .start: return startDate ?? Date()
+        case .finish: return finishDate ?? Date()
+        }
+    }
+
+    enum DateKind { case purchase, sale, start, finish }
+
     @State private var showDatePicker = false
-    @State private var datePickerTarget = true
+    @State private var datePickerKind: DateKind = .purchase
 
     private func confirmDismiss() {
         if hasUnsavedChanges() {

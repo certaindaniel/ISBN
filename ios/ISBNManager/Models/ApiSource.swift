@@ -25,7 +25,21 @@ enum ApiSource: String, CaseIterable, Identifiable {
         }
     }
 
-    var requiresKey: Bool { false }
+    var requiresKey: Bool {
+        switch self {
+        case .googleBooks, .jikeFree: return true
+        case .openLibrary, .wikipedia: return false
+        }
+    }
+
+    /// 使用者填入 API key 的儲存鍵（若需要 key）。nil 表示不需 key。
+    var keyStorageKey: String? {
+        switch self {
+        case .googleBooks: return "google_books_api_key"
+        case .jikeFree: return "jike_api_key"
+        default: return nil
+        }
+    }
 
     var baseUrl: String {
         switch self {

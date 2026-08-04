@@ -74,10 +74,14 @@ final class Database {
               salePrice REAL,
               purchaseDate TEXT NOT NULL,
               saleDate TEXT,
+              startDate TEXT,
+              finishDate TEXT,
+              progress REAL,
               quantity INTEGER DEFAULT 1,
               status TEXT DEFAULT 'unread',
               language TEXT,
               lexileScore INTEGER,
+              tags TEXT,
               createdAt TEXT NOT NULL,
               updatedAt TEXT NOT NULL
             )
@@ -96,7 +100,21 @@ final class Database {
             sqlite3_exec(db, "UPDATE books SET status='unread' WHERE status IS NULL OR status='' OR status='owned'", nil, nil, nil)
             sqlite3_exec(db, "UPDATE books SET status='read' WHERE status='sold'", nil, nil, nil)
         }
-        sqlite3_exec(db, "PRAGMA user_version = 3", nil, nil, nil)
+        if userVersion < 4 {
+            if !columnExists("startDate") {
+                sqlite3_exec(db, "ALTER TABLE books ADD COLUMN startDate TEXT", nil, nil, nil)
+            }
+            if !columnExists("finishDate") {
+                sqlite3_exec(db, "ALTER TABLE books ADD COLUMN finishDate TEXT", nil, nil, nil)
+            }
+            if !columnExists("progress") {
+                sqlite3_exec(db, "ALTER TABLE books ADD COLUMN progress REAL", nil, nil, nil)
+            }
+            if !columnExists("tags") {
+                sqlite3_exec(db, "ALTER TABLE books ADD COLUMN tags TEXT", nil, nil, nil)
+            }
+        }
+        sqlite3_exec(db, "PRAGMA user_version = 4", nil, nil, nil)
     }
 
     private func lastErrorMessage(_ db: OpaquePointer?) -> String {
@@ -113,9 +131,10 @@ final class Database {
         var stmt: OpaquePointer?
         let sql = """
         INSERT INTO books(isbn, title, author, publisher, coverUrl, description,
-                          purchasePrice, salePrice, purchaseDate, saleDate, quantity,
-                          status, language, lexileScore, createdAt, updatedAt)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                          purchasePrice, salePrice, purchaseDate, saleDate,
+                          startDate, finishDate, progress, quantity, status,
+                          language, lexileScore, tags, createdAt, updatedAt)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         """
         guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
         sqlite3_bind_text(stmt, 1, book.isbn, -1, SQLITE_TRANSIENT)
@@ -128,12 +147,16 @@ final class Database {
         sqlite3_bind_double(stmt, 8, book.salePrice ?? 0)
         sqlite3_bind_text(stmt, 9, book.purchaseDate.iso8601, -1, SQLITE_TRANSIENT)
         sqlite3_bind_text(stmt, 10, book.saleDate?.iso8601, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_int(stmt, 11, Int32(book.quantity))
-        sqlite3_bind_text(stmt, 12, book.status, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_text(stmt, 13, book.language, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_int(stmt, 14, Int32(book.lexileScore ?? 0))
-        sqlite3_bind_text(stmt, 15, now, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_text(stmt, 16, now, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 11, book.startDate?.iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 12, book.finishDate?.iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_double(stmt, 13, book.progress ?? 0)
+        sqlite3_bind_int(stmt, 14, Int32(book.quantity))
+        sqlite3_bind_text(stmt, 15, book.status, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 16, book.language, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_int(stmt, 17, Int32(book.lexileScore ?? 0))
+        sqlite3_bind_text(stmt, 18, book.tags, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 19, now, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 20, now, -1, SQLITE_TRANSIENT)
         let rc = sqlite3_step(stmt)
         sqlite3_finalize(stmt)
         if rc == SQLITE_DONE {
@@ -169,8 +192,9 @@ final class Database {
         var stmt: OpaquePointer?
         let sql = """
         UPDATE books SET isbn=?, title=?, author=?, publisher=?, coverUrl=?, description=?,
-        purchasePrice=?, salePrice=?, purchaseDate=?, saleDate=?, quantity=?, status=?,
-        language=?, lexileScore=?, updatedAt=? WHERE id=?
+        purchasePrice=?, salePrice=?, purchaseDate=?, saleDate=?,
+        startDate=?, finishDate=?, progress=?, quantity=?, status=?,
+        language=?, lexileScore=?, tags=?, updatedAt=? WHERE id=?
         """
         guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return false }
         sqlite3_bind_text(stmt, 1, book.isbn, -1, SQLITE_TRANSIENT)
@@ -183,12 +207,16 @@ final class Database {
         sqlite3_bind_double(stmt, 8, book.salePrice ?? 0)
         sqlite3_bind_text(stmt, 9, book.purchaseDate.iso8601, -1, SQLITE_TRANSIENT)
         sqlite3_bind_text(stmt, 10, book.saleDate?.iso8601, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_int(stmt, 11, Int32(book.quantity))
-        sqlite3_bind_text(stmt, 12, book.status, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_text(stmt, 13, book.language, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_int(stmt, 14, Int32(book.lexileScore ?? 0))
-        sqlite3_bind_text(stmt, 15, Date().iso8601, -1, SQLITE_TRANSIENT)
-        sqlite3_bind_int(stmt, 16, Int32(id))
+        sqlite3_bind_text(stmt, 11, book.startDate?.iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 12, book.finishDate?.iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_double(stmt, 13, book.progress ?? 0)
+        sqlite3_bind_int(stmt, 14, Int32(book.quantity))
+        sqlite3_bind_text(stmt, 15, book.status, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 16, book.language, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_int(stmt, 17, Int32(book.lexileScore ?? 0))
+        sqlite3_bind_text(stmt, 18, book.tags, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(stmt, 19, Date().iso8601, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_int(stmt, 20, Int32(id))
         let rc = sqlite3_step(stmt)
         sqlite3_finalize(stmt)
         return rc == SQLITE_DONE
@@ -292,10 +320,14 @@ final class Database {
                     salePrice: optionalDouble("salePrice"),
                     purchaseDate: Date(iso8601: text("purchaseDate") ?? ""),
                     saleDate: text("saleDate").map { Date(iso8601: $0) },
+                    startDate: text("startDate").map { Date(iso8601: $0) },
+                    finishDate: text("finishDate").map { Date(iso8601: $0) },
+                    progress: optionalDouble("progress"),
                     quantity: intVal("quantity") ?? 1,
                     status: text("status") ?? "unread",
                     language: text("language"),
-                    lexileScore: optionalInt("lexileScore"))
+                    lexileScore: optionalInt("lexileScore"),
+                    tags: text("tags"))
     }
 
     /// 依欄位名稱取得在 SELECT * 結果中的欄位索引，避免因遷移路徑不同造成的欄位順序差異。

@@ -234,6 +234,12 @@ struct BookRow: View {
                         }
                     }
                 }
+                if book.status == "reading", let p = book.progress {
+                    ProgressView(value: p, total: 100)
+                        .tint(.orange)
+                } else if book.status == "read", book.finishDate != nil {
+                    Text("✓").font(.caption).foregroundColor(.green)
+                }
             }
             Spacer()
         }

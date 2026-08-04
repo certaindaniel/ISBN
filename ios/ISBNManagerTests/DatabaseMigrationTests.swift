@@ -114,7 +114,7 @@ final class DatabaseMigrationTests: XCTestCase {
         XCTAssertEqual(sold?.status, "read")      // sold -> read
         XCTAssertEqual(sold?.purchasePrice, 20.0)
         XCTAssertEqual(sold?.salePrice, 30.0)
-        XCTAssertEqual(userVersion(p), 3)
+        XCTAssertEqual(userVersion(p), 4)
     }
 
     /// v2 既有資料庫：已有 language/lexileScore、舊狀態（owned/sold）。
@@ -134,7 +134,7 @@ final class DatabaseMigrationTests: XCTestCase {
         let sold = books.first { $0.isbn == "9780140328721" }
         XCTAssertEqual(sold?.status, "read")
         XCTAssertEqual(sold?.language, "zh")
-        XCTAssertEqual(userVersion(p), 3)
+        XCTAssertEqual(userVersion(p), 4)
     }
 
     /// v3 既有資料庫：完整 schema、狀態已對齊。遷移不應造成任何資料變動。
@@ -155,7 +155,11 @@ final class DatabaseMigrationTests: XCTestCase {
         let second = books.first { $0.isbn == "9781491927281" }
         XCTAssertEqual(second?.status, "unread")
         XCTAssertEqual(second?.language, "en")
-        XCTAssertEqual(userVersion(p), 3)
+        XCTAssertNil(second?.startDate)
+        XCTAssertNil(second?.finishDate)
+        XCTAssertNil(second?.progress)
+        XCTAssertNil(second?.tags)
+        XCTAssertEqual(userVersion(p), 4)
     }
 
     /// 模擬 sqflite 從 v1 升級到 v3 的真實路徑：language/lexileScore 被附加到表格尾端。
@@ -186,7 +190,7 @@ final class DatabaseMigrationTests: XCTestCase {
         XCTAssertEqual(sold?.status, "read")
         XCTAssertEqual(sold?.language, "zh")
         XCTAssertEqual(sold?.salePrice, 30.0)
-        XCTAssertEqual(userVersion(p), 3)
+        XCTAssertEqual(userVersion(p), 4)
     }
 
     /// 遷移後重新寫入與更新書籍，確保 CRUD 在既有資料庫上仍正常。
@@ -197,7 +201,9 @@ final class DatabaseMigrationTests: XCTestCase {
         let created = db.insertBook(Book(isbn: "9781449355739", title: "Programming Rust",
                                          author: "Blandy", publisher: "Oreilly",
                                          purchasePrice: 12.0, purchaseDate: Date(),
-                                         status: "unread", language: "en", lexileScore: 1000))
+                                         startDate: Date(), finishDate: Date(),
+                                         progress: 100, status: "read", language: "en",
+                                         lexileScore: 1000, tags: "tech,rust"))
         XCTAssertNotNil(created)
         XCTAssertEqual(db.getAllBooks().count, 3)
 
@@ -205,6 +211,10 @@ final class DatabaseMigrationTests: XCTestCase {
         XCTAssertNotNil(fetched)
         XCTAssertEqual(fetched?.language, "en")
         XCTAssertEqual(fetched?.lexileScore, 1000)
+        XCTAssertEqual(fetched?.progress, 100)
+        XCTAssertEqual(fetched?.tags, "tech,rust")
+        XCTAssertNotNil(fetched?.startDate)
+        XCTAssertNotNil(fetched?.finishDate)
 
         fetched?.status = "read"
         XCTAssertTrue(db.updateBook(fetched!))

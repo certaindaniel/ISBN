@@ -17,6 +17,7 @@ struct SettingsView: View {
         List {
             languageSection
             sourcesSection
+            keySection
             websitesSection
             purchaseSection
             rateSection
@@ -62,6 +63,29 @@ struct SettingsView: View {
             Text(s.t("settings_sources_subtitle")).font(.footnote).foregroundColor(.secondary)
             Text(s.t("settings_sources_explain")).font(.footnote).foregroundColor(.secondary)
         }
+    }
+
+    // MARK: - API Key（選填）
+
+    private var keySection: some View {
+        Section(s.t("settings_keys_title")) {
+            ForEach(ApiSource.allCases.filter { $0.requiresKey }) { source in
+                TextField(s.t("settings_key_placeholder"),
+                          text: keyBinding(for: source))
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+            }
+            Text(s.t("settings_keys_explain")).font(.footnote).foregroundColor(.secondary)
+        }
+    }
+
+    private func keyBinding(for source: ApiSource) -> Binding<String> {
+        let key = source.keyStorageKey ?? ""
+        return Binding(get: {
+            UserDefaults.standard.string(forKey: key) ?? ""
+        }, set: { newValue in
+            UserDefaults.standard.set(newValue.trimmingCharacters(in: .whitespaces), forKey: key)
+        })
     }
 
     private func binding(for source: ApiSource) -> Binding<Bool> {

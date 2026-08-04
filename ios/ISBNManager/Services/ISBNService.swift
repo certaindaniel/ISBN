@@ -175,7 +175,11 @@ extension ISBNService {
     }
 
     static func searchGoogleBooks(_ isbn: String) async throws -> Book? {
-        guard let url = URL(string: "https://www.googleapis.com/books/v1/volumes?q=isbn:\(isbn)") else { return nil }
+        var base = "https://www.googleapis.com/books/v1/volumes?q=isbn:\(isbn)&country=US"
+        if let key = storedKey(.googleBooks) {
+            base += "&key=\(key)"
+        }
+        guard let url = URL(string: base) else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
         let (data, resp) = try await URLSession.shared.data(for: req)
@@ -217,7 +221,8 @@ extension ISBNService {
     }
 
     static func searchJikeFree(_ isbn: String) async throws -> Book? {
-        guard let url = URL(string: "https://api.jike.xyz/situ/book/isbn/\(isbn)") else { return nil }
+        guard let key = storedKey(.jikeFree), !key.isEmpty else { return nil }
+        guard let url = URL(string: "https://api.jike.xyz/situ/book/isbn/\(isbn)?apikey=\(key)") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: 8)
         req.httpMethod = "GET"
         let (data, resp) = try await URLSession.shared.data(for: req)
@@ -234,6 +239,13 @@ extension ISBNService {
         let coverUrl = images?["large"] as? String ?? payload["image"] as? String
         return Book(isbn: isbn, title: title, author: author, publisher: publisher,
                     coverUrl: coverUrl, purchasePrice: 0, purchaseDate: Date(), language: "zh")
+    }
+
+    /// 讀取來源的 API key（存在 UserDefaults），無 key 回傳 nil。
+    private static func storedKey(_ source: ApiSource) -> String? {
+        guard let storageKey = source.keyStorageKey else { return nil }
+        let v = UserDefaults.standard.string(forKey: storageKey)
+        return v?.trimmingCharacters(in: .whitespaces).isEmpty == true ? nil : v?.trimmingCharacters(in: .whitespaces)
     }
 
     // MARK: - Lexile

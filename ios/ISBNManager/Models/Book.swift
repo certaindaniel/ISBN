@@ -13,16 +13,21 @@ struct Book: Identifiable, Codable {
     var salePrice: Double?
     var purchaseDate: Date
     var saleDate: Date?
+    var startDate: Date?
+    var finishDate: Date?
+    var progress: Double?
     var quantity: Int
     var status: String  // 'unread' | 'reading' | 'read'
     var language: String?
     var lexileScore: Int?
+    var tags: String?
 
     init(id: Int? = nil, isbn: String, title: String, author: String, publisher: String,
          coverUrl: String? = nil, description: String? = nil, purchasePrice: Double,
          salePrice: Double? = nil, purchaseDate: Date, saleDate: Date? = nil,
+         startDate: Date? = nil, finishDate: Date? = nil, progress: Double? = nil,
          quantity: Int = 1, status: String = "unread", language: String? = nil,
-         lexileScore: Int? = nil) {
+         lexileScore: Int? = nil, tags: String? = nil) {
         self.id = id
         self.isbn = isbn
         self.title = title
@@ -34,10 +39,14 @@ struct Book: Identifiable, Codable {
         self.salePrice = salePrice
         self.purchaseDate = purchaseDate
         self.saleDate = saleDate
+        self.startDate = startDate
+        self.finishDate = finishDate
+        self.progress = progress
         self.quantity = quantity
         self.status = status
         self.language = language
         self.lexileScore = lexileScore
+        self.tags = tags
     }
 
     var profit: Double? {
