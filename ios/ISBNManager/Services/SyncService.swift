@@ -89,7 +89,16 @@ final class SyncService {
                 if case .success(let record) = result { records.append(record) }
             }
             op.queryCompletionBlock = { (_ cursor: CKQueryOperation.Cursor?, _ error: Error?) in
-                if let error { cont.resume(throwing: error) } else { cont.resume(returning: records) }
+                if let error {
+                    // record type 尚未建立（沒有資料時 pull 會遇到 unknownItem）→ 視為無遠端資料
+                    if let ck = error as? CKError, ck.code == .unknownItem || ck.code.rawValue == 11 {
+                        cont.resume(returning: records)
+                    } else {
+                        cont.resume(throwing: error)
+                    }
+                } else {
+                    cont.resume(returning: records)
+                }
             }
             database.add(op)
         }

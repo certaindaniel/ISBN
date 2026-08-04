@@ -67,6 +67,8 @@
   - 同步失敗診斷：entitlements container 為空/截斷(isb)，CloudKit 連不上
   - 使用者在 Xcode 修正 container 為 iCloud.com.daniel.isbn，xcent 正確嵌入
   - 建置+安裝+啟動（含正確 container）；待使用者重試同步
+  - 使用者回報錯誤：icloud_pull_failed CKError 11 "Did not find record type: Book"
+  - 根因：無資料、record type 尚未建立；修正為 unknownItem/11 視為無遠端資料
 - Files created/modified:
   - ISBNManager.entitlements（Xcode 產生）、SyncService.swift（新增）、project.yml、SettingsView.swift、LocalizedTables.swift
 
