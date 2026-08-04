@@ -56,10 +56,24 @@
 - Files created/modified:
   - Database.swift, BookEditView.swift, LocalizedTables.swift, DatabaseMigrationTests.swift
 
+### Phase 5: iCloud 同步（阻塞記錄）
+- **Status:** in_progress（阻塞）
+- Actions taken:
+  - 檢查本機開發 profile：wildcard "XC iOS: *" 不含 iCloud/CloudKit entitlement
+  - 若直接加 CloudKit entitlement 會使實機簽名失敗，破壞實機安裝
+  - 需使用者先在 Xcode 開啟 iCloud capability（Apple 帳號 session 產生含 iCloud 的 profile）+ 實機 iCloud 帳號驗證
+- Files created/modified:
+  - 無（未加會破壞簽名的 entitlement）
+
+### Phase 6: 書本估價評估
+- **Status:** complete
+- Actions taken:
+  - 評估市場估價來源：CLZ 需訂閱、Amazon 需網頁刮取、無可靠免 key 乾淨 API → 不整合
+
 ## Test Results
 | Test | Input | Expected | Actual | Status |
 |------|-------|----------|--------|--------|
-| 單元測試(13) | xcodebuild test | 全過 | 全過 | ✓ |
+| 單元測試(14) | xcodebuild test | 全過 | 全過 | ✓ |
 | 建置 | xcodebuild build | 成功 | 成功 | ✓ |
 | 實機安裝+啟動 | devicectl install+launch | 成功 | 成功 | ✓ |
 
@@ -75,8 +89,8 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 5（iCloud 同步）+ Phase 6 估價 |
-| Where am I going? | Phase 5-8 |
-| What's the goal? | 可靠度+功能補完+commit/push+實機安裝 |
+| Where am I? | Phase 5（iCloud 阻塞）+ Phase 7-8（交付） |
+| Where am I going? | Phase 7-8（測試/交付）；iCloud 待 Xcode 開啟 capability |
+| What's the goal? | 可靠度+功能補完（已完成可驗證項）+commit/push+實機安裝（已做） |
 | What have I learned? | findings.md |
 | What have I done? | 本檔案 |

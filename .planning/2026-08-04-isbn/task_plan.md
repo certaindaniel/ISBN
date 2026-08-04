@@ -34,14 +34,14 @@ Phase 5（iCloud 同步）
 - **Status:** complete
 
 ### Phase 5: iCloud 同步
-- [ ] CloudKit/entitlement 設定
-- [ ] 書籍資料同步與衝突處理
-- **Status:** pending
+- [ ] CloudKit/entitlement 設定 → 阻塞：本機開發 profile 無 iCloud entitlement，需在 Xcode 開啟 iCloud capability（需使用者 Apple 帳號 session）+ 實機 iCloud 帳號驗證
+- [ ] 書籍資料同步與衝突處理 → 依上一步
+- **Status:** in_progress（阻塞，待使用者於 Xcode 開啟 iCloud）
 
 ### Phase 6: 書本估價 + AI 推薦
-- [ ] 市場估價來源整合（無可靠免 key 來源，待評估）
+- [x] 市場估價評估 → 無可靠免 key 來源（CLZ 需訂閱、Amazon 需刮取），不整合
 - [x] AI/推薦功能（本地相似書籍：依標籤/作者）
-- **Status:** in_progress
+- **Status:** complete
 
 ### Phase 7: 測試與驗證
 - [ ] 建置成功
