@@ -26,6 +26,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.daniel.isbn
         PRODUCT_NAME: ISBNManager
+        CODE_SIGN_ENTITLEMENTS: ISBNManager/ISBNManager.entitlements
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: ISBNManager/Info.plist
         TARGETED_DEVICE_FAMILY: "1,2"

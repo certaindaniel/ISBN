@@ -57,13 +57,15 @@
   - Database.swift, BookEditView.swift, LocalizedTables.swift, DatabaseMigrationTests.swift
 
 ### Phase 5: iCloud 同步（阻塞記錄）
-- **Status:** in_progress（阻塞）
+- **Status:** in_progress（已實作骨架，待實機驗證）
 - Actions taken:
-  - 檢查本機開發 profile：wildcard "XC iOS: *" 不含 iCloud/CloudKit entitlement
-  - 若直接加 CloudKit entitlement 會使實機簽名失敗，破壞實機安裝
-  - 需使用者先在 Xcode 開啟 iCloud capability（Apple 帳號 session 產生含 iCloud 的 profile）+ 實機 iCloud 帳號驗證
+  - 使用者於 Xcode 開啟 iCloud capability，profile「iOS Team Provisioning Profile: com.daniel.isbn」含 iCloud
+  - project.yml 同步 CODE_SIGN_ENTITLEMENTS=ISBNManager/ISBNManager.entitlements，重新產生 xcodeproj
+  - 新增 SyncService.swift（CloudKit 私人 DB，以 ISBN 為 record name，推本機/拉遠端合併）
+  - 設定頁新增「同步 iCloud」按鈕；sync_title/subtitle/success/failed 三語系
+  - 建置+安裝到實機（含 iCloud 簽名）；待使用者於手機觸發同步驗證
 - Files created/modified:
-  - 無（未加會破壞簽名的 entitlement）
+  - ISBNManager.entitlements（Xcode 產生）、SyncService.swift（新增）、project.yml、SettingsView.swift、LocalizedTables.swift
 
 ### Phase 6: 書本估價評估
 - **Status:** complete
@@ -89,8 +91,8 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 5（iCloud 阻塞）+ Phase 7-8（交付） |
-| Where am I going? | Phase 7-8（測試/交付）；iCloud 待 Xcode 開啟 capability |
-| What's the goal? | 可靠度+功能補完（已完成可驗證項）+commit/push+實機安裝（已做） |
+| Where am I? | Phase 5（iCloud 已實作骨架，待實機驗證） |
+| Where am I going? | Phase 5 實機驗證 → 交付 |
+| What's the goal? | 可靠度+功能補完+iCloud 同步+commit/push+實機安裝 |
 | What have I learned? | findings.md |
 | What have I done? | 本檔案 |

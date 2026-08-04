@@ -21,6 +21,7 @@ struct SettingsView: View {
             websitesSection
             purchaseSection
             rateSection
+            syncSection
         }
         .navigationTitle(s.t("settings_title"))
         .navigationBarTitleDisplayMode(.inline)
@@ -182,5 +183,34 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    // MARK: - iCloud 同步
+
+    private var syncSection: some View {
+        Section {
+            Button {
+                Task { await runSync() }
+            } label: {
+                HStack {
+                    Image(systemName: "icloud").foregroundColor(.blue)
+                    VStack(alignment: .leading) {
+                        Text(s.t("sync_title")).foregroundColor(.primary)
+                        Text(s.t("sync_subtitle")).font(.caption).foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    if let msg = syncMessage {
+                        Text(msg).font(.caption).foregroundColor(msg == s.t("sync_success") ? .green : .red)
+                    }
+                }
+            }
+        }
+    }
+
+    @State private var syncMessage: String?
+
+    private func runSync() async {
+        let error = await SyncService.shared.sync()
+        syncMessage = error == nil ? s.t("sync_success") : s.t("sync_failed")
     }
 }

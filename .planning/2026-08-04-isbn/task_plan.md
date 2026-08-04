@@ -4,7 +4,7 @@
 完成 ISBN 書籍管理 App 的查書可靠度提升（本地快取、NLC 來源、429/503 重試、評估 NLCISBNPlugin），並補完先前未實作的功能（閱讀目標/連續天數、願望清單 TBR、iCloud 同步、書本估價、AI 推薦），全部建置+測試通過，commit + push，並安裝到實機。
 
 ## Current Phase
-完成（可驗證項全交付；iCloud 阻塞待 Xcode 開啟 capability）
+Phase 5（iCloud 同步已實作骨架，實機驗證待使用者）
 
 ## Phases
 
@@ -34,9 +34,11 @@
 - **Status:** complete
 
 ### Phase 5: iCloud 同步
-- [ ] CloudKit/entitlement 設定 → 阻塞：本機開發 profile 無 iCloud entitlement，需在 Xcode 開啟 iCloud capability（需使用者 Apple 帳號 session）+ 實機 iCloud 帳號驗證
-- [ ] 書籍資料同步與衝突處理 → 依上一步
-- **Status:** in_progress（阻塞，待使用者於 Xcode 開啟 iCloud）
+- [x] CloudKit/entitlement 設定 → 使用者於 Xcode 開啟 iCloud，profile 含 iCloud；project.yml 同步 CODE_SIGN_ENTITLEMENTS
+- [x] SyncService.swift（CloudKit 推/拉+合併，以 ISBN 為 record name）+ 設定頁同步按鈕
+- [x] 建置+安裝到實機（含 iCloud 簽名）
+- [ ] 實機觸發同步驗證 → 待使用者於手機按「同步 iCloud」
+- **Status:** in_progress（實作完成，待實機驗證）
 
 ### Phase 6: 書本估價 + AI 推薦
 - [x] 市場估價評估 → 無可靠免 key 來源（CLZ 需訂閱、Amazon 需刮取），不整合
