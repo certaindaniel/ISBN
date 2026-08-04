@@ -249,6 +249,27 @@ final class Database {
         return 0
     }
 
+    /// 相似書籍推薦：依作者相同或標籤重疊，排除自己，回傳最多 limit 本。
+    func similarBooks(to book: Book, limit: Int = 6) -> [Book] {
+        let tags = (book.tags ?? "").split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        var result: [Book] = []
+        for other in getAllBooks() {
+            if let id = book.id, other.id == id { continue }
+            if other.isbn == book.isbn { continue }
+            var score = 0
+            if !other.author.isEmpty, other.author == book.author { score += 2 }
+            if let ot = other.tags {
+                for t in ot.split(separator: ",").map({ $0.trimmingCharacters(in: .whitespaces) })
+                where tags.contains(t) { score += 1 }
+            }
+            if score > 0 {
+                result.append(other)
+                if result.count >= limit { break }
+            }
+        }
+        return result
+    }
+
     private func lastErrorMessage(_ db: OpaquePointer?) -> String {
         guard let db else { return "unknown" }
         return String(cString: sqlite3_errmsg(db))

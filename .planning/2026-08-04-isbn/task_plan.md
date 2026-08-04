@@ -39,9 +39,9 @@ Phase 5（iCloud 同步）
 - **Status:** pending
 
 ### Phase 6: 書本估價 + AI 推薦
-- [ ] 市場估價來源整合
-- [ ] AI/推薦功能（輕量）
-- **Status:** pending
+- [ ] 市場估價來源整合（無可靠免 key 來源，待評估）
+- [x] AI/推薦功能（本地相似書籍：依標籤/作者）
+- **Status:** in_progress
 
 ### Phase 7: 測試與驗證
 - [ ] 建置成功

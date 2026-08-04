@@ -258,4 +258,22 @@ final class DatabaseMigrationTests: XCTestCase {
         db.setSetting("reading_goal_year", "40")
         XCTAssertEqual(db.getSetting("reading_goal_year"), "40")
     }
+
+    /// 相似書籍推薦：依作者/標籤重疊，排除自己。
+    func testSimilarBooksRecommendation() {
+        let p = file("similar.db")
+        let db = Database(dbPath: p)
+        let b1 = Book(isbn: "9780140328721", title: "1984", author: "Orwell", publisher: "Penguin",
+                      purchasePrice: 10, purchaseDate: Date(), tags: "dystopian")
+        let b2 = Book(isbn: "9781781390000", title: "Animal Farm", author: "Orwell", publisher: "Penguin",
+                      purchasePrice: 10, purchaseDate: Date(), tags: "allegory")
+        let b3 = Book(isbn: "9780000000000", title: "Brave New World", author: "Huxley", publisher: "x",
+                      purchasePrice: 10, purchaseDate: Date(), tags: "dystopian")
+        db.insertBook(b1); db.insertBook(b2); db.insertBook(b3)
+        let recs = db.similarBooks(to: b1)
+        XCTAssertEqual(recs.count, 2)
+        let isbns = recs.map { $0.isbn }
+        XCTAssertTrue(isbns.contains("9781781390000"))  // 同作者 Orwell
+        XCTAssertTrue(isbns.contains("9780000000000"))  // 同標籤 dystopian
+    }
 }

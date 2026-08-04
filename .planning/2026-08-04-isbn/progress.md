@@ -47,6 +47,15 @@
 - Files created/modified:
   - BookEditView.swift, BookListView.swift, LocalizedTables.swift
 
+### Phase 6（部分）: 本地 AI 相似書籍推薦
+- **Status:** complete
+- Actions taken:
+  - Database.similarBooks(to:)：依作者/標籤重疊、排除自己與同 isbn
+  - BookEditView 新增「相似書籍」推薦區塊
+  - 新增 similar_title 三語系鍵、testSimilarBooksRecommendation，14 測試全過
+- Files created/modified:
+  - Database.swift, BookEditView.swift, LocalizedTables.swift, DatabaseMigrationTests.swift
+
 ## Test Results
 | Test | Input | Expected | Actual | Status |
 |------|-------|----------|--------|--------|
@@ -66,7 +75,7 @@
 ## 5-Question Reboot Check
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 5（iCloud 同步） |
+| Where am I? | Phase 5（iCloud 同步）+ Phase 6 估價 |
 | Where am I going? | Phase 5-8 |
 | What's the goal? | 可靠度+功能補完+commit/push+實機安裝 |
 | What have I learned? | findings.md |

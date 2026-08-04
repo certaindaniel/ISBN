@@ -70,6 +70,7 @@ struct BookEditView: View {
                     purchaseSection
                     saleSection
                     profitSection
+                    similarSection
                     saveButton
                 }
                 .padding(16)
@@ -324,6 +325,25 @@ struct BookEditView: View {
             }
             .padding(16)
             .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
+        )
+    }
+
+    // MARK: - 相似書籍推薦
+
+    private var similarSection: some View {
+        guard let book = initialBook else { return AnyView(EmptyView()) }
+        let similar = Database.shared.similarBooks(to: book, limit: 5)
+        if similar.isEmpty { return AnyView(EmptyView()) }
+        return AnyView(
+            VStack(alignment: .leading, spacing: 6) {
+                Text(s.t("similar_title")).font(.subheadline).bold()
+                ForEach(similar) { b in
+                    Text("• \(b.title.isEmpty ? s.t("unknown_title") : b.title)")
+                        .font(.caption).foregroundColor(.secondary)
+                }
+            }
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color.indigo.opacity(0.08)))
         )
     }
 
