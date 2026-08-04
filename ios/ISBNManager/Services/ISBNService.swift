@@ -125,7 +125,7 @@ struct ISBNService {
 extension ISBNService {
     // MARK: - 查詢
 
-    /// 多來源依序查詢 ISBN。
+    /// 多來源查詢 ISBN：平行呼叫所有啟用來源，依使用者偏好順序取第一個成功結果。
     static func searchByIsbn(_ rawIsbn: String, sources: [ApiSource],
                              onSourceStart: ((ApiSource) -> Void)? = nil) async throws -> Book? {
         let isbn = normalizeIsbn(rawIsbn)
@@ -136,18 +136,35 @@ extension ISBNService {
             throw IsbnError(message: "無效的 ISBN 格式", code: "isbn_error_invalid_format")
         }
         let active = sources.isEmpty ? ApiSource.defaultEnabled() : sources
-        for source in active {
-            onSourceStart?(source)
-            var result: Book?
-            switch source {
-            case .googleBooks: result = try? await searchGoogleBooks(isbn)
-            case .openLibrary: result = try? await searchOpenLibrary(isbn)
-            case .wikipedia: result = try? await searchWikipedia(isbn)
-            case .jikeFree: result = try? await searchJikeFree(isbn)
+        var results: [ApiSource: Book] = [:]
+        await withTaskGroup(of: (ApiSource, Book?).self) { group in
+            for source in active {
+                onSourceStart?(source)
+                group.addTask {
+                    let book = await search(source, isbn)
+                    return (source, book)
+                }
             }
-            if let result { return result }
+            for await (source, book) in group {
+                if let book { results[source] = book }
+            }
+        }
+        for source in active {
+            if let book = results[source] { return book }
         }
         return nil
+    }
+
+    /// 依來源呼叫對應的查詢函式。
+    private static func search(_ source: ApiSource, _ isbn: String) async -> Book? {
+        switch source {
+        case .googleBooks: return try? await searchGoogleBooks(isbn)
+        case .openLibrary: return try? await searchOpenLibrary(isbn)
+        case .wikipedia: return try? await searchWikipedia(isbn)
+        case .jikeFree: return try? await searchJikeFree(isbn)
+        case .wikidata: return try? await searchWikidata(isbn)
+        case .libraryOfCongress: return try? await searchLibraryOfCongress(isbn)
+        }
     }
 
     static func searchOpenLibrary(_ isbn: String) async throws -> Book? {
@@ -239,6 +256,73 @@ extension ISBNService {
         let coverUrl = images?["large"] as? String ?? payload["image"] as? String
         return Book(isbn: isbn, title: title, author: author, publisher: publisher,
                     coverUrl: coverUrl, purchasePrice: 0, purchaseDate: Date(), language: "zh")
+    }
+
+    // MARK: - Wikidata（免 key 開放資料）
+
+    static func searchWikidata(_ isbn: String) async throws -> Book? {
+        let query = """
+        SELECT ?title ?author ?publisher ?cover WHERE {
+          ?item wdt:P212 "\(isbn)".
+          OPTIONAL { ?item rdfs:label ?title }
+          OPTIONAL { ?item wdt:P50 ?a . ?a rdfs:label ?author }
+          OPTIONAL { ?item wdt:P123 ?p . ?p rdfs:label ?publisher }
+          OPTIONAL { ?item wdt:P18 ?cover }
+        } LIMIT 1
+        """
+        guard var comps = URLComponents(string: "https://query.wikidata.org/sparql") else { return nil }
+        comps.queryItems = [URLQueryItem(name: "query", value: query), URLQueryItem(name: "format", value: "json")]
+        guard let url = comps.url else { return nil }
+        var req = URLRequest(url: url, timeoutInterval: timeout)
+        req.httpMethod = "GET"
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+        guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let bindings = (obj["results"] as? [String: Any])?["bindings"] as? [Any],
+              let first = bindings.first as? [String: Any] else { return nil }
+        let title = wikidataValue(first, "title") ?? ""
+        let author = wikidataValue(first, "author") ?? ""
+        let publisher = wikidataValue(first, "publisher") ?? ""
+        let cover = wikidataValue(first, "cover")
+        guard !title.isEmpty else { return nil }
+        let language = detectLanguage(title: title, author: author)
+        return Book(isbn: isbn, title: title, author: author, publisher: publisher,
+                    coverUrl: cover, purchasePrice: 0, purchaseDate: Date(), language: language)
+    }
+
+    private static func wikidataValue(_ row: [String: Any], _ key: String) -> String? {
+        (row[key] as? [String: Any])?["value"] as? String
+    }
+
+    // MARK: - Library of Congress（免 key 開放資料）
+
+    static func searchLibraryOfCongress(_ isbn: String) async throws -> Book? {
+        guard let url = URL(string: "https://www.loc.gov/search/?q=isbn:\(isbn)&fo=json") else { return nil }
+        var req = URLRequest(url: url, timeoutInterval: timeout)
+        req.httpMethod = "GET"
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+        guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let results = obj["results"] as? [Any], !results.isEmpty,
+              let first = results.first as? [String: Any] else { return nil }
+        let title = (first["title"] as? String ?? "").replacingOccurrences(of: "\n", with: "")
+        let author = locContributorName(first["contributor"])
+        let publisher = (first["publisher"] as? String ?? "").replacingOccurrences(of: "\n", with: "")
+        let cover = first["image_url"] as? String
+        guard !title.isEmpty else { return nil }
+        let language = detectLanguage(title: title, author: author)
+        return Book(isbn: isbn, title: title, author: author, publisher: publisher,
+                    coverUrl: cover, purchasePrice: 0, purchaseDate: Date(), language: language)
+    }
+
+    private static func locContributorName(_ value: Any?) -> String {
+        if let dict = value as? [String: Any] {
+            return dict["name"] as? String ?? ""
+        }
+        if let arr = value as? [Any], let first = arr.first as? [String: Any] {
+            return first["name"] as? String ?? ""
+        }
+        return ""
     }
 
     /// 讀取來源的 API key（存在 UserDefaults），無 key 回傳 nil。

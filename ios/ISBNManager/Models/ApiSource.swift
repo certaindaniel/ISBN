@@ -6,6 +6,8 @@ enum ApiSource: String, CaseIterable, Identifiable {
     case openLibrary = "openLibrary"
     case wikipedia = "wikipedia"
     case jikeFree = "jikeFree"
+    case wikidata = "wikidata"
+    case libraryOfCongress = "libraryOfCongress"
 
     var id: String { rawValue }
 
@@ -15,12 +17,14 @@ enum ApiSource: String, CaseIterable, Identifiable {
         case .openLibrary: return "Open Library"
         case .wikipedia: return "Wikipedia"
         case .jikeFree: return "Jike Free"
+        case .wikidata: return "Wikidata"
+        case .libraryOfCongress: return "Library of Congress"
         }
     }
 
     var enabledByDefault: Bool {
         switch self {
-        case .googleBooks, .openLibrary: return true
+        case .googleBooks, .openLibrary, .wikidata, .libraryOfCongress: return true
         case .wikipedia, .jikeFree: return false
         }
     }
@@ -28,7 +32,7 @@ enum ApiSource: String, CaseIterable, Identifiable {
     var requiresKey: Bool {
         switch self {
         case .googleBooks, .jikeFree: return true
-        case .openLibrary, .wikipedia: return false
+        case .openLibrary, .wikipedia, .wikidata, .libraryOfCongress: return false
         }
     }
 
@@ -47,6 +51,8 @@ enum ApiSource: String, CaseIterable, Identifiable {
         case .openLibrary: return "https://openlibrary.org/api/books?bibkeys=ISBN:"
         case .wikipedia: return "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="
         case .jikeFree: return "https://api.jike.xyz/situ/book/isbn/"
+        case .wikidata: return "https://query.wikidata.org/sparql"
+        case .libraryOfCongress: return "https://www.loc.gov/search/"
         }
     }
 
@@ -57,6 +63,8 @@ enum ApiSource: String, CaseIterable, Identifiable {
         case .openLibrary: return s.t("settings_openlibrary_title")
         case .wikipedia: return s.t("settings_wikipedia_title")
         case .jikeFree: return s.t("settings_jike_title")
+        case .wikidata: return s.t("settings_wikidata_title")
+        case .libraryOfCongress: return s.t("settings_loc_title")
         }
     }
 
@@ -67,6 +75,8 @@ enum ApiSource: String, CaseIterable, Identifiable {
         case .openLibrary: return s.t("settings_openlibrary_subtitle")
         case .wikipedia: return s.t("settings_wikipedia_subtitle")
         case .jikeFree: return s.t("settings_jike_subtitle")
+        case .wikidata: return s.t("settings_wikidata_subtitle")
+        case .libraryOfCongress: return s.t("settings_loc_subtitle")
         }
     }
 
