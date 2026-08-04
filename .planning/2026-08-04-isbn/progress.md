@@ -64,6 +64,9 @@
   - 新增 SyncService.swift（CloudKit 私人 DB，以 ISBN 為 record name，推本機/拉遠端合併）
   - 設定頁新增「同步 iCloud」按鈕；sync_title/subtitle/success/failed 三語系
   - 建置+安裝到實機（含 iCloud 簽名）；待使用者於手機觸發同步驗證
+  - 同步失敗診斷：entitlements container 為空/截斷(isb)，CloudKit 連不上
+  - 使用者在 Xcode 修正 container 為 iCloud.com.daniel.isbn，xcent 正確嵌入
+  - 建置+安裝+啟動（含正確 container）；待使用者重試同步
 - Files created/modified:
   - ISBNManager.entitlements（Xcode 產生）、SyncService.swift（新增）、project.yml、SettingsView.swift、LocalizedTables.swift
 
