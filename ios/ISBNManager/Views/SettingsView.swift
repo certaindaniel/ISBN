@@ -200,11 +200,19 @@ struct SettingsView: View {
                     }
                     Spacer()
                     if let msg = syncMessage {
-                        Text(msg).font(.caption).foregroundColor(msg == s.t("sync_success") ? .green : .red)
+                        Button {
+                            copyMessage(msg)
+                        } label: {
+                            Text(msg).font(.caption).foregroundColor(msg == s.t("sync_success") ? .green : .red)
+                        }
                     }
                 }
             }
         }
+    }
+
+    private func copyMessage(_ msg: String) {
+        UIPasteboard.general.string = msg
     }
 
     @State private var syncMessage: String?

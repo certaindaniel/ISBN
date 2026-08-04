@@ -1,11 +1,13 @@
 import Foundation
 import CloudKit
+import os
 
 /// CloudKit 同步服務：把書籍資料同步到使用者私人 iCloud 資料庫。
 /// 以 ISBN 作為 CloudKit record 名稱（跨裝置穩定）。推本機、拉遠端並合併。
 @MainActor
 final class SyncService {
     static let shared = SyncService()
+    private let logger = Logger(subsystem: "com.daniel.isbn", category: "sync")
     private let container = CKContainer(identifier: "iCloud.com.daniel.isbn")
     private var database: CKDatabase { container.privateCloudDatabase }
 
@@ -17,10 +19,14 @@ final class SyncService {
         do {
             let status = try await container.accountStatus()
             if status != .available {
-                return "account_status_\(status.rawValue)"
+                let msg = "account_status_\(status.rawValue)"
+                logger.error("\(msg, privacy: .public)")
+                return msg
             }
         } catch {
-            return "account_status_check_failed: \(cloudKitErrorDetail(error))"
+            let msg = "account_status_check_failed: \(cloudKitErrorDetail(error))"
+            logger.error("\(msg, privacy: .public)")
+            return msg
         }
 
         let localBooks = Database.shared.getAllBooks()
@@ -32,7 +38,9 @@ final class SyncService {
             do {
                 try await saveRecords(records)
             } catch {
-                return "icloud_push_failed: \(cloudKitErrorDetail(error))"
+                let msg = "icloud_push_failed: \(cloudKitErrorDetail(error))"
+                logger.error("\(msg, privacy: .public)")
+                return msg
             }
         }
 
@@ -45,8 +53,11 @@ final class SyncService {
                 }
             }
         } catch {
-            return "icloud_pull_failed: \(cloudKitErrorDetail(error))"
+            let msg = "icloud_pull_failed: \(cloudKitErrorDetail(error))"
+            logger.error("\(msg, privacy: .public)")
+            return msg
         }
+        logger.info("sync_success")
         return nil
     }
 
