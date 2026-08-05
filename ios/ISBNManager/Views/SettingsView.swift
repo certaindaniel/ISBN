@@ -149,7 +149,7 @@ struct SettingsView: View {
     // MARK: - 解鎖與評分
 
     private var purchaseSection: some View {
-        Section {
+        Section(s.t("settings_section_unlock")) {
             Button {
                 showPaywall = true
             } label: {
@@ -170,7 +170,7 @@ struct SettingsView: View {
     }
 
     private var rateSection: some View {
-        Section {
+        Section(s.t("settings_section_review")) {
             Button {
                 Task { await ReviewService.openStoreListing() }
             } label: {
@@ -189,7 +189,7 @@ struct SettingsView: View {
     // MARK: - iCloud 同步
 
     private var syncSection: some View {
-        Section {
+        Section(s.t("settings_section_sync")) {
             Button {
                 Task { await runSync() }
             } label: {

@@ -113,6 +113,19 @@ struct StatisticsView: View {
                 Spacer()
                 Text(String(format: "%.1f%%", percent)).bold().foregroundColor(.green)
             }
+            HStack {
+                Spacer()
+                ZStack {
+                    Circle().stroke(Color(.systemGray5), lineWidth: 10)
+                    Circle()
+                        .trim(from: 0, to: min(percent / 100, 1))
+                        .stroke(Color.green, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                    Text(String(format: "%.0f%%", percent)).font(.headline).bold().foregroundColor(.green)
+                }
+                .frame(width: 72, height: 72)
+                Spacer()
+            }
             HStack(spacing: 0) {
                 Rectangle().fill(Color.green).frame(width: CGFloat(read) / CGFloat(total) * 300, height: 10)
                 Rectangle().fill(Color.orange).frame(width: CGFloat(reading) / CGFloat(total) * 300, height: 10)

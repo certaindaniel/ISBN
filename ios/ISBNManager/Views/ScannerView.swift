@@ -227,7 +227,9 @@ struct ScannerView: View {
                 Image(systemName: torchOn ? "flashlight.fill" : "flashlight")
             }
             .buttonStyle(.bordered)
+            .tint(torchOn ? Color.yellow : Color.accentColor)
             .accessibilityLabel(s.t("torch"))
+            .accessibilityValue(torchOn ? s.t("torch_on") : s.t("torch_off"))
         }
     }
 

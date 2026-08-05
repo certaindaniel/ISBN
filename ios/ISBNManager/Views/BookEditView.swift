@@ -30,6 +30,7 @@ struct BookEditView: View {
     @State private var showImagePicker = false
     @State private var showLexile = false
     @State private var toast: String?
+    @State private var formError: String?
     @State private var showUnsavedConfirm = false
 
     private var s: Strings { locale.strings }
@@ -149,6 +150,8 @@ struct BookEditView: View {
                             Text(s.t("take_photo")).font(.caption).foregroundColor(.accentColor)
                         })
                         .onTapGesture { showImagePicker = true }
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel(s.t("take_photo"))
                 }
                 if coverImageData != nil || initialBook?.coverUrl != nil {
                     Button { showImagePicker = true } label: {
@@ -184,7 +187,7 @@ struct BookEditView: View {
     }
 
     private var placeholderCover: some View {
-        RoundedRectangle(cornerRadius: 8).fill(Color(.systemGray4)).frame(width: 120, height: 180).overlay(Image(systemName: "book").foregroundColor(.gray))
+        RoundedRectangle(cornerRadius: 8).fill(Color(.systemGray4)).frame(width: 120, height: 180).overlay(Image(systemName: "book").foregroundColor(.secondary))
     }
 
     // MARK: - 閱讀狀態
@@ -236,6 +239,8 @@ struct BookEditView: View {
                         get: { Double(progressText) ?? 0 },
                         set: { progressText = String(Int($0)) }
                     ), in: 0...100, step: 1)
+                    .accessibilityLabel(s.t("progress_percent"))
+                    .accessibilityValue(progressText.isEmpty ? "0%" : "\(progressText)%")
                     Text("\(progressText.isEmpty ? "0" : progressText)%").frame(width: 40)
                 }
             }
@@ -355,14 +360,21 @@ struct BookEditView: View {
     }
 
     private var saveButton: some View {
-        Button {
-            save()
-        } label: {
-            Text(s.t("save_book_button"))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor))
-                .foregroundColor(.white)
+        VStack(spacing: 8) {
+            if let formError {
+                Text(formError)
+                    .font(.footnote).foregroundColor(.red)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Button {
+                save()
+            } label: {
+                Text(s.t("save_book_button"))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor))
+                    .foregroundColor(.white)
+            }
         }
     }
 
@@ -414,8 +426,11 @@ struct BookEditView: View {
     }
 
     private func save() {
+        formError = nil
         guard !title.isEmpty, !author.isEmpty, !publisher.isEmpty, !isbn.isEmpty, !purchasePriceText.isEmpty else {
-            toast = s.t("pleaseFillRequiredFields")
+            let msg = s.t("pleaseFillRequiredFields")
+            formError = msg
+            toast = msg
             return
         }
         let coverURL = coverImageData != nil ? saveCoverImage() : initialBook?.coverUrl

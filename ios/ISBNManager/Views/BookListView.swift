@@ -49,6 +49,7 @@ struct BookListView: View {
                 }
             }
             .navigationTitle(s.t("my_books_title"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
@@ -83,7 +84,7 @@ struct BookListView: View {
                 })
             }
             .overlay(alignment: .bottomTrailing) {
-                if store.books.isEmpty && !store.isLoading {
+                if !store.isLoading {
                     addButton
                 }
             }
@@ -119,6 +120,7 @@ struct BookListView: View {
             } label: {
                 Image(systemName: "xmark").foregroundColor(.red)
             }
+            .accessibilityLabel(s.t("cancel"))
         }
         .padding(10)
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.red.opacity(0.1)))
@@ -157,7 +159,14 @@ struct BookListView: View {
             Image(systemName: "books.vertical")
                 .font(.system(size: 48)).foregroundColor(.accentColor)
             Text(s.t("filter_no_books")).font(.title3)
-            Text(s.t("empty_hint")).font(.subheadline).foregroundColor(.gray)
+            Text(s.t("empty_hint")).font(.subheadline).foregroundColor(.secondary)
+            HStack(spacing: 10) {
+                Button(s.t("scan_title")) { showScanner = true }
+                    .buttonStyle(.borderedProminent)
+                Button(s.t("search_by_title_title")) { showTitleSearch = true }
+                    .buttonStyle(.bordered)
+            }
+            .padding(.top, 4)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 60)
@@ -175,7 +184,7 @@ struct BookListView: View {
                 .foregroundColor(.white)
                 .shadow(radius: 4)
         }
-        .padding(.trailing, 20).padding(.bottom, 16)
+        .padding(.trailing, 20).padding(.bottom, 24)
     }
 
     private func searchAndEdit(_ isbn: String) async {
@@ -228,7 +237,7 @@ struct BookRow: View {
     var body: some View {
         HStack(spacing: 12) {
             coverImage
-                .frame(width: 44, height: 66)
+                .frame(width: 52, height: 78)
                 .background(RoundedRectangle(cornerRadius: 4).fill(Color(.systemGray4)))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
 
@@ -247,8 +256,11 @@ struct BookRow: View {
                     }
                 }
                 if book.status == "reading", let p = book.progress {
-                    ProgressView(value: p, total: 100)
-                        .tint(.orange)
+                    HStack(spacing: 6) {
+                        ProgressView(value: p, total: 100)
+                            .tint(.orange)
+                        Text("\(Int(p))%").font(.caption2).foregroundColor(.secondary)
+                    }
                 } else if book.status == "read", book.finishDate != nil {
                     Text("✓").font(.caption).foregroundColor(.green)
                 }
@@ -259,7 +271,7 @@ struct BookRow: View {
             }
             Spacer()
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 8)
         .contextMenu {
             Button(s.t("edit")) { onEdit() }
             Button(s.t("delete"), role: .destructive) { onDelete() }
@@ -273,23 +285,28 @@ struct BookRow: View {
                 if let uiImage = UIImage(contentsOfFile: path) {
                     Image(uiImage: uiImage).resizable().scaledToFill()
                 } else {
-                    Image(systemName: "book").foregroundColor(.gray)
+                    Image(systemName: "book").foregroundColor(.secondary)
                 }
             } else {
                 AsyncImage(url: URL(string: url)) { phase in
-                    if let img = phase.image { img.resizable().scaledToFill() }
-                    else { Image(systemName: "book").foregroundColor(.gray) }
+                    if let img = phase.image {
+                        img.resizable().scaledToFill()
+                    } else if phase.error != nil {
+                        Image(systemName: "book").foregroundColor(.secondary)
+                    } else {
+                        ProgressView().tint(.accentColor)
+                    }
                 }
             }
         } else {
-            Image(systemName: "book").foregroundColor(.gray)
+            Image(systemName: "book").foregroundColor(.secondary)
         }
     }
 
     private var statusBadge: some View {
         let color: Color = book.status == "read" ? .green
             : (book.status == "reading" ? .orange
-            : (book.status == "wishlist" ? .purple : .gray))
+            : (book.status == "wishlist" ? .accentColor : .gray))
         let label = book.status == "read" ? s.t("filter_read")
             : (book.status == "reading" ? s.t("filter_reading")
             : (book.status == "wishlist" ? s.t("filter_wishlist") : s.t("filter_unread")))
