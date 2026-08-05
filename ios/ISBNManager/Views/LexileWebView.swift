@@ -41,7 +41,9 @@ struct LexileWebView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button { pasteFromClipboard() } label: { Image(systemName: "doc.on.clipboard") }
+                            .accessibilityLabel(s.t("lexile_paste"))
                         Button { reloadTrigger.toggle() } label: { Image(systemName: "arrow.clockwise") }
+                            .accessibilityLabel(s.t("lexile_reload"))
                     }
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button(s.t("lexile_manual_label")) { showManual = true }

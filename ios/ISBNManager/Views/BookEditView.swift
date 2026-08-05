@@ -152,8 +152,13 @@ struct BookEditView: View {
                 }
                 if coverImageData != nil || initialBook?.coverUrl != nil {
                     Button { showImagePicker = true } label: {
-                        Image(systemName: "camera").padding(6).background(Circle().fill(Color.accentColor)).foregroundColor(.white)
+                        Image(systemName: "camera")
+                            .font(.system(size: 18))
+                            .frame(width: 44, height: 44)
+                            .background(Circle().fill(Color.accentColor))
+                            .foregroundColor(.white)
                     }
+                    .accessibilityLabel(s.t("take_photo"))
                     .offset(x: -8, y: -8)
                 }
             }
@@ -260,6 +265,8 @@ struct BookEditView: View {
                 Button {
                     showLexile = true
                 } label: { Image(systemName: "open.in.new") }
+                    .frame(width: 44, height: 44)
+                    .accessibilityLabel(s.t("lexile_title"))
             }
             if language == "en" {
                 Text(s.t("lexile_manual_title")).font(.caption).foregroundColor(.blue)

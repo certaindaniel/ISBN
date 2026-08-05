@@ -28,6 +28,7 @@ struct SettingsView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showApiTest = true } label: { Image(systemName: "ladybug") }
+                .accessibilityLabel(s.t("api_test_title"))
             }
         }
         .navigationDestination(isPresented: $showApiTest) { ApiTestView() }
