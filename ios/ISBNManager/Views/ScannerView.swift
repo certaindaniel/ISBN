@@ -125,6 +125,7 @@ struct ScannerView: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button { showSettings = true } label: { Image(systemName: "gearshape") }
+                .accessibilityLabel(s.t("settings_title"))
             }
         }
         .navigationDestination(isPresented: $showSettings) { SettingsView() }
@@ -161,6 +162,7 @@ struct ScannerView: View {
                 Image(systemName: torchOn ? "flashlight.fill" : "flashlight")
             }
             .buttonStyle(.bordered)
+            .accessibilityLabel(s.t("torch"))
         }
     }
 

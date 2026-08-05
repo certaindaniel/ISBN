@@ -60,6 +60,7 @@ struct BookListView: View {
                     } label: {
                         Image(systemName: "gearshape")
                     }
+                    .accessibilityLabel(s.t("settings_title"))
                 }
             }
             .navigationDestination(isPresented: $showSettings) { SettingsView() }
@@ -136,14 +137,16 @@ struct BookListView: View {
     }
 
     private func filterChip(_ value: String, _ label: String) -> some View {
-        Button {
+        let isSelected = filterStatus == value
+        return Button {
             filterStatus = value
         } label: {
             Text(label)
                 .font(.subheadline)
                 .padding(.horizontal, 10).padding(.vertical, 5)
-                .background(Capsule().fill(filterStatus == value ? Color.accentColor : Color(.systemGray5)))
-                .foregroundColor(filterStatus == value ? .white : .primary)
+                .background(Capsule().fill(isSelected ? Color.accentColor : Color(.systemGray5)))
+                .foregroundStyle(isSelected ? .white : .primary)
+                .overlay(Capsule().stroke(isSelected ? Color.clear : Color(.systemGray4), lineWidth: 1))
         }
         .buttonStyle(.plain)
     }

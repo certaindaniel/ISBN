@@ -72,6 +72,8 @@
   - 掃描器失效根因：startSession 未請求相機權限；改為 requestAccess 後再啟動
   - ISBN/EAN 判別擴充：新增 isEanButNotIsbn（EAN-13 非978/979 + EAN-8/UPC-E），訊息更清楚
   - 新增 testEanButNotIsbn，15 測試全過；建置+安裝到實機
+  - UI/UX（ui-ux-pro-max 技能）：AccentColor 改紫色 #7C3AED、filter chip 選取/未選取對比+邊框、
+    純圖示按鈕加 accessibilityLabel、torch 本地化鍵；15 測試全過
 - Files created/modified:
   - ISBNManager.entitlements（Xcode 產生）、SyncService.swift（新增）、project.yml、SettingsView.swift、LocalizedTables.swift
 
