@@ -60,6 +60,7 @@ struct ScannerView: View {
     @State private var torchOn = false
     @State private var toast: String?
     @State private var showSettings = false
+    @State private var cameraDenied = false
 
     private var s: Strings { locale.strings }
 
@@ -88,6 +89,23 @@ struct ScannerView: View {
                         .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.8)))
                         .padding(.bottom, 150)
                 }
+            }
+
+            if cameraDenied {
+                VStack(spacing: 12) {
+                    Image(systemName: "camera.fill").font(.system(size: 40)).foregroundColor(.gray)
+                    Text(s.t("camera_denied")).multilineTextAlignment(.center)
+                        .font(.subheadline)
+                    Button(s.t("camera_open_settings")) {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding(24)
+                .background(RoundedRectangle(cornerRadius: 12).fill(.ultraThinMaterial))
+                .padding(20)
             }
         }
         .navigationBarTitle(s.t("scan_title"), displayMode: .inline)
@@ -183,23 +201,34 @@ struct ScannerView: View {
     // MARK: - 相機
 
     private func startSession() {
-        session.sessionPreset = .high
-        AVCaptureDevice.requestAccess(for: .video) { granted in
-            guard granted else { return }
-            DispatchQueue.main.async {
-                guard let device = AVCaptureDevice.default(for: .video),
-                      let input = try? AVCaptureDeviceInput(device: device),
-                      session.canAddInput(input) else { return }
-                session.addInput(input)
-                let output = AVCaptureMetadataOutput()
-                if session.canAddOutput(output) {
-                    session.addOutput(output)
-                    output.metadataObjectTypes = [.ean13, .ean8, .upce]
-                    output.setMetadataObjectsDelegate(coordinator, queue: .main)
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            configureAndStart()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    if granted { configureAndStart() }
+                    else { cameraDenied = true }
                 }
-                session.startRunning()
             }
+        default:
+            cameraDenied = true
         }
+    }
+
+    private func configureAndStart() {
+        session.sessionPreset = .high
+        guard let device = AVCaptureDevice.default(for: .video),
+              let input = try? AVCaptureDeviceInput(device: device),
+              session.canAddInput(input) else { return }
+        session.addInput(input)
+        let output = AVCaptureMetadataOutput()
+        if session.canAddOutput(output) {
+            session.addOutput(output)
+            output.metadataObjectTypes = [.ean13, .ean8, .upce]
+            output.setMetadataObjectsDelegate(coordinator, queue: .main)
+        }
+        session.startRunning()
     }
 
     private func stopSession() {
