@@ -13,6 +13,7 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: NKY2898W74
 targets:
   ISBNManager:
     type: application
