@@ -61,6 +61,7 @@ struct ScannerView: View {
     @State private var toast: String?
     @State private var showSettings = false
     @State private var cameraDenied = false
+    @State private var cameraStatusText = ""
 
     private var s: Strings { locale.strings }
 
@@ -68,6 +69,18 @@ struct ScannerView: View {
         ZStack {
             CameraPreview(session: session)
                 .ignoresSafeArea()
+
+            VStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "camera").foregroundColor(.white)
+                    Text(cameraStatusText.isEmpty ? "..." : cameraStatusText)
+                        .font(.caption2).foregroundColor(.white)
+                }
+                .padding(8)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.6)))
+                .padding(.top, 8)
+                Spacer()
+            }
 
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color.accentColor, lineWidth: 3)
@@ -203,24 +216,36 @@ struct ScannerView: View {
     private func startSession() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
+            cameraStatusText = "auth:authorized"
             configureAndStart()
         case .notDetermined:
+            cameraStatusText = "auth:notDetermined"
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
-                    if granted { configureAndStart() }
-                    else { cameraDenied = true }
+                    if granted {
+                        cameraStatusText = "auth:granted"
+                        configureAndStart()
+                    } else {
+                        cameraStatusText = "auth:denied"
+                        cameraDenied = true
+                    }
                 }
             }
         default:
+            cameraStatusText = "auth:denied"
             cameraDenied = true
         }
     }
 
     private func configureAndStart() {
+        cameraStatusText = "starting"
         session.sessionPreset = .high
         guard let device = AVCaptureDevice.default(for: .video),
               let input = try? AVCaptureDeviceInput(device: device),
-              session.canAddInput(input) else { return }
+              session.canAddInput(input) else {
+            cameraStatusText = "input_failed"
+            return
+        }
         session.addInput(input)
         let output = AVCaptureMetadataOutput()
         if session.canAddOutput(output) {
@@ -229,6 +254,7 @@ struct ScannerView: View {
             output.setMetadataObjectsDelegate(coordinator, queue: .main)
         }
         session.startRunning()
+        cameraStatusText = session.isRunning ? "running" : "start_failed"
     }
 
     private func stopSession() {
