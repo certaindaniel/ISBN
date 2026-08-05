@@ -17,6 +17,7 @@ struct BookListView: View {
     @State private var showTitleSearch = false
     @State private var showSettings = false
     @State private var showAddSheet = false
+    @State private var currentSource = ""
 
     private var s: Strings { locale.strings }
 
@@ -144,9 +145,9 @@ struct BookListView: View {
             Text(label)
                 .font(.subheadline)
                 .padding(.horizontal, 10).padding(.vertical, 5)
-                .background(Capsule().fill(isSelected ? Color.accentColor : Color(.systemGray5)))
+                .background(Capsule().fill(isSelected ? Color.accentColor : Color.accentColor.opacity(0.18)))
                 .foregroundStyle(isSelected ? .white : .primary)
-                .overlay(Capsule().stroke(isSelected ? Color.clear : Color(.systemGray4), lineWidth: 1))
+                .overlay(Capsule().stroke(isSelected ? Color.clear : Color.accentColor.opacity(0.35), lineWidth: 1))
         }
         .buttonStyle(.plain)
     }
@@ -154,7 +155,7 @@ struct BookListView: View {
     @ViewBuilder private var emptyState: some View {
         VStack(spacing: 12) {
             Image(systemName: "books.vertical")
-                .font(.system(size: 48)).foregroundColor(.gray)
+                .font(.system(size: 48)).foregroundColor(.accentColor)
             Text(s.t("filter_no_books")).font(.title3)
             Text(s.t("empty_hint")).font(.subheadline).foregroundColor(.gray)
         }
@@ -178,7 +179,10 @@ struct BookListView: View {
     }
 
     private func searchAndEdit(_ isbn: String) async {
-        let book = await store.searchBookByIsbn(isbn, sources: enabledSources())
+        currentSource = ""
+        let book = await store.searchBookByIsbn(isbn, sources: enabledSources(), onSourceStart: { source in
+            DispatchQueue.main.async { currentSource = source.displayName }
+        })
         if let book { editTarget = EditTarget(book: book) }
     }
 
@@ -201,6 +205,9 @@ struct BookListView: View {
             VStack(spacing: 12) {
                 ProgressView()
                 Text(s.t("searching_title")).font(.subheadline)
+                if !currentSource.isEmpty {
+                    Text(s.sourceLabel(currentSource)).font(.caption).foregroundColor(.secondary)
+                }
             }
             .padding(20)
             .background(RoundedRectangle(cornerRadius: 12).fill(.ultraThinMaterial))

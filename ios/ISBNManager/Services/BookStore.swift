@@ -46,8 +46,10 @@ final class BookStore: ObservableObject {
             return local
         }
         let active = sources.isEmpty ? ApiSource.defaultEnabled() : sources
+        AppLogger.debug("searchBookByIsbn \(normalized) sources: \(active.map(\.rawValue).joined(separator: ","))")
         do {
             let book = try await ISBNService.searchByIsbn(normalized, sources: active, onSourceStart: onSourceStart)
+            AppLogger.debug("searchBookByIsbn \(normalized) -> \(book?.title ?? "nil")")
             if book == nil {
                 let isZh = LocaleManager.shared.effectiveLanguage != .english
                 let fallbackURL = isZh ? "https://isbn.ncl.edu.tw/NEW_ISBNNet/main_DisplayResults.php?Pact=DisplayAll4Simple&isbn=\(normalized)" : "https://openlibrary.org/isbn/\(normalized)"

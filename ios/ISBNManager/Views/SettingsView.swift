@@ -129,7 +129,7 @@ struct SettingsView: View {
             openURL(url)
         } label: {
             HStack {
-                Image(systemName: icon).foregroundColor(.blue)
+                Image(systemName: icon).foregroundColor(.accentColor)
                 VStack(alignment: .leading) {
                     Text(title).foregroundColor(.primary)
                     Text(subtitle).font(.caption).foregroundColor(.secondary)
@@ -153,7 +153,7 @@ struct SettingsView: View {
                 showPaywall = true
             } label: {
                 HStack {
-                    Image(systemName: purchase.isUnlocked ? "checkmark.seal" : "lock.open").foregroundColor(.blue)
+                    Image(systemName: purchase.isUnlocked ? "checkmark.seal" : "lock.open").foregroundColor(.accentColor)
                     VStack(alignment: .leading) {
                         Text(purchase.isUnlocked ? s.t("paywall_unlocked") : s.t("settings_unlock_title"))
                             .foregroundColor(.primary)
@@ -193,7 +193,7 @@ struct SettingsView: View {
                 Task { await runSync() }
             } label: {
                 HStack {
-                    Image(systemName: "icloud").foregroundColor(.blue)
+                    Image(systemName: "icloud").foregroundColor(.accentColor)
                     VStack(alignment: .leading) {
                         Text(s.t("sync_title")).foregroundColor(.primary)
                         Text(s.t("sync_subtitle")).font(.caption).foregroundColor(.secondary)

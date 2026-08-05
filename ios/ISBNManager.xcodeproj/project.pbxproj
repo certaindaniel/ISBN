@@ -14,6 +14,8 @@
 		441F0AB3419B5D4BFC4CA004 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A71303F3D2EDEDD1A5702 /* PurchaseService.swift */; };
 		44D30BAF29BC312855E8B62C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E4C99CABCD73D68EC820BB /* RootView.swift */; };
 		54CCC481951FD2F09330C57F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A5F90445D1E579F97DE8BC /* Assets.xcassets */; };
+		5ED0DB7FF22948E8470FAFAA /* ISBNLookupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC2178B23CB112B9C9E8E89 /* ISBNLookupTests.swift */; };
+		6A3E98CB9083CA1D8310C441 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DC4D45DC91C9D541169B84 /* AppLogger.swift */; };
 		6FD93D017C4D556A3BDFF80D /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803F904CF42BC28B2B8E06A8 /* ScannerView.swift */; };
 		7E0D638CC89F24EC5E84045D /* ISBNManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F648CEBD3C3FAC0CC527A3 /* ISBNManagerApp.swift */; };
 		978AAF34F40A6C0DA80768B1 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF75A488A3E4F0D8B3C8B02 /* Book.swift */; };
@@ -48,6 +50,7 @@
 		153600754DA2D9B8E30B3EC9 /* ISBNService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNService.swift; sourceTree = "<group>"; };
 		177D71B1D02688E2FCA19C20 /* HelperViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperViews.swift; sourceTree = "<group>"; };
 		1F1811290BA975077527E3A8 /* ApiSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSource.swift; sourceTree = "<group>"; };
+		20DC4D45DC91C9D541169B84 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		22A5F90445D1E579F97DE8BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A4A71303F3D2EDEDD1A5702 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
 		3C1182AD1E284C7C549B6E6E /* ISBNManagerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ISBNManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +76,7 @@
 		F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNServiceTests.swift; sourceTree = "<group>"; };
 		F34B53A16E7D76C773191658 /* BookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
 		FCE1308CB77A160D3554ABF8 /* ApiTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiTestView.swift; sourceTree = "<group>"; };
+		FFC2178B23CB112B9C9E8E89 /* ISBNLookupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNLookupTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -80,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				B70339D0ADA98DCB9D1F2D19 /* DatabaseMigrationTests.swift */,
+				FFC2178B23CB112B9C9E8E89 /* ISBNLookupTests.swift */,
 				F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */,
 			);
 			path = ISBNManagerTests;
@@ -97,6 +102,7 @@
 		339D61114EE3397DC51287EF /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				20DC4D45DC91C9D541169B84 /* AppLogger.swift */,
 				962CB541F52E51B393F0E33C /* BookStore.swift */,
 				9DD497D692910E562F2D0333 /* Database.swift */,
 				153600754DA2D9B8E30B3EC9 /* ISBNService.swift */,
@@ -260,6 +266,7 @@
 			files = (
 				EC34482D6B45E712C2E96DF1 /* ApiSource.swift in Sources */,
 				34D058A79992BAA71D3B8197 /* ApiTestView.swift in Sources */,
+				6A3E98CB9083CA1D8310C441 /* AppLogger.swift in Sources */,
 				978AAF34F40A6C0DA80768B1 /* Book.swift in Sources */,
 				E22F703E5C3EA66E2404E424 /* BookEditView.swift in Sources */,
 				A18FB956F738E19763102D12 /* BookListView.swift in Sources */,
@@ -288,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7A42BC2184D261F5959534A /* DatabaseMigrationTests.swift in Sources */,
+				5ED0DB7FF22948E8470FAFAA /* ISBNLookupTests.swift in Sources */,
 				FA3F32F7FD6B77E4DE180DDE /* ISBNServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,7 +13,7 @@ struct PaywallView: View {
                     Image(systemName: "checkmark.circle.fill").font(.system(size: 72)).foregroundColor(.green)
                     Text(s.t("paywall_unlocked")).font(.title3)
                 } else {
-                    Image(systemName: "auto.stories").font(.system(size: 72)).foregroundColor(.blue)
+                    Image(systemName: "auto.stories").font(.system(size: 72)).foregroundColor(.accentColor)
                     Text(s.paywallSubtitle(PurchaseService.freeBookLimit))
                         .font(.headline).multilineTextAlignment(.center)
 
@@ -51,7 +51,7 @@ struct PaywallView: View {
 
     private func featureRow(_ icon: String, _ text: String) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: icon).foregroundColor(.blue)
+            Image(systemName: icon).foregroundColor(.accentColor)
             Text(text).foregroundColor(.primary)
             Spacer()
         }
