@@ -6,7 +6,7 @@
 
 （由執行 agent 依序追加。使用者明天早上據此驗收。）
 
-`run 1 | BookRow 封面縮圖 44x66→50x75、列垂直間距 6→8 | ios/ISBNManager/Views/BookListView.swift:229-233,262 | BookBuddy/Libib 封面導向 + 8dp 間距韻律 | BUILD SUCCEEDED + TEST SUCCEEDED(17)`
+`run 1 | BookRow 封面縮圖加大至 52x78、列垂直 padding 6→8（8dp 韻律） | ios/ISBNManager/Views/BookListView.swift:231,262 | BookBuddy/Libib 封面導向 + pro-rules 8dp spacing | build+test 全過(17)；已裝實機並啟動`
 
 `run 2 | 閱讀中列內加百分比文字（ProgressView 旁 "N%"）| ios/ISBNManager/Views/BookListView.swift:249-256 | Goodreads 列內進度 | BUILD SUCCEEDED + TEST SUCCEEDED(17)`
 
