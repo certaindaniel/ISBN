@@ -1,9 +1,0 @@
-/* 
-  InfoPlist.strings
-  ISBN Book Manager
-
-  Localized privacy usage descriptions for English
-*/
-"CFBundleDisplayName" = "ISBN Book Manager";
-"NSCameraUsageDescription" = "The app needs camera access to scan book ISBN barcodes";
-"NSPhotoLibraryUsageDescription" = "The app needs photo library access to select book cover images";
