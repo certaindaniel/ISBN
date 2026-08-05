@@ -69,6 +69,9 @@
   - 建置+安裝+啟動（含正確 container）；待使用者重試同步
   - 使用者回報錯誤：icloud_pull_failed CKError 11 "Did not find record type: Book"
   - 根因：無資料、record type 尚未建立；修正為 unknownItem/11 視為無遠端資料
+  - 掃描器失效根因：startSession 未請求相機權限；改為 requestAccess 後再啟動
+  - ISBN/EAN 判別擴充：新增 isEanButNotIsbn（EAN-13 非978/979 + EAN-8/UPC-E），訊息更清楚
+  - 新增 testEanButNotIsbn，15 測試全過；建置+安裝到實機
 - Files created/modified:
   - ISBNManager.entitlements（Xcode 產生）、SyncService.swift（新增）、project.yml、SettingsView.swift、LocalizedTables.swift
 

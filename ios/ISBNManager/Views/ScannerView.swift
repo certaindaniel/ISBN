@@ -184,17 +184,22 @@ struct ScannerView: View {
 
     private func startSession() {
         session.sessionPreset = .high
-        guard let device = AVCaptureDevice.default(for: .video),
-              let input = try? AVCaptureDeviceInput(device: device),
-              session.canAddInput(input) else { return }
-        session.addInput(input)
-        let output = AVCaptureMetadataOutput()
-        if session.canAddOutput(output) {
-            session.addOutput(output)
-            output.metadataObjectTypes = [.ean13, .ean8, .upce]
-            output.setMetadataObjectsDelegate(coordinator, queue: .main)
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+            guard granted else { return }
+            DispatchQueue.main.async {
+                guard let device = AVCaptureDevice.default(for: .video),
+                      let input = try? AVCaptureDeviceInput(device: device),
+                      session.canAddInput(input) else { return }
+                session.addInput(input)
+                let output = AVCaptureMetadataOutput()
+                if session.canAddOutput(output) {
+                    session.addOutput(output)
+                    output.metadataObjectTypes = [.ean13, .ean8, .upce]
+                    output.setMetadataObjectsDelegate(coordinator, queue: .main)
+                }
+                session.startRunning()
+            }
         }
-        session.startRunning()
     }
 
     private func stopSession() {

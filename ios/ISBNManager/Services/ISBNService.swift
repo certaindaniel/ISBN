@@ -75,6 +75,14 @@ struct ISBNService {
         return checkDigit == expected
     }
 
+    /// 是否為「商品條碼(EAN/UPC)但不是書籍 ISBN」：13 位非 978/979 的 EAN-13，或 8 位 EAN-8/UPC-E。
+    static func isEanButNotIsbn(_ code: String) -> Bool {
+        let cleaned = normalizeIsbn(code)
+        if cleaned.count == 13 { return isEan13ButNotIsbn(cleaned) }
+        if cleaned.count == 8 { return true }
+        return false
+    }
+
     static func formatIsbn(_ isbn: String) -> String {
         let cleaned = normalizeIsbn(isbn)
         if cleaned.count == 13 {
@@ -130,8 +138,8 @@ extension ISBNService {
                              onSourceStart: ((ApiSource) -> Void)? = nil) async throws -> Book? {
         let isbn = normalizeIsbn(rawIsbn)
         if !isValidIsbn(isbn) {
-            if isEan13ButNotIsbn(isbn) {
-                throw IsbnError(message: "請掃描 ISBN 條碼，這個是 EAN", code: "scan_not_isbn_ean")
+            if isEanButNotIsbn(isbn) {
+                throw IsbnError(message: "這是商品條碼(EAN/UPC)，不是書籍 ISBN", code: "scan_not_isbn_ean")
             }
             throw IsbnError(message: "無效的 ISBN 格式", code: "isbn_error_invalid_format")
         }
