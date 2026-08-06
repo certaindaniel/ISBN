@@ -36,51 +36,183 @@ struct BookEditView: View {
     private var s: Strings { locale.strings }
     private var isNew: Bool { initialBook == nil }
 
+    private var calculatedProfit: (profit: Double, isProfit: Bool)? {
+        guard let purchase = Double(purchasePriceText), let sale = Double(salePriceText) else { return nil }
+        return (sale - purchase, (sale - purchase) >= 0)
+    }
+
+    private var similarBooks: [Book]? {
+        guard let book = initialBook else { return nil }
+        let list = Database.shared.similarBooks(to: book, limit: 5)
+        return list.isEmpty ? nil : list
+    }
+
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    coverSection
+            Form {
+                if let formError {
+                    Section {
+                        Text(formError)
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                    }
+                }
 
+                Section {
+                    coverHeader
                     TextField(s.t("manual_isbn_label"), text: $isbn)
                         .keyboardType(.numberPad)
                         .disabled(!isNew)
-                        .textFieldStyle(.roundedBorder)
+
+                    if isNew && !isbn.trimmingCharacters(in: .whitespaces).isEmpty {
+                        Button(s.t("fill_from_isbn")) {
+                            Task { await fetchFromIsbn() }
+                        }
+                    }
 
                     TextField(s.t("label_title_required"), text: $title)
-                        .textFieldStyle(.roundedBorder)
                     TextField(s.t("label_author_required"), text: $author)
-                        .textFieldStyle(.roundedBorder)
                     TextField(s.t("label_publisher_required"), text: $publisher)
-                        .textFieldStyle(.roundedBorder)
-                    TextField(s.t("label_description"), text: $description)
-                        .textFieldStyle(.roundedBorder)
+                    TextField(s.t("label_description"), text: $description, axis: .vertical)
+                        .lineLimit(2...5)
 
                     if let language {
                         HStack {
-                            Image(systemName: "globe")
+                            Image(systemName: "globe").foregroundColor(.appAccent)
                             Text(s.languageLabel(languageName(language)))
+                                .foregroundColor(.secondary)
                         }
-                        .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 4).fill(Color(.systemGray6)))
+                    }
+                }
+
+                Section {
+                    Picker("", selection: $readStatus) {
+                        Text(s.t("filter_unread")).tag("unread")
+                        Text(s.t("filter_reading")).tag("reading")
+                        Text(s.t("filter_read")).tag("read")
+                        Text(s.t("filter_wishlist")).tag("wishlist")
+                    }
+                    .pickerStyle(.segmented)
+
+                    if readStatus == "reading" {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(s.t("progress_percent")).foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(progressText.isEmpty ? "0" : progressText)%").bold()
+                            }
+                            Slider(value: Binding(
+                                get: { Double(progressText) ?? 0 },
+                                set: { progressText = String(Int($0)) }
+                            ), in: 0...100, step: 1)
+                            .tint(.appReading)
+                        }
+                        .padding(.vertical, 4)
                     }
 
-                    readStatusSection
-                    progressSection
-                    lexileSection
-                    purchaseSection
-                    saleSection
-                    profitSection
-                    similarSection
-                    saveButton
+                    HStack {
+                        Text(s.t("progress_start"))
+                        Spacer()
+                        Text(startDate.map(dateString) ?? s.t("progress_none"))
+                            .foregroundColor(startDate != nil ? .primary : .secondary)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture { pickDate(.start) }
+
+                    HStack {
+                        Text(s.t("progress_finish"))
+                        Spacer()
+                        Text(finishDate.map(dateString) ?? s.t("progress_none"))
+                            .foregroundColor(finishDate != nil ? .primary : .secondary)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture { pickDate(.finish) }
+
+                    TextField(s.t("tags_hint"), text: $tags)
+                } header: {
+                    Text(s.t("progress_title"))
                 }
-                .padding(16)
+
+                Section {
+                    HStack {
+                        TextField(s.t("example_lexile_hint"), text: $lexileText)
+                            .keyboardType(.numberPad)
+                        Button {
+                            showLexile = true
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.appAccent)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    if language == "en" {
+                        Text(s.t("lexile_manual_title")).font(.caption).foregroundColor(.appAccent)
+                    }
+                } header: {
+                    Text(s.t("label_lexile"))
+                }
+
+                Section {
+                    TextField(s.t("label_purchase_price_required"), text: $purchasePriceText)
+                        .keyboardType(.decimalPad)
+
+                    HStack {
+                        Text(s.t("purchase_date_title"))
+                        Spacer()
+                        Text(dateString(purchaseDate)).foregroundColor(.secondary)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture { pickDate(.purchase) }
+
+                    TextField(s.t("label_sale_price"), text: $salePriceText)
+                        .keyboardType(.decimalPad)
+
+                    if let saleDate {
+                        HStack {
+                            Text(s.t("sale_date_title"))
+                            Spacer()
+                            Text(dateString(saleDate)).foregroundColor(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture { pickDate(.sale) }
+                    } else {
+                        Button(s.t("set_sale_date_label")) { pickDate(.sale) }
+                    }
+
+                    if let profitInfo = calculatedProfit {
+                        HStack {
+                            Text(s.t("profit_label")).bold()
+                            Spacer()
+                            Text(String(format: "%.2f", profitInfo.profit))
+                                .bold()
+                                .foregroundColor(profitInfo.profit >= 0 ? .appProfit : .appLoss)
+                        }
+                    }
+                } header: {
+                    Text(s.t("finance_title"))
+                }
+
+                if let similar = similarBooks {
+                    Section {
+                        ForEach(similar) { b in
+                            Text("• \(b.title.isEmpty ? s.t("unknown_title") : b.title)")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    } header: {
+                        Text(s.t("similar_title"))
+                    }
+                }
             }
             .navigationTitle(isNew ? s.t("new_book") : s.t("edit_book"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(s.t("cancel")) { confirmDismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
                     Button(s.t("save_book_button")) { save() }
+                        .bold()
                 }
             }
         }
@@ -113,15 +245,17 @@ struct BookEditView: View {
         }
         .overlay(alignment: .top) {
             if let toast {
-                Text(toast).font(.footnote).padding(10).background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.8)).foregroundColor(.white)).padding(.top, 8)
+                Text(toast)
+                    .font(.footnote)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Capsule().fill(Color.black.opacity(0.85)))
+                    .foregroundColor(.white)
+                    .padding(.top, 12)
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .interactiveDismissDisabled()
-        .toolbar {
-            ToolbarItemGroup(placement: .navigationBarLeading) {
-                Button(s.t("cancel")) { confirmDismiss() }
-            }
-        }
         .confirmationDialog(s.t("unsavedChangesTitle"), isPresented: $showUnsavedConfirm) {
             Button(s.t("saveAndLeave")) { save() }
             Button(s.t("discard"), role: .destructive) { dismiss() }
@@ -133,21 +267,21 @@ struct BookEditView: View {
 
     // MARK: - 封面
 
-    private var coverSection: some View {
+    private var coverHeader: some View {
         HStack {
             Spacer()
             ZStack(alignment: .bottomTrailing) {
                 if let data = coverImageData, let ui = UIImage(data: data) {
-                    Image(uiImage: ui).resizable().scaledToFill().frame(width: 120, height: 180).clipShape(RoundedRectangle(cornerRadius: 8)).shadow(radius: 4)
+                    Image(uiImage: ui).resizable().scaledToFill().frame(width: 110, height: 165).clipShape(RoundedRectangle(cornerRadius: 10)).shadow(color: .black.opacity(0.15), radius: 4)
                 } else if let url = initialBook?.coverUrl {
                     remoteCover(url)
                 } else {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.accentColor, lineWidth: 2)
-                        .frame(width: 120, height: 180)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.appAccent.opacity(0.5), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                        .frame(width: 110, height: 165)
                         .overlay(VStack(spacing: 8) {
-                            Image(systemName: "camera").font(.system(size: 40)).foregroundColor(.accentColor)
-                            Text(s.t("take_photo")).font(.caption).foregroundColor(.accentColor)
+                            Image(systemName: "camera.fill").font(.system(size: 32)).foregroundColor(.appAccent)
+                            Text(s.t("take_photo")).font(.caption).fontWeight(.medium).foregroundColor(.appAccent)
                         })
                         .onTapGesture { showImagePicker = true }
                         .accessibilityAddTraits(.isButton)
@@ -155,19 +289,21 @@ struct BookEditView: View {
                 }
                 if coverImageData != nil || initialBook?.coverUrl != nil {
                     Button { showImagePicker = true } label: {
-                        Image(systemName: "camera")
-                            .font(.system(size: 18))
-                            .frame(width: 44, height: 44)
-                            .background(Circle().fill(Color.accentColor))
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 14))
+                            .frame(width: 36, height: 36)
+                            .background(Circle().fill(Color.appAccent).shadow(radius: 2))
                             .foregroundColor(.white)
                     }
                     .accessibilityLabel(s.t("take_photo"))
-                    .offset(x: -8, y: -8)
+                    .offset(x: 4, y: 4)
                 }
             }
             Spacer()
         }
+        .padding(.vertical, 8)
     }
+
 
     @ViewBuilder private func remoteCover(_ url: String) -> some View {
         if url.hasPrefix("/") || url.hasPrefix("file://") {
@@ -188,194 +324,6 @@ struct BookEditView: View {
 
     private var placeholderCover: some View {
         RoundedRectangle(cornerRadius: 8).fill(Color(.systemGray4)).frame(width: 120, height: 180).overlay(Image(systemName: "book").foregroundColor(.secondary))
-    }
-
-    // MARK: - 閱讀狀態
-
-    private var readStatusSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(readStatusLabel).font(.subheadline).bold()
-            Picker("", selection: $readStatus) {
-                Text(s.t("filter_unread")).tag("unread")
-                Text(s.t("filter_reading")).tag("reading")
-                Text(s.t("filter_read")).tag("read")
-                Text(s.t("filter_wishlist")).tag("wishlist")
-            }.pickerStyle(.segmented)
-        }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
-    }
-
-    // MARK: - 閱讀進度
-
-    private var progressSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(s.t("progress_title")).font(.subheadline).bold()
-
-            HStack {
-                Text(s.t("progress_start"))
-                Spacer()
-                Text(startDate.map(dateString) ?? s.t("progress_none"))
-                    .foregroundColor(startDate != nil ? .primary : .secondary)
-            }
-            .padding(10)
-            .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-            .onTapGesture { pickDate(.start) }
-
-            HStack {
-                Text(s.t("progress_finish"))
-                Spacer()
-                Text(finishDate.map(dateString) ?? s.t("progress_none"))
-                    .foregroundColor(finishDate != nil ? .primary : .secondary)
-            }
-            .padding(10)
-            .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-            .onTapGesture { pickDate(.finish) }
-
-            if readStatus == "reading" {
-                HStack {
-                    Text(s.t("progress_percent")).foregroundColor(.secondary)
-                    Slider(value: Binding(
-                        get: { Double(progressText) ?? 0 },
-                        set: { progressText = String(Int($0)) }
-                    ), in: 0...100, step: 1)
-                    .accessibilityLabel(s.t("progress_percent"))
-                    .accessibilityValue(progressText.isEmpty ? "0%" : "\(progressText)%")
-                    Text("\(progressText.isEmpty ? "0" : progressText)%").frame(width: 40)
-                }
-            }
-
-            TextField(s.t("tags_hint"), text: $tags).textFieldStyle(.roundedBorder)
-        }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.purple.opacity(0.08)))
-    }
-
-    private var readStatusLabel: String {
-        switch readStatus {
-        case "read": return s.t("filter_read")
-        case "reading": return s.t("filter_reading")
-        case "wishlist": return s.t("filter_wishlist")
-        default: return s.t("filter_unread")
-        }
-    }
-
-    // MARK: - Lexile
-
-    private var lexileSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(s.t("label_lexile")).font(.caption).foregroundColor(.secondary)
-            HStack {
-                TextField(s.t("example_lexile_hint"), text: $lexileText).keyboardType(.numberPad).textFieldStyle(.roundedBorder)
-                Button {
-                    showLexile = true
-                } label: { Image(systemName: "open.in.new") }
-                    .frame(width: 44, height: 44)
-                    .accessibilityLabel(s.t("lexile_title"))
-            }
-            if language == "en" {
-                Text(s.t("lexile_manual_title")).font(.caption).foregroundColor(.blue)
-            } else {
-                Text(s.t("lexile_manual_label")).font(.caption).foregroundColor(.secondary)
-            }
-        }
-    }
-
-    // MARK: - 購買
-
-    private var purchaseSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField(s.t("label_purchase_price_required"), text: $purchasePriceText)
-                .keyboardType(.decimalPad).textFieldStyle(.roundedBorder)
-            HStack {
-                Text(s.t("purchase_date_title"))
-                Spacer()
-                Text(dateString(purchaseDate)).foregroundColor(.secondary)
-            }
-            .padding(10)
-            .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-            .onTapGesture { pickDate(.purchase) }
-        }
-    }
-
-    private var saleSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField(s.t("label_sale_price"), text: $salePriceText)
-                .keyboardType(.decimalPad).textFieldStyle(.roundedBorder)
-            if let saleDate {
-                HStack {
-                    Text(s.t("sale_date_title"))
-                    Spacer()
-                    Text(dateString(saleDate)).foregroundColor(.secondary)
-                }
-                .padding(10)
-                .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray6)))
-                .onTapGesture { pickDate(.sale) }
-            } else {
-                Button(s.t("set_sale_date_label")) { pickDate(.sale) }
-            }
-        }
-    }
-
-    private var profitSection: some View {
-        let purchase = Double(purchasePriceText) ?? 0
-        let sale = Double(salePriceText)
-        if purchasePriceText.isEmpty || sale == nil { return AnyView(EmptyView()) }
-        let profit = sale! - purchase
-        let color = profit >= 0 ? Color.green : Color.red
-        return AnyView(
-            VStack(alignment: .leading, spacing: 6) {
-                Text(s.t("profit_calculation")).font(.headline)
-                Text("\(s.t("label_purchase_price_required")): \(purchasePriceText)")
-                Text("\(s.t("label_sale_price")): \(salePriceText)")
-                Divider()
-                HStack {
-                    Text(s.t("profit_label")).bold()
-                    Spacer()
-                    Text(String(format: "%.2f", profit)).bold().foregroundColor(color)
-                }
-            }
-            .padding(16)
-            .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
-        )
-    }
-
-    // MARK: - 相似書籍推薦
-
-    private var similarSection: some View {
-        guard let book = initialBook else { return AnyView(EmptyView()) }
-        let similar = Database.shared.similarBooks(to: book, limit: 5)
-        if similar.isEmpty { return AnyView(EmptyView()) }
-        return AnyView(
-            VStack(alignment: .leading, spacing: 6) {
-                Text(s.t("similar_title")).font(.subheadline).bold()
-                ForEach(similar) { b in
-                    Text("• \(b.title.isEmpty ? s.t("unknown_title") : b.title)")
-                        .font(.caption).foregroundColor(.secondary)
-                }
-            }
-            .padding(12)
-            .background(RoundedRectangle(cornerRadius: 8).fill(Color.indigo.opacity(0.08)))
-        )
-    }
-
-    private var saveButton: some View {
-        VStack(spacing: 8) {
-            if let formError {
-                Text(formError)
-                    .font(.footnote).foregroundColor(.red)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            Button {
-                save()
-            } label: {
-                Text(s.t("save_book_button"))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor))
-                    .foregroundColor(.white)
-            }
-        }
     }
 
     // MARK: - 動作
@@ -423,6 +371,27 @@ struct BookEditView: View {
         if readStatus != book.status { return true }
         if language != book.language { return true }
         return false
+    }
+
+    private func fetchFromIsbn() async {
+        let normalized = ISBNService.normalizeIsbn(isbn)
+        guard ISBNService.isValidIsbn(normalized) else {
+            toast = s.t("manual_isbn_hint")
+            return
+        }
+        guard let book = await store.searchBookByIsbn(normalized, sources: []) else {
+            toast = s.t("cannot_find_book")
+            return
+        }
+        title = book.title
+        author = book.author
+        publisher = book.publisher
+        description = book.description ?? ""
+        language = book.language
+        if let cover = book.coverUrl, let url = URL(string: cover),
+           let data = (try? await URLSession.shared.data(from: url))?.0 {
+            coverImageData = data
+        }
     }
 
     private func save() {
