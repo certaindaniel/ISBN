@@ -204,18 +204,26 @@ extension ISBNService {
     }
 
     static func searchOpenLibrary(_ isbn: String) async throws -> Book? {
-        guard let url = URL(string: "\(openLibraryBaseURL)?bibkeys=ISBN:\(isbn)&format=json") else { return nil }
+        // jscmd=details：最小格式(預設)只回 bib_key/thumbnail，不回 title/authors，
+        // 導致「只有 ISBN 無書名」的空白記錄。details 才含完整 title/publishers/cover。
+        guard let url = URL(string: "\\(openLibraryBaseURL)?bibkeys=ISBN:\\(isbn)&jscmd=details&format=json") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: timeout)
         req.httpMethod = "GET"
 guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { return nil }
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let bookData = obj["ISBN:\(isbn)"] as? [String: Any] else { return nil }
-        let title = bookData["title"] as? String ?? ""
-        let authors = bookData["authors"] as? [Any]
-        let author = (authors?.first as? [String: Any])?["name"] as? String ?? ""
-        let publishers = bookData["publishers"] as? [Any]
-        let publisher = (publishers?.first as? [String: Any])?["name"] as? String ?? ""
-        let cover = (bookData["cover"] as? [String: Any])?["large"] as? String
+              let bookData = obj["ISBN:\\(isbn)"] as? [String: Any] else { return nil }
+        let details = (bookData["details"] as? [String: Any]) ?? bookData
+        let title = details["title"] as? String ?? ""
+        let authors = details["authors"] as? [Any]
+        let author = (authors as? [String])?.first
+                     ?? ((authors?.first as? [String: Any])?["name"] as? String)
+                     ?? ""
+        let publishers = details["publishers"] as? [Any]
+        let publisher = (publishers as? [String])?.first
+                        ?? ((publishers?.first as? [String: Any])?["name"] as? String)
+                        ?? ""
+        let cover = bookData["thumbnail_url"] as? String
+                    ?? ((details["cover"] as? [String: Any])?["large"] as? String)
         var book = Book(isbn: isbn, title: title, author: author, publisher: publisher,
                         coverUrl: cover, purchasePrice: 0, purchaseDate: Date())
         let language = detectLanguage(title: title, author: author)
@@ -365,14 +373,15 @@ guard let (data, http) = await retryFetch(req), http.statusCode == 200 else { re
     // MARK: - Lexile
 
     static func fetchLexileScore(isbn: String, title: String) async -> Int? {
-        guard let url = URL(string: "\(openLibraryBaseURL)?bibkeys=ISBN:\(isbn)&format=json") else { return nil }
+        guard let url = URL(string: "\\(openLibraryBaseURL)?bibkeys=ISBN:\\(isbn)&jscmd=details&format=json") else { return nil }
         var req = URLRequest(url: url, timeoutInterval: 8)
         req.httpMethod = "GET"
         do {
             let (data, _) = try await URLSession.shared.data(for: req)
             guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let bookData = obj["ISBN:\(isbn)"] as? [String: Any],
-                  let classifications = bookData["classifications"] as? [String: Any],
+                  let bookData = obj["ISBN:\\(isbn)"] as? [String: Any] else { return nil }
+            let details = (bookData["details"] as? [String: Any]) ?? bookData
+            guard let classifications = details["classifications"] as? [String: Any],
                   let lexileData = classifications["lexile"] as? String else { return nil }
             return extractInt(lexileData)
         } catch {
