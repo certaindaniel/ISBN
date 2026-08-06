@@ -94,8 +94,17 @@ struct SettingsView: View {
         Binding(get: { isEnabled(source) },
                 set: { newValue in
                     var enabled = UserDefaults.standard.stringArray(forKey: "enabled_api_sources") ?? []
-                    if newValue { enabled.append(source.rawValue) }
-                    else { enabled.removeAll { $0 == source.rawValue } }
+                    // 尚未初始化（空清單=回退預設）時，先把「預設啟用」清單寫進去再套用本次變更，
+                    // 避免「關掉預設來源」變成寫回空清單→又回預設（LoC 關不掉）、
+                    // 或「只開一個來源」把其餘預設來源全部蓋掉（Open Library 被搞掉）。
+                    if enabled.isEmpty {
+                        enabled = ApiSource.allCases.filter { $0.enabledByDefault }.map(\.rawValue)
+                    }
+                    if newValue {
+                        if !enabled.contains(source.rawValue) { enabled.append(source.rawValue) }
+                    } else {
+                        enabled.removeAll { $0 == source.rawValue }
+                    }
                     UserDefaults.standard.set(enabled, forKey: "enabled_api_sources")
                 })
     }
