@@ -185,14 +185,18 @@ extension ISBNService {
         }
     }
 
-    /// 帶退避重試的網路取回：429(額度)/503(伺服器) 時等待 1.5 秒重試一次。
+    /// 帶退避重試的網路取回：429(額度)/503(伺服器) 時等待遞增退避重試數次。
     private static func retryFetch(_ req: URLRequest) async -> (Data, HTTPURLResponse)? {
-        for attempt in 0..<2 {
+        var lastData: Data? = nil
+        var lastResp: HTTPURLResponse? = nil
+        for attempt in 0..<3 {
             do {
                 let (data, resp) = try await URLSession.shared.data(for: req)
                 guard let http = resp as? HTTPURLResponse else { return nil }
-                if (http.statusCode == 429 || http.statusCode == 503) && attempt == 0 {
-                    try? await Task.sleep(nanoseconds: 1_500_000_000)
+                if http.statusCode == 429 || http.statusCode == 503 {
+                    // 限流/伺服器忙：退避後重試
+                    try? await Task.sleep(nanoseconds: UInt64(1_500_000_000 * (attempt + 1)))
+                    lastData = data; lastResp = http
                     continue
                 }
                 return (data, http)
@@ -200,7 +204,7 @@ extension ISBNService {
                 return nil
             }
         }
-        return nil
+        return lastResp.map { (lastData ?? Data(), $0) }
     }
 
     static func searchOpenLibrary(_ isbn: String) async throws -> Book? {
