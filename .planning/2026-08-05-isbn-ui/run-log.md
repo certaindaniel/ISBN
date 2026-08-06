@@ -50,3 +50,9 @@
 - 執行 run 1..20，完成 15 項實際改動、5 項評估型跳過（run 11/12/20 因超出單一外科式 scope 或語意重疊；皆記錄原因）。
 - 每項實際改動皆 BUILD SUCCEEDED + TEST SUCCEEDED(17)。
 - 保留紫色主色與統計語意色；未 commit（working tree + run-log 供使用者驗收）。
+
+## 補充根因（使用者指出，重要）
+- 為何「怎麼改紫色都是灰白」的真正主因：Assets.xcassets/AccentColor.colorset/Contents.json 的 RGB 用了**浮點小數格式（如 "0.388"）**，Xcode 資產編譯器 actool 無法正確解析，把 AccentColor 自動降級退回 **#FFFFFF 白色**——所以之前所有紫色應用改動都看不到紫色。
+- 修法（使用者）：改為 Xcode 嚴格標準的**16 進位 RGB（0x63, 0x66, 0xF1 = #6366F1 靛紫）**。
+- 驗證：assetutil 讀出編譯後 Assets.car 的 AccentColor components = [0.388, 0.4, 0.945, 1] = #6366F1，非白色。根因已解。
+
