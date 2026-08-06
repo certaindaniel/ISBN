@@ -192,7 +192,17 @@ struct BookListView: View {
         let book = await store.searchBookByIsbn(isbn, sources: enabledSources(), onSourceStart: { source in
             DispatchQueue.main.async { currentSource = source.displayName }
         })
-        if let book { editTarget = EditTarget(book: book) }
+        if let book {
+            editTarget = EditTarget(book: book)
+        } else {
+            // 查無完整書籍資訊：仍開「ISBN 預填」新增頁，讓使用者可手動補填。
+            // error banner 已顯示查無資訊原因。
+            let normalized = ISBNService.normalizeIsbn(isbn)
+            if ISBNService.isValidIsbn(normalized) {
+                editTarget = EditTarget(book: Book(isbn: normalized, title: "", author: "", publisher: "",
+                                                   purchasePrice: 0, purchaseDate: Date()))
+            }
+        }
     }
 
     private func enabledSources() -> [ApiSource] {

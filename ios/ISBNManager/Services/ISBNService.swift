@@ -144,7 +144,10 @@ extension ISBNService {
             throw IsbnError(message: "無效的 ISBN 格式", code: "isbn_error_invalid_format")
         }
         // 本地快取優先：同一 ISBN 已查過就直接回，省額度、秒回。
-        if let cached = Database.shared.cachedBook(isbn) { return cached }
+        // 只信任「有完整書名」的快取，避免空 title 的殘缺記錄誤導。
+        if let cached = Database.shared.cachedBook(isbn), !cached.title.isEmpty {
+            return cached
+        }
         let active = sources.isEmpty ? ApiSource.defaultEnabled() : sources
         var results: [ApiSource: Book] = [:]
         await withTaskGroup(of: (ApiSource, Book?).self) { group in
@@ -160,7 +163,9 @@ extension ISBNService {
             }
         }
         for source in active {
-            if let book = results[source] {
+            // 只接受「有完整書名」的結果：殘缺記錄（只有 ISBN、無 title）
+            // 不該開出空白編輯頁，也不該被快取。
+            if let book = results[source], !book.title.isEmpty {
                 Database.shared.saveCachedBook(book)
                 return book
             }
