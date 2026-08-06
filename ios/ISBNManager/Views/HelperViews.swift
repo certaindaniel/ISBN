@@ -1,6 +1,16 @@
 import SwiftUI
 import UIKit
 
+// MARK: - App Theme Colors
+extension Color {
+    static let appAccent = Color(red: 0.388, green: 0.400, blue: 0.945)
+    static let appProfit = Color(red: 0.16, green: 0.65, blue: 0.47)
+    static let appLoss = Color(red: 0.92, green: 0.34, blue: 0.34)
+    static let appReading = Color(red: 0.95, green: 0.55, blue: 0.15)
+    static let appCardBg = Color(uiColor: .secondarySystemGroupedBackground)
+}
+
+
 /// 日期選擇 sheet。
 struct DatePickerSheet: View {
     @Environment(\.dismiss) private var dismiss

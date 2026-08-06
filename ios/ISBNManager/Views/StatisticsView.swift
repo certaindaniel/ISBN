@@ -4,22 +4,37 @@ import SwiftUI
 struct StatisticsView: View {
     @EnvironmentObject var store: BookStore
     @ObservedObject private var locale = LocaleManager.shared
+    @State private var selectedTab = 0
     @State private var goalText = ""
     private var s: Strings { locale.strings }
 
     var body: some View {
-        TabView {
-            readingTab.tabItem { Label(s.t("statistics_tab_reading"), systemImage: "book") }
-            financeTab.tabItem { Label(s.t("statistics_tab_finance"), systemImage: "dollarsign.circle") }
+        NavigationStack {
+            VStack(spacing: 0) {
+                Picker("", selection: $selectedTab) {
+                    Text(s.t("statistics_tab_reading")).tag(0)
+                    Text(s.t("statistics_tab_finance")).tag(1)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+
+                if selectedTab == 0 {
+                    readingTab
+                } else {
+                    financeTab
+                }
+            }
+            .background(Color(uiColor: .systemGroupedBackground))
+            .navigationTitle(s.t("statistics_title"))
+            .navigationBarTitleDisplayMode(.inline)
+            .task { await store.loadStatistics() }
         }
-        .navigationTitle(s.t("statistics_title"))
-        .navigationBarTitleDisplayMode(.inline)
-        .task { await store.loadStatistics() }
     }
 
     private var readingTab: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 overviewCard
                 goalsCard
                 if store.statistics.totalBooks > 0 { completionCard }
@@ -40,37 +55,45 @@ struct StatisticsView: View {
         let current = Database.shared.currentStreak()
         let best = Database.shared.bestStreak()
 
-        return VStack(alignment: .leading, spacing: 10) {
+        return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(s.t("goals_title")).font(.headline)
                 Spacer()
-                TextField(s.t("goals_hint"), text: $goalText)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: 60)
-                    .onSubmit { saveGoal(goalText) }
+                HStack(spacing: 4) {
+                    TextField(s.t("goals_hint"), text: $goalText)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .frame(width: 50)
+                        .onSubmit { saveGoal(goalText) }
+                    Text(s.t("books")).font(.subheadline).foregroundColor(.secondary)
+                }
             }
 
             Text(s.goalsDone(done, goal))
                 .font(.subheadline).foregroundColor(.secondary)
 
             ProgressView(value: min(percent, 1.0), total: 1.0)
-                .tint(.green)
+                .tint(.appProfit)
 
-            Text(String(format: s.t("goals_percent"), percent * 100))
-                .font(.caption).foregroundColor(.green)
+            HStack {
+                Text(String(format: s.t("goals_percent"), percent * 100))
+                    .font(.caption).fontWeight(.semibold).foregroundColor(.appProfit)
+                Spacer()
+            }
+
+            Divider()
 
             HStack {
                 Image(systemName: "flame.fill").foregroundColor(.orange)
                 Text(s.goalsStreakCurrent(current))
-                    .font(.subheadline)
+                    .font(.subheadline).fontWeight(.medium)
                 Spacer()
                 Text(s.goalsStreakBest(best))
                     .font(.caption).foregroundColor(.secondary)
             }
         }
         .padding(16)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)).shadow(color: .black.opacity(0.1), radius: 2))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.appCardBg).shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1))
     }
 
     private func saveGoal(_ text: String) {
@@ -79,26 +102,28 @@ struct StatisticsView: View {
     }
 
     private var overviewCard: some View {
-        VStack(spacing: 20) {
+        VStack(alignment: .leading, spacing: 14) {
             Text(s.t("stat_overview_title")).font(.headline)
-            HStack {
-                statItem(s.t("stat_total_books"), store.statistics.totalBooks, "books.vertical", .blue)
-                statItem(s.t("stat_read"), store.statistics.readBooks, "checkmark.circle", .green)
-                statItem(s.t("stat_reading"), store.statistics.readingBooks, "book", .orange)
+            HStack(spacing: 12) {
+                statItem(s.t("stat_total_books"), store.statistics.totalBooks, "books.vertical.fill", .appAccent)
+                statItem(s.t("stat_read"), store.statistics.readBooks, "checkmark.circle.fill", .appProfit)
+                statItem(s.t("stat_reading"), store.statistics.readingBooks, "book.fill", .appReading)
                 statItem(s.t("stat_unread"), store.statistics.unreadBooks, "circle", .gray)
             }
         }
         .padding(16)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)).shadow(color: .black.opacity(0.1), radius: 2))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.appCardBg).shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1))
     }
 
     private func statItem(_ label: String, _ value: Int, _ icon: String, _ color: Color) -> some View {
         VStack(spacing: 6) {
-            Image(systemName: icon).font(.system(size: 30)).foregroundColor(color)
+            Image(systemName: icon).font(.system(size: 26)).foregroundColor(color)
             Text("\(value)").font(.title3.bold()).foregroundColor(color)
-            Text(label).font(.caption).foregroundColor(.secondary)
+            Text(label).font(.caption2).foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(RoundedRectangle(cornerRadius: 10).fill(color.opacity(0.08)))
     }
 
     private var completionCard: some View {
@@ -107,71 +132,85 @@ struct StatisticsView: View {
         let reading = store.statistics.readingBooks
         let unread = store.statistics.unreadBooks
         let percent = Double(read) / Double(total) * 100
-        return VStack(alignment: .leading, spacing: 10) {
+        return VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text(s.t("stat_completion_title")).font(.headline)
                 Spacer()
-                Text(String(format: "%.1f%%", percent)).bold().foregroundColor(.green)
+                Text(String(format: "%.1f%%", percent)).bold().foregroundColor(.appProfit)
             }
+
             HStack {
                 Spacer()
                 ZStack {
-                    Circle().stroke(Color(.systemGray5), lineWidth: 10)
+                    Circle().stroke(Color(.systemGray5), lineWidth: 8)
                     Circle()
                         .trim(from: 0, to: min(percent / 100, 1))
-                        .stroke(Color.green, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                        .stroke(Color.appProfit, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                         .rotationEffect(.degrees(-90))
-                    Text(String(format: "%.0f%%", percent)).font(.headline).bold().foregroundColor(.green)
+                    Text(String(format: "%.0f%%", percent)).font(.headline).bold().foregroundColor(.appProfit)
                 }
-                .frame(width: 72, height: 72)
+                .frame(width: 76, height: 76)
                 Spacer()
             }
-            HStack(spacing: 0) {
-                Rectangle().fill(Color.green).frame(width: CGFloat(read) / CGFloat(total) * 300, height: 10)
-                Rectangle().fill(Color.orange).frame(width: CGFloat(reading) / CGFloat(total) * 300, height: 10)
-                Rectangle().fill(Color(.systemGray4)).frame(width: CGFloat(unread) / CGFloat(total) * 300, height: 10)
+
+            GeometryReader { geo in
+                let totalW = geo.size.width
+                let readW = total > 0 ? (CGFloat(read) / CGFloat(total)) * totalW : 0
+                let readingW = total > 0 ? (CGFloat(reading) / CGFloat(total)) * totalW : 0
+                let unreadW = total > 0 ? (CGFloat(unread) / CGFloat(total)) * totalW : 0
+
+                HStack(spacing: 0) {
+                    Rectangle().fill(Color.appProfit).frame(width: readW, height: 10)
+                    Rectangle().fill(Color.appReading).frame(width: readingW, height: 10)
+                    Rectangle().fill(Color(.systemGray4)).frame(width: unreadW, height: 10)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 5))
             }
-            .clipShape(RoundedRectangle(cornerRadius: 4))
+            .frame(height: 10)
+
             HStack {
-                Text("\(s.t("stat_read")): \(read)").foregroundColor(.green)
+                Text("\(s.t("stat_read")): \(read)").foregroundColor(.appProfit)
                 Spacer()
-                Text(s.statsReadingLabel(reading)).foregroundColor(.orange)
+                Text(s.statsReadingLabel(reading)).foregroundColor(.appReading)
                 Spacer()
                 Text(s.statsUnreadLabel(unread)).foregroundColor(.gray)
-            }.font(.caption)
+            }
+            .font(.caption)
+            .fontWeight(.medium)
         }
         .padding(16)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)).shadow(color: .black.opacity(0.1), radius: 2))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.appCardBg).shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1))
     }
 
     private var financeTab: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(s.t("finance_title")).font(.headline)
-                financeRow(s.t("finance_total_spent"), store.statistics.totalSpent, .red)
-                financeRow(s.t("finance_total_earned"), store.statistics.totalEarned, .green)
+                financeRow(s.t("finance_total_spent"), store.statistics.totalSpent, .appLoss)
+                financeRow(s.t("finance_total_earned"), store.statistics.totalEarned, .appProfit)
                 Divider()
                 HStack {
                     Text(s.t("finance_total_profit")).font(.headline)
                     Spacer()
                     Text(String(format: "%.2f", store.statistics.totalProfit))
-                        .font(.title3.bold())
-                        .foregroundColor(store.statistics.totalProfit >= 0 ? .green : .red)
+                        .font(.title2.bold())
+                        .foregroundColor(store.statistics.totalProfit >= 0 ? .appProfit : .appLoss)
                 }
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 8).fill(store.statistics.totalProfit >= 0 ? Color.green.opacity(0.1) : Color.red.opacity(0.1)))
+                .padding(14)
+                .background(RoundedRectangle(cornerRadius: 10).fill(store.statistics.totalProfit >= 0 ? Color.appProfit.opacity(0.1) : Color.appLoss.opacity(0.1)))
             }
             .padding(16)
-            .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)).shadow(color: .black.opacity(0.1), radius: 2))
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.appCardBg).shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1))
             .padding(16)
         }
     }
 
     private func financeRow(_ label: String, _ amount: Double, _ color: Color) -> some View {
         HStack {
-            Text(label)
+            Text(label).font(.subheadline)
             Spacer()
-            Text(String(format: "%.2f", amount)).bold().foregroundColor(color)
+            Text(String(format: "%.2f", amount)).font(.headline).bold().foregroundColor(color)
         }
     }
 }
+

@@ -8,54 +8,91 @@ struct PaywallView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 if purchase.isUnlocked {
-                    Image(systemName: "checkmark.circle.fill").font(.system(size: 72)).foregroundColor(.green)
-                    Text(s.t("paywall_unlocked")).font(.title3)
+                    VStack(spacing: 16) {
+                        Image(systemName: "checkmark.seal.fill")
+                            .font(.system(size: 72))
+                            .foregroundColor(.appProfit)
+                        Text(s.t("paywall_unlocked"))
+                            .font(.title2).fontWeight(.bold)
+                    }
+                    .padding(.vertical, 40)
                 } else {
-                    Image(systemName: "auto.stories").font(.system(size: 72)).foregroundColor(.accentColor)
-                    Text(s.paywallSubtitle(PurchaseService.freeBookLimit))
-                        .font(.headline).multilineTextAlignment(.center)
+                    VStack(spacing: 16) {
+                        ZStack {
+                            Circle().fill(Color.appAccent.opacity(0.12))
+                                .frame(width: 100, height: 100)
+                            Image(systemName: "books.vertical.fill")
+                                .font(.system(size: 48))
+                                .foregroundColor(.appAccent)
+                        }
 
-                    featureRow("infinity", s.t("paywall_feature_unlimited"))
-                    featureRow("chart.line.uptrend", s.t("paywall_feature_profit"))
-                    featureRow("lock.open", s.t("paywall_feature_once"))
+                        Text(s.paywallSubtitle(PurchaseService.freeBookLimit))
+                            .font(.title3).fontWeight(.bold)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 10)
+                    }
+
+                    VStack(spacing: 12) {
+                        featureRow("infinity.circle.fill", s.t("paywall_feature_unlimited"))
+                        featureRow("chart.line.uptrend.xyaxis.circle.fill", s.t("paywall_feature_profit"))
+                        featureRow("lock.open.circle.fill", s.t("paywall_feature_once"))
+                    }
+                    .padding(16)
+                    .background(RoundedRectangle(cornerRadius: 16).fill(Color.appCardBg))
 
                     if let lastError = purchase.lastError {
-                        Text(lastError).font(.footnote).foregroundColor(.red)
+                        Text(lastError)
+                            .font(.footnote)
+                            .foregroundColor(.appLoss)
+                            .multilineTextAlignment(.center)
                     }
 
-                    Button {
-                        Task { await purchase.buy() }
-                    } label: {
-                        if purchase.purchasePending {
-                            ProgressView().frame(maxWidth: .infinity).padding(.vertical, 12)
-                        } else {
-                            Text(purchase.product != nil ? s.paywallBuy(priceText()) : s.t("paywall_unavailable"))
-                                .frame(maxWidth: .infinity).padding(.vertical, 12)
-                                .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor))
-                                .foregroundColor(.white)
+                    VStack(spacing: 12) {
+                        Button {
+                            Task { await purchase.buy() }
+                        } label: {
+                            if purchase.purchasePending {
+                                ProgressView().tint(.white).frame(maxWidth: .infinity).padding(.vertical, 14)
+                            } else {
+                                Text(purchase.product != nil ? s.paywallBuy(priceText()) : s.t("paywall_unavailable"))
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 14)
+                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.appAccent))
+                                    .foregroundColor(.white)
+                                    .shadow(color: Color.appAccent.opacity(0.3), radius: 6, x: 0, y: 3)
+                            }
                         }
-                    }
-                    .disabled(purchase.product == nil || purchase.purchasePending)
+                        .disabled(purchase.product == nil || purchase.purchasePending)
 
-                    Button(s.t("paywall_restore")) {
-                        Task { await purchase.restore() }
+                        Button(s.t("paywall_restore")) {
+                            Task { await purchase.restore() }
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .disabled(purchase.purchasePending)
                     }
-                    .disabled(purchase.purchasePending)
                 }
             }
             .padding(24)
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
     }
 
     private func featureRow(_ icon: String, _ text: String) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon).foregroundColor(.accentColor)
-            Text(text).foregroundColor(.primary)
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(.appAccent)
+            Text(text)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
             Spacer()
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 4)
     }
 
     private func priceText() -> String {
@@ -63,3 +100,4 @@ struct PaywallView: View {
         return product.displayPrice
     }
 }
+

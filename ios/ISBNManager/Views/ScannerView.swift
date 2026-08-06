@@ -100,51 +100,52 @@ struct ScannerView: View {
             CameraPreview(session: session)
                 .ignoresSafeArea()
 
-            VStack(spacing: 4) {
-                HStack(spacing: 6) {
-                    Image(systemName: "camera").foregroundColor(.white)
-                    Text(cameraStatusText.isEmpty ? "..." : cameraStatusText)
-                        .font(.caption2).foregroundColor(.white)
-                }
-                if !diagDetail.isEmpty {
-                    Text(diagDetail).font(.system(size: 9)).foregroundColor(.white)
-                }
-                if detectedCount > 0 {
-                    Text("detected \(detectedCount): \(lastDetected)")
-                        .font(.system(size: 9)).foregroundColor(.green)
+            // Viewfinder frame
+            VStack {
+                Spacer()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.appAccent, lineWidth: 3)
+                        .frame(width: 260, height: 260)
+                        .shadow(color: Color.appAccent.opacity(0.5), radius: 8)
+
+                    Image(systemName: "viewfinder")
+                        .font(.system(size: 40))
+                        .foregroundColor(Color.appAccent.opacity(0.4))
                 }
                 Spacer()
             }
-            .padding(8)
-            .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.6)))
-            .padding(.top, 8)
 
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.accentColor, lineWidth: 3)
-                .frame(width: 280, height: 280)
-
+            // Bottom control panel
             VStack {
                 Spacer()
                 bottomPanel
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 24)
-            .background(LinearGradient(colors: [.clear, .black.opacity(0.7)], startPoint: .top, endPoint: .bottom))
 
             if let toast {
                 VStack {
+                    Text(toast)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(Capsule().fill(Color.black.opacity(0.85)))
+                        .padding(.top, 50)
                     Spacer()
-                    Text(toast).font(.subheadline).foregroundColor(.white)
-                        .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.8)))
-                        .padding(.bottom, 150)
                 }
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
 
             if cameraDenied {
-                VStack(spacing: 12) {
-                    Image(systemName: "camera.fill").font(.system(size: 40)).foregroundColor(.gray)
-                    Text(s.t("camera_denied")).multilineTextAlignment(.center)
+                VStack(spacing: 16) {
+                    Image(systemName: "camera.fill")
+                        .font(.system(size: 44))
+                        .foregroundColor(.secondary)
+                    Text(s.t("camera_denied"))
+                        .multilineTextAlignment(.center)
                         .font(.subheadline)
                     Button(s.t("camera_open_settings")) {
                         if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -152,35 +153,42 @@ struct ScannerView: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(.appAccent)
                 }
+                .padding(28)
+                .background(RoundedRectangle(cornerRadius: 16).fill(.ultraThinMaterial))
                 .padding(24)
-                .background(RoundedRectangle(cornerRadius: 12).fill(.ultraThinMaterial))
-                .padding(20)
             }
 
             if isSearching {
-                VStack {
-                    Spacer()
-                    VStack(spacing: 4) {
+                ZStack {
+                    Color.black.opacity(0.4)
+                    VStack(spacing: 12) {
                         ProgressView().tint(.white)
                         Text(s.t("searching_title"))
-                            .font(.subheadline).foregroundColor(.white)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
                         if !currentSource.isEmpty {
                             Text(s.sourceLabel(currentSource))
-                                .font(.caption2).foregroundColor(.white)
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
-                    .padding(12)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.7)))
-                    .padding(.bottom, 120)
+                    .padding(20)
+                    .background(RoundedRectangle(cornerRadius: 14).fill(Color.black.opacity(0.8)))
                 }
+                .ignoresSafeArea()
             }
         }
         .navigationBarTitle(s.t("scan_title"), displayMode: .inline)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(s.t("cancel")) { dismiss() }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showSettings = true } label: { Image(systemName: "gearshape") }
-                .accessibilityLabel(s.t("settings_title"))
+                    .accessibilityLabel(s.t("settings_title"))
             }
         }
         .navigationDestination(isPresented: $showSettings) { SettingsView() }
@@ -207,31 +215,50 @@ struct ScannerView: View {
     // MARK: - 底部控制區
 
     private var bottomPanel: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 14) {
             Text(s.t("scan_area_hint"))
-                .font(.subheadline).foregroundColor(.white)
-                .padding(.horizontal, 12).padding(.vertical, 8)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.5)))
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(.white.opacity(0.9))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 6)
+                .background(Capsule().fill(Color.black.opacity(0.6)))
 
-            HStack {
-                TextField(s.t("manual_isbn_hint"), text: $manualIsbn)
-                    .keyboardType(.numberPad)
-                    .foregroundColor(.white)
-                    .padding(.vertical, 10).padding(.horizontal, 8)
-                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.5)))
-                Button(s.t("search_button")) { searchManual() }
-                    .buttonStyle(.borderedProminent)
-            }
+            HStack(spacing: 10) {
+                HStack {
+                    Image(systemName: "barcode")
+                        .foregroundColor(.gray)
+                    TextField(s.t("manual_isbn_hint"), text: $manualIsbn)
+                        .keyboardType(.numberPad)
+                        .foregroundColor(.primary)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(uiColor: .systemBackground).opacity(0.9)))
 
-            Button { toggleTorch() } label: {
-                Image(systemName: torchOn ? "flashlight.fill" : "flashlight")
+                Button { searchManual() } label: {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.appAccent)
+                }
+                .buttonStyle(.plain)
+
+                Button { toggleTorch() } label: {
+                    Image(systemName: torchOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                        .font(.body.weight(.semibold))
+                        .padding(10)
+                        .background(Circle().fill(torchOn ? Color.yellow : Color.black.opacity(0.6)))
+                        .foregroundColor(torchOn ? .black : .white)
+                }
+                .accessibilityLabel(s.t("torch"))
+                .accessibilityValue(torchOn ? s.t("torch_on") : s.t("torch_off"))
             }
-            .buttonStyle(.bordered)
-            .tint(torchOn ? Color.yellow : Color.accentColor)
-            .accessibilityLabel(s.t("torch"))
-            .accessibilityValue(torchOn ? s.t("torch_on") : s.t("torch_off"))
         }
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: 18).fill(.ultraThinMaterial))
+        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
     }
+
 
     // MARK: - 動作
 

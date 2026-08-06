@@ -33,19 +33,35 @@ struct BookListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                if store.error != nil { errorBanner }
+            VStack(spacing: 0) {
+                if store.error != nil {
+                    errorBanner
+                        .padding(.horizontal, 16)
+                        .padding(.top, 8)
+                }
+
                 filterSection
+                    .padding(.vertical, 8)
+                    .background(Color(uiColor: .systemGroupedBackground))
+
                 if filteredBooks.isEmpty {
                     emptyState
                 } else {
-                    ForEach(filteredBooks) { book in
-                        BookRow(book: book,
-                                onEdit: { editTarget = EditTarget(book: book) },
-                                onDelete: { confirmDelete(book) })
-                            .contentShape(Rectangle())
-                            .onTapGesture { editTarget = EditTarget(book: book) }
+                    List {
+                        ForEach(filteredBooks) { book in
+                            BookRow(book: book,
+                                    onEdit: { editTarget = EditTarget(book: book) },
+                                    onDelete: { confirmDelete(book) })
+                                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .contentShape(Rectangle())
+                                .onTapGesture { editTarget = EditTarget(book: book) }
+                        }
                     }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(uiColor: .systemGroupedBackground))
                 }
             }
             .navigationTitle(s.t("my_books_title"))
@@ -122,8 +138,8 @@ struct BookListView: View {
             }
             .accessibilityLabel(s.t("cancel"))
         }
-        .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.red.opacity(0.1)))
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.red.opacity(0.12)))
     }
 
     private var filterSection: some View {
@@ -135,7 +151,7 @@ struct BookListView: View {
                 filterChip("read", s.t("filter_read"))
                 filterChip("wishlist", s.t("filter_wishlist"))
             }
-            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
         }
     }
 
@@ -145,47 +161,62 @@ struct BookListView: View {
             filterStatus = value
         } label: {
             Text(label)
-                .font(.subheadline)
-                .padding(.horizontal, 10).padding(.vertical, 5)
-                .background(Capsule().fill(isSelected ? Color.accentColor : Color.accentColor.opacity(0.18)))
-                .foregroundStyle(isSelected ? .white : .primary)
-                .overlay(Capsule().stroke(isSelected ? Color.clear : Color.accentColor.opacity(0.35), lineWidth: 1))
+                .font(.subheadline).fontWeight(isSelected ? .semibold : .regular)
+                .padding(.horizontal, 14).padding(.vertical, 6)
+                .background(Capsule().fill(isSelected ? Color.appAccent : Color(uiColor: .tertiarySystemFill)))
+                .foregroundStyle(isSelected ? Color.white : Color.primary)
         }
         .buttonStyle(.plain)
     }
 
     @ViewBuilder private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "books.vertical")
-                .font(.system(size: 48)).foregroundColor(.accentColor)
-            Text(s.t("filter_no_books")).font(.title3)
-            Text(s.t("empty_hint")).font(.subheadline).foregroundColor(.secondary)
-            HStack(spacing: 10) {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "books.vertical.fill")
+                .font(.system(size: 56)).foregroundColor(.appAccent.opacity(0.8))
+            Text(s.t("filter_no_books"))
+                .font(.title3).fontWeight(.semibold)
+            Text(s.t("empty_hint"))
+                .font(.subheadline).foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+            HStack(spacing: 12) {
                 Button(s.t("scan_title")) { showScanner = true }
                     .buttonStyle(.borderedProminent)
+                    .tint(.appAccent)
                 Button(s.t("search_by_title_title")) { showTitleSearch = true }
                     .buttonStyle(.bordered)
             }
-            .padding(.top, 4)
+            .padding(.top, 8)
+            Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 60)
+        .background(Color(uiColor: .systemGroupedBackground))
     }
 
     @ViewBuilder private var addButton: some View {
         Menu {
-            Button(s.t("search_by_title_title")) { showTitleSearch = true }
-            Button(s.t("scan_title")) { showScanner = true }
+            Button {
+                showScanner = true
+            } label: {
+                Label(s.t("scan_title"), systemImage: "barcode.viewfinder")
+            }
+            Button {
+                showTitleSearch = true
+            } label: {
+                Label(s.t("search_by_title_title"), systemImage: "magnifyingglass")
+            }
         } label: {
             Image(systemName: "plus")
-                .font(.title2)
-                .frame(width: 56, height: 56)
-                .background(Circle().fill(Color.accentColor))
+                .font(.title2.weight(.semibold))
+                .frame(width: 54, height: 54)
+                .background(Circle().fill(Color.appAccent).shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 3))
                 .foregroundColor(.white)
-                .shadow(radius: 4)
         }
-        .padding(.trailing, 20).padding(.bottom, 24)
+        .padding(.trailing, 20)
+        .padding(.bottom, 20)
     }
+
 
     private func searchAndEdit(_ isbn: String) async {
         currentSource = ""
@@ -195,8 +226,6 @@ struct BookListView: View {
         if let book {
             editTarget = EditTarget(book: book)
         } else {
-            // 查無完整書籍資訊：仍開「ISBN 預填」新增頁，讓使用者可手動補填。
-            // error banner 已顯示查無資訊原因。
             let normalized = ISBNService.normalizeIsbn(isbn)
             if ISBNService.isValidIsbn(normalized) {
                 editTarget = EditTarget(book: Book(isbn: normalized, title: "", author: "", publisher: "",
@@ -220,16 +249,17 @@ struct BookListView: View {
 
     private var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.2)
+            Color.black.opacity(0.25)
             VStack(spacing: 12) {
-                ProgressView()
-                Text(s.t("searching_title")).font(.subheadline)
+                ProgressView().tint(.white)
+                Text(s.t("searching_title")).font(.subheadline).bold().foregroundColor(.white)
                 if !currentSource.isEmpty {
-                    Text(s.sourceLabel(currentSource)).font(.caption).foregroundColor(.secondary)
+                    Text(s.sourceLabel(currentSource)).font(.caption).foregroundColor(.white.opacity(0.8))
                 }
             }
-            .padding(20)
-            .background(RoundedRectangle(cornerRadius: 12).fill(.ultraThinMaterial))
+            .padding(24)
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color(.systemBackground).opacity(0.95)))
+            .shadow(radius: 10)
         }
         .ignoresSafeArea()
     }
@@ -245,43 +275,67 @@ struct BookRow: View {
     private var s: Strings { locale.strings }
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 14) {
             coverImage
-                .frame(width: 52, height: 78)
-                .background(RoundedRectangle(cornerRadius: 4).fill(Color(.systemGray4)))
-                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .frame(width: 56, height: 80)
+                .background(RoundedRectangle(cornerRadius: 6).fill(Color(.systemGray5)))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(book.title.isEmpty ? s.t("unknown_title") : book.title)
                     .font(.headline)
+                    .lineLimit(2)
+
                 Text(book.author.isEmpty ? s.t("unknown_author") : book.author)
-                    .font(.subheadline).foregroundColor(.secondary)
-                HStack(spacing: 8) {
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+
+                HStack(spacing: 6) {
                     statusBadge
+
                     if let score = book.lexileScore {
                         HStack(spacing: 2) {
-                            Image(systemName: "chart.line.uptrend.xyaxis").font(.system(size: 11)).foregroundColor(.blue)
-                            Text(s.lexileLabel(score)).font(.caption).foregroundColor(.blue)
+                            Image(systemName: "chart.line.uptrend.xyaxis").font(.system(size: 10))
+                            Text(s.lexileLabel(score)).font(.caption2).fontWeight(.medium)
                         }
+                        .foregroundColor(.blue)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Capsule().fill(Color.blue.opacity(0.12)))
                     }
                 }
+
                 if book.status == "reading", let p = book.progress {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 8) {
                         ProgressView(value: p, total: 100)
-                            .tint(.orange)
-                        Text("\(Int(p))%").font(.caption2).foregroundColor(.secondary)
+                            .tint(.appReading)
+                        Text("\(Int(p))%").font(.caption2).fontWeight(.medium).foregroundColor(.secondary)
                     }
                 } else if book.status == "read", book.finishDate != nil {
-                    Text("✓").font(.caption).foregroundColor(.green)
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.caption2)
+                            .foregroundColor(.appProfit)
+                        Text(s.t("filter_read"))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
-                if let tags = book.tags {
-                    Text(tags).font(.caption2).foregroundColor(.secondary)
+
+                if let tags = book.tags, !tags.isEmpty {
+                    Text(tags)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
             }
-            Spacer()
+
+            Spacer(minLength: 0)
         }
-        .padding(.vertical, 8)
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.appCardBg).shadow(color: .black.opacity(0.04), radius: 3, x: 0, y: 1))
         .contextMenu {
             Button(s.t("edit")) { onEdit() }
             Button(s.t("delete"), role: .destructive) { onDelete() }
@@ -295,35 +349,56 @@ struct BookRow: View {
                 if let uiImage = UIImage(contentsOfFile: path) {
                     Image(uiImage: uiImage).resizable().scaledToFill()
                 } else {
-                    Image(systemName: "book").foregroundColor(.secondary)
+                    placeholderIcon
                 }
             } else {
                 AsyncImage(url: URL(string: url)) { phase in
                     if let img = phase.image {
                         img.resizable().scaledToFill()
                     } else if phase.error != nil {
-                        Image(systemName: "book").foregroundColor(.secondary)
+                        placeholderIcon
                     } else {
-                        ProgressView().tint(.accentColor)
+                        ProgressView().tint(.appAccent)
                     }
                 }
             }
         } else {
-            Image(systemName: "book").foregroundColor(.secondary)
+            placeholderIcon
         }
     }
 
+    private var placeholderIcon: some View {
+        VStack {
+            Image(systemName: "book.closed.fill")
+                .font(.system(size: 24))
+                .foregroundColor(.secondary.opacity(0.7))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6))
+    }
+
     private var statusBadge: some View {
-        let color: Color = book.status == "read" ? .green
-            : (book.status == "reading" ? .orange
-            : (book.status == "wishlist" ? .accentColor : .gray))
-        let label = book.status == "read" ? s.t("filter_read")
-            : (book.status == "reading" ? s.t("filter_reading")
-            : (book.status == "wishlist" ? s.t("filter_wishlist") : s.t("filter_unread")))
+        let (color, label) = statusDetails
         return Text(label)
             .font(.caption2)
-            .padding(.horizontal, 6).padding(.vertical, 2)
-            .background(Capsule().fill(color))
-            .foregroundColor(.white)
+            .fontWeight(.semibold)
+            .padding(.horizontal, 8).padding(.vertical, 3)
+            .background(Capsule().fill(color.opacity(0.15)))
+            .foregroundColor(color)
+    }
+
+    private var statusDetails: (Color, String) {
+        switch book.status {
+        case "read":
+            return (.appProfit, s.t("filter_read"))
+        case "reading":
+            return (.appReading, s.t("filter_reading"))
+        case "wishlist":
+            return (.appAccent, s.t("filter_wishlist"))
+        default:
+            return (Color(.systemGray), s.t("filter_unread"))
+        }
     }
 }
+
+

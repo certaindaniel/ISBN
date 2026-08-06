@@ -5,11 +5,11 @@
       "color": {
         "color-space": "srgb",
         "components": {
-          "red": "0.486",
-          "green": "0.227",
-          "blue": "0.929"
-        },
-        "alpha": "1.0"
+          "red": "0x63",
+          "green": "0x66",
+          "blue": "0xF1",
+          "alpha": "1.000"
+        }
       }
     }
   ],
@@ -18,3 +18,5 @@
     "author": "xcode"
   }
 }
+
+

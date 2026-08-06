@@ -15,6 +15,7 @@ struct RootView: View {
                     Label(locale.strings.t("statistics"), systemImage: "chart.bar")
                 }
         }
-        .tint(Color.accentColor)
+        .tint(Color.appAccent)
     }
 }
+
