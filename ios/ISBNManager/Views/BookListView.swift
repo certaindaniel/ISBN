@@ -86,7 +86,9 @@ struct BookListView: View {
                 if store.isLoading { loadingOverlay }
             }
             .fullScreenCover(isPresented: $showScanner) {
-                ScannerView()
+                NavigationStack {
+                    ScannerView()
+                }
             }
             .sheet(item: $editTarget) { target in
                 BookEditView(initialBook: target.book)

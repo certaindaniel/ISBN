@@ -24,8 +24,8 @@ enum ApiSource: String, CaseIterable, Identifiable {
 
     var enabledByDefault: Bool {
         switch self {
-        case .googleBooks, .openLibrary, .wikidata, .libraryOfCongress: return true
-        case .wikipedia, .jikeFree: return false
+        case .googleBooks, .openLibrary, .wikidata: return true
+        case .wikipedia, .jikeFree, .libraryOfCongress: return false
         }
     }
 

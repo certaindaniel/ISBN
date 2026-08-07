@@ -71,7 +71,7 @@
 		C3CDEED2F20A2F48B32F4E50 /* ISBNManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ISBNManager.entitlements; sourceTree = "<group>"; };
 		D25E705B7DFB4B7A9D2036C4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D6106F384D69E68DF9B00C55 /* LocalizedTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedTables.swift; sourceTree = "<group>"; };
-		DB7AA66EE80F6C095BD56402 /* ISBNManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ISBNManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB7AA66EE80F6C095BD56402 /* ISBNManager.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ISBNManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1EEB3B1C65CBB41CDF6EE8 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		F1DA4642F4CDC6D11216B5AC /* ISBNServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISBNServiceTests.swift; sourceTree = "<group>"; };
 		F34B53A16E7D76C773191658 /* BookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
@@ -221,9 +221,11 @@
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					1EC5E3E69A0107165D3EE586 = {
+						DevelopmentTeam = NKY2898W74;
 						ProvisioningStyle = Automatic;
 					};
 					42A2DBFEF8E52F8AEE0DF610 = {
+						DevelopmentTeam = NKY2898W74;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -319,7 +321,6 @@
 				CODE_SIGN_ENTITLEMENTS = ISBNManager/ISBNManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = NKY2898W74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ISBNManager/Info.plist;
@@ -372,6 +373,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NKY2898W74;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -454,6 +456,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = NKY2898W74;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -501,7 +504,6 @@
 				CODE_SIGN_ENTITLEMENTS = ISBNManager/ISBNManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = NKY2898W74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ISBNManager/Info.plist;

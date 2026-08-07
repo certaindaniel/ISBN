@@ -159,6 +159,7 @@ extension ISBNService {
                 }
             }
             for await (source, book) in group {
+                AppLogger.fileLog("searchByIsbn ISBN=\(isbn) source=\(source.rawValue) ok=\(book != nil ? 1 : 0) title=\(book?.title ?? "nil")")
                 if let book { results[source] = book }
             }
         }
@@ -166,10 +167,12 @@ extension ISBNService {
             // 只接受「有完整書名」的結果：殘缺記錄（只有 ISBN、無 title）
             // 不該開出空白編輯頁，也不該被快取。
             if let book = results[source], !book.title.isEmpty {
+                AppLogger.fileLog("searchByIsbn ISBN=\(isbn) RETURNED title=\(book.title) source=\(source.rawValue)")
                 Database.shared.saveCachedBook(book)
                 return book
             }
         }
+        AppLogger.fileLog("searchByIsbn ISBN=\(isbn) RETURNED nil (no complete record)")
         return nil
     }
 
@@ -193,12 +196,14 @@ extension ISBNService {
             do {
                 let (data, resp) = try await URLSession.shared.data(for: req)
                 guard let http = resp as? HTTPURLResponse else { return nil }
-                if http.statusCode == 429 || http.statusCode == 503 {
-                    // 限流/伺服器忙：退避後重試
+                if http.statusCode == 503 {
+                    // 伺服器暫時忙碌：退避後重試（503 是暫時性，可重試）
                     try? await Task.sleep(nanoseconds: UInt64(1_500_000_000 * (attempt + 1)))
                     lastData = data; lastResp = http
                     continue
                 }
+                // 429 = 額度/限流（如 Google Books 共用配額已爆）：重試不會解，
+                // 直接放棄回傳，避免每次查詢被 9 秒退避拖住。
                 return (data, http)
             } catch {
                 return nil
